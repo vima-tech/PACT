@@ -662,7 +662,9 @@ export function renderHTML({ title, headerMeta, chapters, reqs, milestones, coun
       `<li><span class="cn">${pi + 1}.${ci + 1}</span><a href="#ch-${c.id}">${esc(c.title)}</a></li>`).join('')
     return `<div class="toc-card"><div class="tp"><span class="pn">${en}</span><a href="#part-${p}">第${'一二三四'[pi]}部分 · ${name}</a></div><ol>${rows}</ol></div>`
   }).join('')
-  const pipeCard = flows.length ? `<div class="toc-card"><div class="tp"><span class="pn">PIPELINE</span>
+  // 开关与 renderPipeline 保持一致：看节点，不看场景。旧格式 P4 有 `### S1` 会被解析成 flow，
+  // 只看 flows 会在目录里挂一张空的流水线卡片。
+  const pipeCard = (flows.length && nodes.length) ? `<div class="toc-card"><div class="tp"><span class="pn">PIPELINE</span>
     <a href="#pipeline">业务流水线 · 先看这里</a></div>
     <ol>${nodes.slice(0, 8).map((n, i) => `<li><span class="cn">${String(i + 1).padStart(2, '0')}</span><a href="#pipeline" data-jump="${esc(n.key)}">${esc(n.name)}</a></li>`).join('')}</ol></div>` : ''
   const toc = `<nav class="toc-doc" id="toc"><h2>目录</h2><div class="toc-grid">${pipeCard}${tocCards}
