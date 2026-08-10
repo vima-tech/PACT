@@ -66,24 +66,47 @@ const chById = Object.fromEntries(chapters.map(c => [c.id, c]))
 const missingAnchors = ANCHOR_ORDER.filter(a => !chById[a])
 
 // ── ② 解析 P5 的 R-ID ───────────────────────────────────────────────────────
+// 列按**表头名**取，不按位置：P5 的列数各项目不同（模板 8 列、feature 档常写 6 列），
+// 位置式取值会把「来源」读成「依赖」。表头缺失时退回位置式，保证旧文件仍可解析。
+const P5_COLS = [
+  ['type',   /类型/],
+  ['desc',   /描述|需求/],
+  ['accept', /验收/],
+  ['prio',   /优先级|优先/],
+  ['deps',   /依赖/],
+  ['source', /来源|出处/],
+  ['assume', /假设/],
+]
+const P5_FALLBACK = { type: 1, desc: 2, accept: 3, prio: 4, deps: 5, source: 6, assume: 7 }
 const reqs = new Map()                                // R### -> {...}
 {
   const ch = chById['P5']
   if (ch) {
-    let group = ''
+    let group = '', colOf = null
     for (const line of ch.body.split('\n')) {
       const g = line.match(/^###\s+(.*)$/); if (g) { group = g[1].trim(); continue }
       const c = cells(line); if (!c) continue
+      // 表头行：第一格是 R-ID 且没有任何 R### 数据 → 建立列名映射
+      if (!/^R\d{3}/.test(plain(c[0])) && /R-?ID/i.test(plain(c[0]))) {
+        colOf = {}
+        for (const [key, re] of P5_COLS) {
+          const i = c.findIndex(h => re.test(plain(h)))
+          if (i > 0) colOf[key] = i
+        }
+        continue
+      }
       const id = plain(c[0]).replace(/\s*★.*$/, '').trim()
       if (!/^R\d{3}$/.test(id)) continue
       if (c.length < 4) continue
+      const m = colOf && Object.keys(colOf).length ? colOf : P5_FALLBACK
+      const at = k => (m[k] == null ? '' : (c[m[k]] || ''))
       reqs.set(id, {
-        id, star: /★/.test(c[0]) || /★/.test(c[6] || ''),
-        type: c[1] || '', desc: c[2] || '', accept: c[3] || '',
-        prio: c[4] || '', deps: expandRIDs(c[5] || '').filter(x => x !== id),
-        source: c[6] || '', assume: c[7] || '', group,
+        id, star: /★/.test(c[0]) || /★/.test(at('source')),
+        type: at('type'), desc: at('desc'), accept: at('accept'),
+        prio: at('prio'), deps: expandRIDs(at('deps')).filter(x => x !== id),
+        source: at('source'), assume: at('assume'), group,
         t1method: '', t1criteria: '', t1checker: '', milestone: '',
-        dependents: [], mentionedIn: [], decisions: [],
+        dependents: [], mentionedIn: [], decisions: [], sentences: [], nodes: [],
       })
     }
   }
@@ -166,7 +189,125 @@ for (const ms of milestones) for (const rid of ms.reqs) {
   r.milestone = r.milestone ? `${r.milestone}, ${ms.id}` : ms.id
 }
 
-// ── ⑦ 反查：依赖倒排 + 章节提及 + 来源 ──────────────────────────────────────
+// ── ⑦ 解析 P4 → 业务流水线（节点 + 连线 + 自然语言清单）──────────────────────
+// 人类主视图的数据来源。节点 = 人真能打开的页面 / 真在跑的功能点；
+// 每个节点下四组固定分组的人话句子，句尾反引号挂 R-ID。详见 templates/PACT.md 的 P4 说明。
+const GROUPS = [
+  ['do',    '能做什么'],
+  ['block', '什么情况会被拦住'],
+  ['see',   '谁看得到什么'],
+  ['auto',  '背后自动发生了什么'],
+]
+const GROUP_BY_NAME = Object.fromEntries(GROUPS.map(([k, n]) => [n, k]))
+const flows = []                                       // 场景（一条主流程）
+const nodes = new Map()                                // key -> 节点（跨场景复用同一个 key）
+const pipelineIssues = []                              // {kind, at, msg}
+{
+  /** "报销列表页 `/expense`" → {name, ident, key}；`@x` 前缀 = 无界面功能点 */
+  const nodeRef = s => {
+    const t = String(s || '').replace(/^\s*[✓√]\s*/, '').trim()
+    const m = t.match(/^(.*?)\s*`([^`]+)`\s*$/)
+    const name = plain(m ? m[1] : t).trim()
+    const ident = m ? m[2].trim() : ''
+    return { name, ident, key: ident || name, kind: /^@/.test(ident) ? '功能点' : '页面' }
+  }
+  // 同一节点在「流程」里带标识写全、在「回头路」里往往只写名字——按名字归并，
+  // 否则会生成一个句子数为 0 的影子节点，并误报成「空节点」。
+  const byName = new Map()
+  const touch = ref => {
+    const key = (!ref.ident && byName.has(ref.name)) ? byName.get(ref.name) : ref.key
+    if (!nodes.has(key)) nodes.set(key, {
+      key, name: ref.name, ident: ref.ident, kind: ref.kind,
+      intro: '', groups: Object.fromEntries(GROUPS.map(([k]) => [k, []])), flows: [], order: nodes.size,
+    })
+    const n = nodes.get(key)
+    if (!n.name && ref.name) n.name = ref.name
+    if (!n.ident && ref.ident) { n.ident = ref.ident; n.kind = ref.kind }
+    if (n.name) byName.set(n.name, key)
+    return n
+  }
+  /** "A --标签--> B --标签--> ✓ 终点" → [{from,to,by,end}] */
+  const parseChain = (txt, alt) => {
+    const segs = String(txt).split(/\s*--(.*?)-->\s*/)
+    const out = []
+    for (let i = 0; i + 2 < segs.length; i += 2) {
+      const [a, by, b] = [segs[i], segs[i + 1], segs[i + 2]]
+      const fromRef = nodeRef(a); if (!fromRef.key) continue
+      const from = touch(fromRef)
+      if (/^\s*[✓√]/.test(b)) out.push({ from: from.key, to: '', by: plain(by), end: true, endText: plain(b).replace(/^[✓√]\s*/, ''), alt: !!alt })
+      else { const to = touch(nodeRef(b)); out.push({ from: from.key, to: to.key, by: plain(by), end: false, alt: !!alt }) }
+    }
+    return out
+  }
+
+  const ch = chById['P4']
+  if (ch) {
+    let flow = null, node = null, group = null, last = null
+    const lines = ch.body.split('\n')
+    for (let li = 0; li < lines.length; li++) {
+      const line = lines[li]
+      const sc = line.match(/^###\s+(S\d+)\s*[·:：-]?\s*(.*)$/)
+      if (sc) { flow = { id: sc[1], title: sc[2].trim(), edges: [], nodes: [], sample: '', done: '', order: flows.length }; flows.push(flow); node = null; group = null; continue }
+      if (!flow) continue
+
+      const nh = line.match(/^####\s+(.*)$/)
+      if (nh) {
+        const ref = nodeRef(nh[1]); node = touch(ref); group = null; last = null
+        if (!node.flows.includes(flow.id)) node.flows.push(flow.id)
+        if (!flow.nodes.includes(node.key)) flow.nodes.push(node.key)
+        continue
+      }
+
+      if (!node) {                                     // 场景头部的 流程 / 回头路 / 样本 / 完成态
+        const f = line.match(/^\s*-\s*\**\s*(流程|回头路|样本|完成态)\s*\**\s*[:：]\s*(.*)$/)
+        if (!f) continue
+        const [, key, val] = f
+        if (key === '流程') flow.edges.push(...parseChain(val, false))
+        else if (key === '回头路') val.split(/[；;]/).forEach(seg => { if (seg.trim()) flow.edges.push(...parseChain(seg, true)) })
+        else if (key === '样本') flow.sample = plain(val)
+        else flow.done = plain(val)
+        continue
+      }
+
+      if (/^\s*>\s?/.test(line)) { if (!node.intro) node.intro = plain(line.replace(/^\s*>\s?/, '')); continue }
+      // 假设行必须先于句子行判定（它同时满足两条缩进列表的形状）
+      const as = line.match(/^\s{3,}-\s*⚠?\s*我定的\s*[:：]\s*(.*)$/)
+      if (as && last) { last.assume = plain(as[1]); continue }
+      const gh = line.match(/^\s*-\s*\**\s*(.+?)\s*\**\s*$/)
+      if (gh && GROUP_BY_NAME[plain(gh[1])] && !/^\s{2,}/.test(line)) { group = GROUP_BY_NAME[plain(gh[1])]; last = null; continue }
+      const it = line.match(/^\s{1,}-\s+(.*\S)\s*$/)
+      if (it && group) {
+        const rids = []
+        const text = it[1].replace(/`(R\d{3})`/g, (m0, r) => { rids.push(r); return '' }).replace(/\s{2,}/g, ' ').trim()
+        if (!text) continue
+        const item = {
+          id: `s${flow.order}n${node.order}i${node.groups[group].length}`,
+          text, rids, group, node: node.key, flow: flow.id, assume: '', hole: /⛔/.test(text),
+        }
+        node.groups[group].push(item); last = item
+        for (const r of rids) { const rq = reqs.get(r); if (rq) { rq.sentences.push(item.id); if (!rq.nodes.includes(node.key)) rq.nodes.push(node.key) } }
+        if (!rids.length) pipelineIssues.push({ kind: 'no-rid', at: `${flow.id} / ${node.name}`, msg: `句子未挂 R-ID：${text.slice(0, 28)}…` })
+        for (const r of rids) if (!reqs.has(r)) pipelineIssues.push({ kind: 'bad-rid', at: `${flow.id} / ${node.name}`, msg: `句子挂了 P5 里不存在的 ${r}` })
+        if (item.hole) pipelineIssues.push({ kind: 'hole', at: `${flow.id} / ${node.name}`, msg: text.replace(/⛔\s*/, '').slice(0, 48) })
+      }
+    }
+  }
+}
+// 流水线体检：空节点 / 死路 / 够不着的需求
+for (const n of nodes.values()) {
+  const cnt = GROUPS.reduce((a, [k]) => a + n.groups[k].length, 0)
+  n.count = cnt
+  if (!cnt) pipelineIssues.push({ kind: 'empty-node', at: n.name, msg: '这个节点上没有挂任何需求——纯展示页？还是野生页面？' })
+}
+for (const f of flows) for (const k of f.nodes) {
+  const out = f.edges.some(e => e.from === k)
+  if (!out) pipelineIssues.push({ kind: 'dead-end', at: `${f.id} / ${nodes.get(k)?.name || k}`, msg: '进得去出不来：无出边且未标终点' })
+}
+if (flows.length) for (const r of reqs.values()) {
+  if (!r.nodes.length) pipelineIssues.push({ kind: 'uncovered-req', at: r.id, msg: '不出现在任何流程里——野生需求？还是漏了流程？' })
+}
+
+// ── ⑧ 反查：依赖倒排 + 章节提及 + 来源 ──────────────────────────────────────
 for (const r of reqs.values()) for (const d of r.deps) if (reqs.has(d)) reqs.get(d).dependents.push(r.id)
 for (const ch of chapters) {
   if (ch.id === 'P5' || ch.id === 'T1') continue          // 这两章天然全是 R-ID，不算「提及」
@@ -182,5 +323,6 @@ for (const r of reqs.values()) {
   }
 }
 return { LINES, chapters, chById, missingAnchors, reqs, decisions, invs, milestones,
+         flows, nodes, pipelineIssues, GROUPS,
          sourceIndex, ANCHOR_ORDER, PART, cells, plain, safe, expandRIDs }
 }

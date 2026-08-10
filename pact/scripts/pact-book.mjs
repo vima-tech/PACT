@@ -45,6 +45,7 @@ const LINES = SRC.split('\n')
 
 // ── 解析（共用 pact-parse.mjs，避免两份解析器漂移）───────────────────────────
 const { LINES: _L, chapters, chById, missingAnchors, reqs, decisions, invs, milestones,
+        flows, nodes, pipelineIssues, GROUPS,
         sourceIndex, ANCHOR_ORDER, PART, cells, plain, safe, expandRIDs } = parsePact(FILE, SRC)
 
 // ── 写文件（先写内存，再落盘，便于 --check 比对）─────────────────────────────
@@ -460,7 +461,27 @@ for (const ms of milestones) {
     milestones: milestones.map(m => ({ id: m.id, name: m.name })),
     counts: { decisions: decisions.length, invs: invs.length },
     file: REF, figs,
+    flows, nodes: [...nodes.values()], pipelineIssues, GROUPS,
   }))
+
+  // ── 流水线体检（P4 的节点 ↔ 句子 ↔ R-ID）──
+  // ⛔ / 句子无 R-ID / 挂了不存在的 R-ID = 规格客观有洞；空节点 / 够不着的需求 = 要人裁定。
+  // 两类严格分开：混为一谈会逼出「为凑覆盖率而编的假节点」。
+  if (flows.length) {
+    const HARD = { hole: '⛔ 走不通', 'no-rid': '句子没挂 R-ID', 'bad-rid': 'R-ID 不存在于 P5' }
+    const SOFT = { 'empty-node': '空节点', 'uncovered-req': '需求够不着', 'dead-end': '流程死路' }
+    const hard = pipelineIssues.filter(i => HARD[i.kind])
+    const soft = pipelineIssues.filter(i => SOFT[i.kind])
+    say(`\n── 业务流水线 ──`)
+    say(`  场景 ${flows.length}｜节点 ${nodes.size}（页面 ${[...nodes.values()].filter(n => n.kind === '页面').length}·功能点 ${[...nodes.values()].filter(n => n.kind === '功能点').length}）｜人话句子 ${[...nodes.values()].reduce((a, n) => a + n.count, 0)}`)
+    if (hard.length) { say(`  [FAIL] ${hard.length} 处规格有洞（冻结门必须清零）：`); for (const i of hard) say(`    · ${HARD[i.kind]}　${i.at}　${i.msg}`) }
+    if (soft.length) { say(`  [待人裁定] ${soft.length} 处需要业务判断（不阻塞，但冻结前应逐条答复）：`); for (const i of soft) say(`    · ${SOFT[i.kind]}　${i.at}　${i.msg}`) }
+    if (!hard.length && !soft.length) say(`  [OK] 节点全部有需求承载，需求全部够得着，无走不通的地方`)
+  } else {
+    say(`\n── 业务流水线 ──`)
+    say(`  P4 未用「流程/节点」写法，本书跳过流水线主视图，只出四层规格。`)
+    say(`  写法见 <SKILL_DIR>/templates/PACT.md 的 P4 段（流程 → 节点 → 四组人话清单）。`)
+  }
 
   if (figTodo.length) {
     say(`\n── 图形化待办（${figTodo.length} 张）──`)
