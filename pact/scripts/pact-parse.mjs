@@ -303,7 +303,9 @@ for (const f of flows) for (const k of f.nodes) {
   const out = f.edges.some(e => e.from === k)
   if (!out) pipelineIssues.push({ kind: 'dead-end', at: `${f.id} / ${nodes.get(k)?.name || k}`, msg: '进得去出不来：无出边且未标终点' })
 }
-if (flows.length) for (const r of reqs.values()) {
+// 开关必须看**节点**而不是场景：旧格式 P4 也有 `### S1 · xxx` 标题（会被解析成 flow），
+// 但没有 `#### 节点` 块。用 flows.length 当开关会把全部需求误报成「够不着」。
+if (nodes.size) for (const r of reqs.values()) {
   if (!r.nodes.length) pipelineIssues.push({ kind: 'uncovered-req', at: r.id, msg: '不出现在任何流程里——野生需求？还是漏了流程？' })
 }
 

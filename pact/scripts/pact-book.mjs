@@ -467,7 +467,7 @@ for (const ms of milestones) {
   // ── 流水线体检（P4 的节点 ↔ 句子 ↔ R-ID）──
   // ⛔ / 句子无 R-ID / 挂了不存在的 R-ID = 规格客观有洞；空节点 / 够不着的需求 = 要人裁定。
   // 两类严格分开：混为一谈会逼出「为凑覆盖率而编的假节点」。
-  if (flows.length) {
+  if (nodes.size) {
     const HARD = { hole: '⛔ 走不通', 'no-rid': '句子没挂 R-ID', 'bad-rid': 'R-ID 不存在于 P5' }
     const SOFT = { 'empty-node': '空节点', 'uncovered-req': '需求够不着', 'dead-end': '流程死路' }
     const hard = pipelineIssues.filter(i => HARD[i.kind])
