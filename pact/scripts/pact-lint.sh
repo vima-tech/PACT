@@ -20,6 +20,8 @@
 #   7 A5 每条 D-ID 四件套齐全（选项/结论/理由/已否决，且有实质内容）
 #   8 C1 / C4 契约可执行（含表格或代码块）
 #   9 [WARN] 残留尖括号占位符 <...>
+#  10 [WARN] 估算门：P7 声称工期/团队却无 estimate.md
+#  11 P4 用「流程 → 节点 → 四组人话清单」写法，且每句挂 R-ID（人类主视图的数据来源）
 #  10 [WARN] P7 声称了工期/团队/周期，却没有同目录 estimate.md（估算门缺席）
 #
 # 退出码：0=全过（可能有 WARN） 1=有 FAIL 2=用法错误 3=发现多份物料需指定
@@ -84,6 +86,10 @@ if [[ $SELFTEST -eq 1 ]]; then
   mutate "植入占位符 TBD"     "5 占位符残留"              's/^## P6 · 非目标.*$/&\n\nTBD/'
   mutate "R-ID 失去验收"      "6 R-ID 验收覆盖 (P5 → T1)" '/<!-- PACT:T1 -->/,/<!-- PACT:T2 -->/ s/^| R00/| X00/'
   mutate "决策删掉「已否决」" "7 决策记录四件套 (A5)"     's/^- \*\*已否决\*\*.*$//'
+  mutate "P4 退回旧写法"      "11 P4 业务流水线（节点 + 四组人话清单）" \
+         '/<!-- PACT:P4 -->/,/<!-- PACT:P5 -->/ s/^#### /### 旧写法 /'
+  mutate "P4 句子丢了 R-ID"   "11 P4 业务流水线（节点 + 四组人话清单）" \
+         '/<!-- PACT:P4 -->/,/<!-- PACT:P5 -->/ s/ `R001`$//'
 
   echo
   if [[ $ST_FAIL -eq 0 ]]; then
@@ -299,6 +305,56 @@ else
   echo "$claims" | sed 's/^/         /'
   echo "         修法：按 $SKILL_DIR/references/effort-estimation.md 走估算门，"
   echo "               产出模板 $SKILL_DIR/templates/estimate.md"
+fi
+
+# ── 11 P4 业务流水线（人类主视图的数据来源）───────────────────────────────
+# 为什么是必备项而不是可选增强：PACT 的完备性是给 AI 的，人按 P/A/C/T 分类轴读
+# 成本是 O(全文)，只能点头，而点头不是对齐。P4 的节点结构是人唯一能顺着业务
+# 跑一遍的入口——没有它，pact-book 只能降级成一本谁也不会逐页读完的规格全文。
+# 确实没有用户可见流程的项目（纯库、纯 SDK），把 P4 整节写成 N/A（理由）即可。
+say "11 P4 业务流水线（节点 + 四组人话清单）"
+p4blk="$TMP/P4.block"
+if [[ ! -s "$p4blk" ]]; then
+  fail "P4 为空"
+elif grep -qE '^[[:space:]]*(##[[:space:]]+P4[^\n]*)?[[:space:]]*N/A' "$p4blk"; then
+  pass "P4 写了 N/A（无用户可见流程）"
+else
+  GROUPS_RE='能做什么|什么情况会被拦住|谁看得到什么|背后自动发生了什么'
+  nodes=$(grep -cE '^####[[:space:]]+' "$p4blk" || true)
+  groups=$(grep -cE "^[[:space:]]*-[[:space:]]+\*{0,2}($GROUPS_RE)\*{0,2}[[:space:]]*$" "$p4blk" || true)
+  flowln=$(grep -cE '^[[:space:]]*-[[:space:]]*\*{0,2}流程\*{0,2}[:：]' "$p4blk" || true)
+  if [[ "$nodes" -eq 0 || "$groups" -eq 0 ]]; then
+    fail "P4 未用「流程 → 节点 → 四组人话清单」写法（节点 $nodes 个 / 分组 $groups 组）"
+    echo "         这不是可选增强：没有它，交付规格书出不了业务流水线主视图，"
+    echo "         人只能去啃四层全文——而那正是 PACT 一直没解决的那半个问题。"
+    echo "         写法见 $SKILL_DIR/templates/PACT.md 的 P4 段与"
+    echo "               $SKILL_DIR/references/authoring-guide.md 的 P4 段；"
+    echo "         完整实例见 $SKILL_DIR/references/example-PACT.md。"
+    echo "         已冻结的旧物料升级：走 /pact-change，属改写呈现不改需求，逐条记 changelog.md。"
+  else
+    [[ "$flowln" -eq 0 ]] && warn "P4 有节点但没有「- 流程：A --靠什么--> B」行，流水线连不成线"
+    # 组名必须落在固定四组里：写错一个字整组静默丢失，比报错更难发现
+    badg="$(grep -oE '^[[:space:]]*-[[:space:]]+[^`|:：]{2,12}$' "$p4blk" \
+            | sed -E 's/^[[:space:]]*-[[:space:]]+//; s/[[:space:]]*$//' \
+            | grep -vE "^($GROUPS_RE)$" | grep -E '^(能|什么|谁|背后)' | sort -u || true)"
+    if [[ -n "$badg" ]]; then
+      fail "P4 出现不在固定四组内的组名（写错一个字，整组会被静默丢掉）"
+      echo "$badg" | sed 's/^/         · /'
+      echo "         只认这四个：能做什么 / 什么情况会被拦住 / 谁看得到什么 / 背后自动发生了什么"
+    fi
+    # 每句人话必须挂 R-ID：没有 R-ID 的行为等于不存在，反查不到就是野生功能
+    norid=$(awk -v g="$GROUPS_RE" '
+      $0 ~ "^[[:space:]]*-[[:space:]]+("g")[[:space:]]*$" { ing=1; next }
+      /^####[[:space:]]/ || /^###[[:space:]]/ { ing=0 }
+      ing && /^[[:space:]]+-[[:space:]]/ && !/⚠/ && !/我定的/ && $0 !~ /`R[0-9][0-9][0-9]`/ { n++ }
+      END { print n+0 }' "$p4blk")
+    if [[ "$norid" -gt 0 ]]; then
+      fail "P4 有 $norid 句人话没挂 R-ID —— 没有 R-ID 的行为等于不存在"
+      echo "         要么回 P5 立条目（并在 T1 补验收），要么删掉这句。"
+    else
+      pass "P4 节点 $nodes 个 · 分组 $groups 组 · 每句均挂 R-ID"
+    fi
+  fi
 fi
 
 # ── 汇总 ──────────────────────────────────────────────────────────────────

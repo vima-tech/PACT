@@ -86,6 +86,9 @@ CORE="$(ls -d ./.claude/skills/pact ~/.claude/skills/pact 2>/dev/null | head -1)
 - **S3 存量评估**（有实质代码时必做，只读不改码）：八维评估给 `file:line` 证据；结论回流 PACT
   （约束→`P7`、结构→`A2`、P0→`T5` 的 M0）。
 - **S4–S7 写四层**：精度标准见 `$CORE/references/authoring-guide.md`，范例见 `references/example-PACT.md`。
+  S4 的 `P4` **默认按「流程 → 节点 → 四组人话清单」写**（节点 = 能指着说「它在这儿」的页面或功能点，
+  每句人话句尾挂 R-ID）——这是交付规格书里**业务流水线主视图**的唯一数据来源，不写就只能出四层全文，
+  人审不动。`pact-lint.sh` 第 11 项查它；纯库/纯 SDK 无用户可见流程的，`P4` 整节写 `N/A（理由）`。
   S7 内含**估算门**：要报价/排期时必走 `$CORE/references/effort-estimation.md` + `scripts/pact-estimate.sh`，
   禁止拍脑袋数字；纯内部项目在 board 标「已跳过（理由）」。
 - **S8 完备性门**（硬闸门，四道全过才准冻结）：

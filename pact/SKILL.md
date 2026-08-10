@@ -136,7 +136,7 @@ SKILL_DIR="$(ls -d ./.claude/skills/pact ~/.claude/skills/pact 2>/dev/null | hea
 # 各脚本未给物料目录时自动扫描 .pact/*/PACT.md；多份物料时 exit 3 列候选，须显式传目录
 
 bash $SKILL_DIR/scripts/pact-status.sh  <物料目录>   # 工序：骨架 + 状态 + 顺序 + 下一道
-bash $SKILL_DIR/scripts/pact-lint.sh    <物料目录>/PACT.md --level=<full|feature>  # 规格九项
+bash $SKILL_DIR/scripts/pact-lint.sh    <物料目录>/PACT.md --level=<full|feature>  # 规格十一项
 bash $SKILL_DIR/scripts/pact-graph.sh   <物料目录>   # 图谱：结构 + 完成度 + 下一批可执行（--next / --require-complete）
 bash $SKILL_DIR/scripts/pact-trace.sh   <物料目录>   # 落地：规格 ↔ 代码 @pact ↔ 图谱 三方比对（收尾 --require-complete）
 bash $SKILL_DIR/scripts/pact-book.sh    <物料目录> --check   # 视图：知识库 ↔ 真源漂移
@@ -231,7 +231,7 @@ S10 无法合理假设的关键歧义、命中 `T3` 停工线。方式：**批�
 | `templates/rate-card.json` | 估算费率卡（拷到物料目录改成实测值） |
 | `scripts/pact-resolve.sh` | 物料目录解析（被其他脚本 source；多物料时 exit 3 列候选） |
 | `scripts/pact-status.sh` | 工序机检（零依赖） |
-| `scripts/pact-lint.sh` | 规格机检九项（零依赖） |
+| `scripts/pact-lint.sh` | 规格机检十一项（零依赖） |
 | `scripts/pact-graph.sh` / `pact-graph.mjs` | ★ 执行图谱机检：结构/DAG/完成度/`--next` 取活/`--done-rids`（需 node） |
 | `scripts/pact-trace.sh` | 落地机检：规格↔代码↔图谱三方比对（虚报/野生检查需 node 读图谱） |
 | `scripts/pact-book.sh` + `pact-book.mjs` / `pact-book-html.mjs` | 生成知识库（md + 单文件 HTML）；`--check` 查漂移（需 node） |
