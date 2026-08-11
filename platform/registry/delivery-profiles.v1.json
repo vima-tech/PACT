@@ -1,0 +1,27 @@
+{
+  "version": "1",
+  "_pact": "@pact R003,R004,R007,R009",
+  "profiles": [
+    {
+      "id": "admin-ui",
+      "matchKind": "admin-ui",
+      "requiredCapabilities": ["pact-core"],
+      "optionalCapabilities": ["ui-admin-adapter", "vima-ui-admin"],
+      "requiredChecks": ["pact-material-check", "pact-self-test", "ui-check-ai", "ui-test", "ui-typecheck", "ui-verify-publish"]
+    },
+    {
+      "id": "business-system",
+      "matchKind": "business-system",
+      "requiredCapabilities": ["pact-core"],
+      "optionalCapabilities": ["ui-admin-adapter", "vima-starter", "vima-starter-adapter", "vima-ui-admin"],
+      "requiredChecks": ["pact-material-check", "pact-self-test", "starter-backend", "starter-cli-pack", "starter-frontend", "starter-template", "ui-check-ai", "ui-test", "ui-typecheck", "ui-verify-publish"]
+    },
+    {
+      "id": "generic",
+      "matchKind": "generic",
+      "requiredCapabilities": ["pact-core"],
+      "optionalCapabilities": [],
+      "requiredChecks": ["pact-material-check", "pact-self-test"]
+    }
+  ]
+}

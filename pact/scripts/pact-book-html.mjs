@@ -17,14 +17,18 @@
 //   ③ 确定性输出——不嵌生成时间戳，同一份 PACT.md 生成的字节完全一致（--check 依赖这一点）。
 
 import { readFileSync, existsSync } from 'node:fs'
-import { createRequire } from 'node:module'
-
-const requireCjs = createRequire(import.meta.url)
+import { runInNewContext } from 'node:vm'
 
 function loadMarked() {
   const p = new URL('../vendor/marked.min.js', import.meta.url)
   if (!existsSync(p)) throw new Error('缺少 vendor/marked.min.js——渲染章节 markdown 需要它')
-  const m = requireCjs('../vendor/marked.min.js')
+  // @pact R026
+  // 仓库为 ESM 时 Node 24 会把 vendored `.js` 当作空 ESM namespace，UMD 的
+  // CommonJS 分支无法拿到 exports。该文件是随 skill 固定发布、hash 可审计的
+  // 构建期依赖；在隔离上下文中提供最小 CommonJS 包装以保持跨 Node 版本一致。
+  const module = { exports: {} }
+  runInNewContext(readFileSync(p, 'utf8'), { module, exports: module.exports })
+  const m = module.exports
   const marked = m.marked ?? m
   marked.setOptions({ gfm: true, breaks: false })
   return marked

@@ -1,0 +1,3026 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PACT · PACT Platform 三阶段统一迁移 · 规格书</title>
+<style>
+:root{
+  --bg:#faf9f7; --bg-soft:#f2f0ec; --panel:#ffffff;
+  --fg:#211d17; --fg-dim:#5f584c; --fg-faint:#948b7d;
+  --line:#e5e1d7; --line-soft:#edeae2;
+  --accent:#9a5a1e; --accent-strong:#7c4715; --accent-fg:#fff;
+  --accent-soft:#f6ecdd; --accent-line:#e3c9a6;
+  --star:#a67c0e; --code-bg:#f4f2ec;
+  --ok:#1f6b63; --ok-soft:#e3efec; --ok-line:#b7d6d0;
+  --warn:#96700a; --warn-soft:#f8f0da; --warn-line:#e1ce97;
+  --bad:#a3341f; --bad-soft:#f9e7e2; --bad-line:#e5bdb2;
+  --hero-grad:radial-gradient(60rem 28rem at 85% -10%,rgba(154,90,30,.12),transparent 60%),
+              radial-gradient(40rem 22rem at 5% 0%,rgba(154,90,30,.06),transparent 55%);
+  --shadow:0 1px 2px rgba(35,28,16,.05),0 16px 40px -18px rgba(35,28,16,.25);
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:ui-sans-serif,-apple-system,"Segoe UI",system-ui,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --content-w:53rem; --side-w:16.5rem; --top-h:3.1rem;
+}
+:root[data-theme="dark"]{
+  --bg:#141210; --bg-soft:#1c1915; --panel:#211d18;
+  --fg:#ece7dc; --fg-dim:#b0a695; --fg-faint:#837a6a;
+  --line:#373126; --line-soft:#2a251d;
+  --accent:#dda668; --accent-strong:#e8b87e; --accent-fg:#2a1a08;
+  --accent-soft:#33291a; --accent-line:#59482e;
+  --star:#dcb64e; --code-bg:#262119;
+  --ok:#6ebbaf; --ok-soft:#16302c; --ok-line:#2c534d;
+  --warn:#d7ab45; --warn-soft:#312814; --warn-line:#584a22;
+  --bad:#e08a71; --bad-soft:#331e18; --bad-line:#5c3529;
+  --hero-grad:radial-gradient(60rem 28rem at 85% -10%,rgba(221,166,104,.10),transparent 60%),
+              radial-gradient(40rem 22rem at 5% 0%,rgba(221,166,104,.05),transparent 55%);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 16px 40px -18px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+/* 顶栏是 sticky，任何锚点跳转都必须给它让出高度。
+   注意：avoid 只写在标题上——目录锚点 id 挂在**容器**（section.chp / details.pack / section.apx）上，
+   写在容器内标题上的 scroll-margin 根本不会被用到，结果就是标题被顶栏切掉一半。 */
+[id]{scroll-margin-top:calc(var(--top-h) + 1rem)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
+  font-size:15px;line-height:1.85;letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  transition:background-color .18s ease,color .18s ease}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+::selection{background:var(--accent-soft)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* ── sticky 顶栏 + 阅读进度 ── */
+.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:calc(var(--content-w) + var(--side-w) + 5rem);margin:0 auto;height:var(--top-h);
+  display:flex;align-items:center;gap:.8rem;padding:0 1.2rem;min-width:0}
+.top .tt{font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.top .tt a{color:var(--fg)}
+.top .tt a:hover{text-decoration:none;color:var(--accent)}
+.badge{font-family:var(--mono);font-size:.68rem;padding:.14rem .55rem;border-radius:999px;
+  border:1px solid var(--line);color:var(--fg-dim);white-space:nowrap}
+.badge.frozen{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent)}
+.top .sp{flex:1}
+.iconbtn{border:1px solid var(--line);background:transparent;color:var(--fg-dim);cursor:pointer;
+  border-radius:8px;padding:.24rem .6rem;font-size:.76rem;font-family:var(--mono);line-height:1.3;
+  transition:border-color .12s,color .12s}
+.iconbtn:hover{border-color:var(--accent-line);color:var(--fg)}
+#bar{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--accent);transition:width .1s linear}
+
+/* ── 布局：侧栏 + 内容 ── */
+.wrap{max-width:calc(var(--content-w) + var(--side-w) + 5rem);margin:0 auto;
+  display:grid;grid-template-columns:var(--side-w) minmax(0,1fr);gap:2.6rem;padding:0 1.2rem}
+@media(max-width:1080px){.wrap{grid-template-columns:minmax(0,1fr)}.side{display:none}}
+.side{position:sticky;top:calc(var(--top-h) + 1.2rem);align-self:start;
+  max-height:calc(100vh - var(--top-h) - 2.4rem);overflow-y:auto;
+  font-size:.75rem;line-height:1.6;padding:.2rem .5rem 1rem 0;scrollbar-width:thin;
+  scrollbar-color:var(--line) transparent}
+.side .st{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:var(--fg-faint);margin:.8rem 0 .4rem}
+.side a{display:block;color:var(--fg-dim);padding:.16rem .55rem;border-radius:7px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background-color .1s,color .1s}
+.side a:hover{background:var(--line-soft);color:var(--fg);text-decoration:none}
+.side a.part{font-weight:650;color:var(--fg);margin-top:.5rem}
+.side a.part .pk{font-family:var(--mono);font-size:.62rem;color:var(--fg-faint);margin-left:.4em;letter-spacing:.06em}
+.side a.ch{padding-left:1.3rem}
+.side a.on{background:var(--accent-soft);color:var(--accent);font-weight:600;box-shadow:inset 2.5px 0 0 var(--accent)}
+.content{min-width:0;padding-bottom:5rem}
+
+/* ── hero 封面区 ── */
+.hero{position:relative;padding:3.6rem 0 2.4rem;background-image:var(--hero-grad);
+  border-bottom:1px solid var(--line)}
+.hero .kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.32em;color:var(--accent);margin-bottom:.9rem}
+.hero h1{font-size:2.3rem;line-height:1.3;margin:0 0 .7rem;letter-spacing:-.022em}
+.hero .sub{color:var(--fg-dim);margin:0 0 1.8rem;max-width:38rem}
+.stats{display:flex;flex-wrap:wrap;gap:.7rem;margin:0 0 1.5rem}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.7rem 1.1rem;
+  min-width:7.5rem;box-shadow:0 1px 2px rgba(35,28,16,.04)}
+.stat .n{font-size:1.25rem;font-weight:700;letter-spacing:-.02em;line-height:1.3}
+.stat .l{font-size:.7rem;color:var(--fg-faint);font-family:var(--mono);letter-spacing:.06em}
+.meta-line{display:flex;flex-wrap:wrap;gap:.45rem;margin:0 0 1.3rem}
+.hero .note{font-size:.76rem;color:var(--fg-faint);line-height:1.8;border-left:2px solid var(--accent-line);
+  padding-left:.9rem;max-width:36rem}
+
+/* ── 目录 ── */
+.toc-doc{padding:2.2rem 0 1.6rem;border-bottom:1px solid var(--line)}
+.toc-doc h2{font-size:1.05rem;margin:0 0 .9rem;letter-spacing:.02em}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:.9rem}
+.toc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.9rem 1.05rem;
+  transition:border-color .12s,box-shadow .12s}
+.toc-card:hover{border-color:var(--accent-line);box-shadow:var(--shadow)}
+.toc-card .tp{display:flex;align-items:baseline;gap:.6em;margin-bottom:.35rem}
+.toc-card .tp a{font-weight:700;color:var(--fg);font-size:.92rem}
+.toc-card .tp .pn{font-family:var(--mono);font-size:.66rem;color:var(--accent);letter-spacing:.12em}
+.toc-card ol{list-style:none;margin:0;padding:0;font-size:.8rem}
+.toc-card ol li{display:flex;gap:.55em;align-items:baseline;padding:.1rem 0}
+.toc-card ol .cn{font-family:var(--mono);font-size:.7rem;color:var(--fg-faint);min-width:2em}
+.toc-card ol a{color:var(--fg-dim)}
+.toc-card ol a:hover{color:var(--accent)}
+
+/* ── 部与章 ── */
+.part{padding:3.4rem 0 .3rem}
+.part .pn{font-family:var(--mono);font-size:.74rem;letter-spacing:.3em;color:var(--accent)}
+.part h2{font-size:1.7rem;margin:.3rem 0 .6rem;letter-spacing:-.018em;scroll-margin-top:calc(var(--top-h) + .8rem)}
+.part .pd{color:var(--fg-dim);max-width:42rem;margin:0;padding-bottom:1.1rem;border-bottom:1px solid var(--line)}
+.chp{padding-top:2.4rem}
+.chp>h3.ct{font-size:1.2rem;margin:0 0 .9rem;padding-bottom:.45rem;border-bottom:1px solid var(--line-soft);
+  scroll-margin-top:calc(var(--top-h) + .8rem)}
+.chp>h3.ct .num{font-family:var(--mono);color:var(--accent);margin-right:.7em;font-size:.92em}
+.chp>h3.ct .anch{float:right;font-family:var(--mono);font-size:.67rem;color:var(--fg-faint);
+  border:1px solid var(--line);border-radius:6px;padding:.12em .55em;margin-top:.35em}
+
+/* ── 章节正文（marked 输出）── */
+.bd h2,.bd h3{font-size:1rem;margin:1.7rem 0 .55rem;font-weight:650;scroll-margin-top:calc(var(--top-h) + .8rem)}
+.bd h4{font-size:.9rem;margin:1.25rem 0 .4rem;color:var(--fg-dim);font-weight:650}
+.bd p{margin:.75rem 0}
+.bd ul,.bd ol{padding-left:1.5rem;margin:.6rem 0}
+.bd li{margin:.28rem 0}
+.bd li::marker{color:var(--fg-faint)}
+.bd strong{font-weight:650}
+.bd code{font-family:var(--mono);font-size:.85em;background:var(--code-bg);padding:.12em .38em;
+  border-radius:5px;border:1px solid var(--line-soft)}
+.bd pre{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:.9rem 1.1rem;
+  overflow-x:auto;font-size:.8rem;line-height:1.65}
+.bd pre code{background:none;border:0;padding:0;font-size:1em}
+.bd blockquote{margin:1rem 0;padding:.7rem 1rem;background:var(--bg-soft);
+  border-left:3px solid var(--accent-line);border-radius:0 8px 8px 0;color:var(--fg-dim)}
+.bd blockquote p{margin:.3rem 0}
+.bd blockquote strong{color:var(--fg)}
+.bd hr{border:0;border-top:1px solid var(--line);margin:2rem 0}
+.bd img{max-width:100%}
+
+/* 表格：网页优势——粘性表头 + 悬停行 + 横向滚动 */
+.tw{overflow-x:auto;overflow-y:auto;max-height:82vh;margin:1rem 0;border:1px solid var(--line);
+  border-radius:10px;background:var(--panel);box-shadow:0 1px 2px rgba(35,28,16,.04)}
+table{border-collapse:collapse;width:100%;font-size:.83rem;line-height:1.6}
+th,td{padding:.5rem .8rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line-soft);
+  overflow-wrap:anywhere}
+thead th{position:sticky;top:0;z-index:1;background:var(--bg-soft);font-weight:650;font-size:.75rem;
+  color:var(--fg-dim);letter-spacing:.05em;white-space:nowrap;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{transition:background-color .1s}
+tbody tr:hover{background:var(--bg-soft)}
+td.nw{white-space:nowrap}
+td code{white-space:nowrap}
+
+/* ── 附录 ── */
+.apx{padding:3.2rem 0 1rem}
+.apx h2{font-size:1.4rem;margin:0 0 .5rem;scroll-margin-top:calc(var(--top-h) + .8rem)}
+.apx .pd{color:var(--fg-dim);margin:0 0 1rem;font-size:.86rem}
+.apx tr:target td{background:var(--accent-soft)}
+.apx tr{scroll-margin-top:calc(var(--top-h) + .8rem)}
+.star{color:var(--star)}
+.rid{font-family:var(--mono);white-space:nowrap}
+
+/* 图（agent 绘制的 SVG 图源，随明暗主题着色） */
+.fig{margin:1.2rem 0;padding:1rem 1rem .6rem;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;box-shadow:0 1px 2px rgba(35,28,16,.04);overflow-x:auto}
+.fig svg{display:block;max-width:100%;height:auto;margin:0 auto;font-family:var(--sans)}
+.fig figcaption{display:flex;align-items:baseline;gap:.9rem;margin-top:.55rem;
+  font-size:.72rem;color:var(--fg-faint)}
+.fig .fl{font-family:var(--mono);letter-spacing:.05em;white-space:nowrap}
+.fig details{display:inline}
+.fig summary{cursor:pointer;color:var(--fg-faint)}
+.fig summary:hover{color:var(--accent)}
+.fig details[open]{display:block;flex-basis:100%}
+.fig details pre{background:var(--code-bg);border:1px solid var(--line-soft);border-radius:8px;
+  padding:.7rem .9rem;font-size:.74rem;line-height:1.6;overflow-x:auto;color:var(--fg-dim);
+  font-family:var(--mono)}
+
+/* R-ID 悬停预览卡（数据取自附录 DOM） */
+#card{position:fixed;z-index:60;max-width:26rem;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;box-shadow:var(--shadow);padding:.75rem 1rem;font-size:.8rem;line-height:1.65;
+  display:none;pointer-events:none}
+#card .ct{font-family:var(--mono);font-weight:650;color:var(--accent);margin-bottom:.2rem}
+#card .cm{color:var(--fg-faint);font-size:.72rem;font-family:var(--mono);margin-top:.35rem}
+
+#toTop{position:fixed;right:1.2rem;bottom:1.2rem;z-index:40;display:none;
+  border:1px solid var(--line);background:var(--panel);color:var(--fg-dim);cursor:pointer;
+  border-radius:999px;width:2.4rem;height:2.4rem;font-size:1rem;box-shadow:var(--shadow)}
+#toTop:hover{color:var(--accent);border-color:var(--accent-line)}
+
+.foot{padding:2.2rem 0 0;margin-top:2.6rem;border-top:1px solid var(--line);
+  font-size:.74rem;color:var(--fg-faint);line-height:1.8}
+
+/* ══ 业务流水线 · 人类主视图 ══════════════════════════════════════════════ */
+.pipe{padding:2.6rem 0 .4rem}
+.pipe .ph{display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap;margin-bottom:.2rem}
+.pipe .ph h2{font-size:1.6rem;margin:0;letter-spacing:-.018em;scroll-margin-top:calc(var(--top-h) + .8rem)}
+.pipe .ph .pk{font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;color:var(--accent)}
+.pipe .pd{color:var(--fg-dim);margin:.35rem 0 1.1rem;max-width:44rem;font-size:.9rem}
+
+.vbar{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin:0 0 1rem;
+  padding:.55rem .8rem;border:1px solid var(--line);border-radius:10px;background:var(--panel);
+  font-family:var(--mono);font-size:.73rem;color:var(--fg-dim)}
+.vbar .track{flex:1;min-width:90px;height:5px;background:var(--bg-soft);border-radius:999px;overflow:hidden;display:flex}
+.vbar .tok{background:var(--ok);height:100%;transition:width .25s ease;width:0}
+.vbar .tno{background:var(--warn);height:100%;transition:width .25s ease;width:0}
+.vbar button{font-family:var(--mono);font-size:.71rem;border:1px solid var(--line);background:transparent;
+  color:var(--fg-dim);border-radius:7px;padding:.24rem .62rem;cursor:pointer;transition:border-color .12s,color .12s}
+.vbar button:hover{border-color:var(--accent-line);color:var(--fg)}
+
+.rig{display:grid;grid-template-columns:15.5rem minmax(0,1fr);gap:1.1rem;align-items:start}
+@media(max-width:860px){.rig{grid-template-columns:minmax(0,1fr)}}
+
+.flow{display:grid;gap:0;align-content:start}
+.fscene{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--fg-faint);
+  margin:.9rem 0 .35rem;padding-top:.6rem;border-top:1px solid var(--line-soft)}
+.fscene:first-child{margin-top:0;padding-top:0;border-top:0}
+.fnode{position:relative;text-align:left;width:100%;font-family:inherit;cursor:pointer;
+  border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:.55rem .7rem;
+  color:var(--fg);transition:border-color .13s,background-color .13s}
+.fnode:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+.fnode.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.fnode .kd{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;color:var(--fg-faint);
+  border:1px solid var(--line);border-radius:4px;padding:0 .3em;margin-right:.4em}
+.fnode .nm{font-weight:640;font-size:.87rem}
+.fnode .id{font-family:var(--mono);font-size:.65rem;color:var(--fg-faint);display:block;margin-top:.12rem;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fnode .ct{position:absolute;right:.6rem;top:.55rem;font-family:var(--mono);font-size:.66rem;font-weight:640;
+  color:var(--accent);background:var(--bg);border:1px solid var(--accent-line);border-radius:999px;
+  min-width:1.45rem;text-align:center;padding:0 .28rem}
+.fnode.warnnode{border-color:var(--warn-line)}
+.fnode.warnnode .ct{color:var(--warn);border-color:var(--warn-line)}
+.fnode.holenode{border-color:var(--bad-line)}
+.fnode.holenode .ct{color:var(--bad);border-color:var(--bad-line)}
+.fedge{display:flex;gap:.4rem;padding:.25rem 0 .25rem .85rem;font-size:.75rem;color:var(--fg-dim);line-height:1.55}
+.fedge .ar{font-family:var(--mono);color:var(--fg-faint)}
+.fedge.alt{color:var(--warn);padding-left:1.5rem;font-size:.72rem}
+.fedge.alt .ar{color:var(--warn-line)}
+.fend{padding:.4rem 0 0 .85rem;font-family:var(--mono);font-size:.71rem;color:var(--ok)}
+
+.nlist{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+.nlist .nh{padding:.75rem .95rem;border-bottom:1px solid var(--line-soft);background:var(--bg-soft)}
+.nlist .nt{font-weight:660;font-size:1.02rem}
+.nlist .nr{font-family:var(--mono);font-size:.67rem;color:var(--fg-faint);margin-left:.5em}
+.nlist .ni{color:var(--fg-dim);font-size:.86rem;margin-top:.22rem;line-height:1.7}
+.nlist .nsample{font-size:.79rem;color:var(--fg-faint);margin-top:.4rem;padding-top:.4rem;
+  border-top:1px dashed var(--line);line-height:1.65}
+.nlist .nsample b{font-family:var(--mono);font-size:.67rem;letter-spacing:.08em;color:var(--accent)}
+.grp{border-top:1px solid var(--line-soft)}
+.grp .gh{display:flex;align-items:baseline;gap:.5rem;padding:.5rem .95rem .05rem}
+.grp .gi{font-family:var(--mono);font-size:.66rem;color:var(--accent);letter-spacing:.1em}
+.grp .gt{font-size:.82rem;font-weight:640;color:var(--fg-dim)}
+.grp .gb{padding:.05rem .95rem .55rem;display:grid;gap:.3rem}
+
+.it{border:1px solid transparent;border-radius:9px;padding:.4rem .55rem;transition:background-color .12s,border-color .12s}
+.it:hover{background:var(--bg-soft)}
+.it[data-v="ok"]{background:var(--ok-soft);border-color:var(--ok-line)}
+.it[data-v="no"]{background:var(--warn-soft);border-color:var(--warn-line)}
+.it.holeit{background:var(--bad-soft);border-color:var(--bad-line)}
+.it .tx{font-size:.92rem;line-height:1.78}
+.it .tx strong{font-weight:650}
+/* 只有带「⚠ 我定的」的句子才把加粗染成待裁定色——那半句正是 AI 替人做的决定 */
+.it.hasassume .tx strong{background:var(--warn-soft);border-bottom:1.5px solid var(--warn-line);
+  padding:0 .1em;border-radius:2px}
+.it.holeit .tx{color:var(--bad)}
+.it .mt{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;margin-top:.28rem}
+.it .mt .sp{flex:1}
+.it .rr{font-family:var(--mono);font-size:.67rem;color:var(--accent);background:var(--accent-soft);
+  border:1px solid var(--accent-line);border-radius:5px;padding:.02rem .34rem}
+.it .rr:hover{text-decoration:none;background:var(--accent);color:var(--accent-fg)}
+.vb{font-family:var(--mono);font-size:.67rem;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg-dim);border-radius:6px;padding:.12rem .52rem;cursor:pointer;transition:all .12s}
+.vb:hover{border-color:var(--accent-line);color:var(--fg)}
+.vb.ok.on{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok);font-weight:640}
+.vb.no.on{background:var(--warn-soft);border-color:var(--warn-line);color:var(--warn);font-weight:640}
+.it .as{margin-top:.3rem;font-size:.81rem;color:var(--warn);display:flex;gap:.4rem;align-items:baseline}
+.it .as .ai{font-family:var(--mono);font-size:.65rem;letter-spacing:.07em;white-space:nowrap}
+.it .nb{display:none;width:100%;margin-top:.3rem;font-family:var(--sans);font-size:.84rem;
+  border:1px solid var(--warn-line);background:var(--bg);color:var(--fg);border-radius:7px;
+  padding:.32rem .5rem;resize:vertical;min-height:1.9rem}
+.it[data-v="no"] .nb{display:block}
+.nempty{padding:.8rem .95rem;color:var(--warn);font-size:.86rem;line-height:1.7}
+
+#vout{margin:1rem 0 0;font-family:var(--mono);font-size:.74rem;line-height:1.7;white-space:pre-wrap;
+  color:var(--fg-dim);background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;
+  padding:.8rem 1rem;overflow-x:auto;max-height:24rem;overflow-y:auto;display:none}
+
+/* 范围边界（P6 提前呈现：非目标暴露最晚，猜错代价最高）*/
+.scope{margin:2.2rem 0 .4rem;border:1px solid var(--warn-line);background:var(--warn-soft);
+  border-radius:12px;padding:.9rem 1.1rem}
+.scope .st{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;color:var(--warn);margin-bottom:.45rem}
+.scope .sb{font-size:.89rem;line-height:1.8}
+.scope .sb ul{margin:.2rem 0;padding-left:1.3rem}
+.scope .sb p:first-child{margin-top:0}
+.scope .sb p:last-child{margin-bottom:0}
+
+/* 支撑材料分隔 */
+.supp{margin:3rem 0 0;padding-top:1.4rem;border-top:2px solid var(--line)}
+.supp .sh{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--fg-faint)}
+.supp .sd{color:var(--fg-dim);font-size:.86rem;margin:.4rem 0 0;max-width:44rem}
+details.pack{margin-top:1rem;border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+details.pack>summary{cursor:pointer;padding:.7rem 1rem;font-weight:650;list-style:none;
+  display:flex;align-items:baseline;gap:.7rem;background:var(--bg-soft)}
+details.pack>summary::-webkit-details-marker{display:none}
+details.pack>summary::before{content:"▸";font-family:var(--mono);color:var(--accent);font-size:.8rem}
+details.pack[open]>summary::before{content:"▾"}
+details.pack>summary .pn2{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;color:var(--accent)}
+details.pack>summary .pdesc{font-weight:400;font-size:.8rem;color:var(--fg-faint);flex:1}
+details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
+
+/* ── 打印降级（不是设计目标，但 Ctrl+P 仍可用）── */
+@media print{
+  body{background:#fff;font-size:10.5pt}
+  .top,.side,#toTop,#card{display:none!important}
+  .wrap{display:block;max-width:none;padding:0}
+  .hero{background:none;padding-top:2rem}
+  .part{page-break-before:always}
+  .tw{max-height:none;overflow:visible;border-radius:0}
+  .tw,.bd pre,.bd blockquote,.chp>h3.ct,.fig{break-inside:avoid}
+  thead th{position:static}
+  a{color:inherit}
+  .apx{page-break-before:always}
+  /* 流水线：纸上点不开，全部摊平；裁定控件无意义，隐藏 */
+  .rig{display:block}
+  .flow{margin-bottom:1rem}
+  .nlist{border:0}
+  .nlist[hidden]{display:block!important}
+  .nlist+.nlist{margin-top:.6rem}
+  details.pack[open]>summary~*,details.pack>.packb{display:block!important}
+  .vbar,.vb,.nb,#vout{display:none!important}
+  .it,.grp,.nlist{break-inside:avoid}
+  details.pack{border:0}
+  details.pack>summary{background:none;padding-left:0}
+  details.pack .packb{padding-left:0;padding-right:0}
+  .supp{page-break-before:always}
+}
+@page{size:A4;margin:16mm 14mm}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <div class="tt"><a href="#cover">PACT · PACT Platform 三阶段统一迁移</a></div>
+  <span class="badge frozen">已冻结 · 2026-08-11</span>
+  <span class="sp"></span>
+  <button class="iconbtn" id="theme" title="明暗主题">☀</button>
+</div><div id="bar"></div></div>
+<div class="wrap">
+<nav class="side" aria-label="目录"><div class="st">目录</div>
+<a href="#cover">封面</a><div class="st">业务流水线</div><a class="ch" href="#pipeline" data-jump="$ npm run platform:inspect">能力检查</a><a class="ch" href="#pipeline" data-jump="$ npm run governance:check">治理验证</a><a class="ch" href="#pipeline" data-jump="$ npm run migration:verify">导入检查</a><a class="ch" href="#pipeline" data-jump="$ npm run verify:products">产品构建</a><a class="ch" href="#pipeline" data-jump="$ npm run release:plan">变更计划</a><a class="ch" href="#pipeline" data-jump="$ npm run release:pack">发布预演</a><div class="st">支撑材料</div><a class="part" href="#part-P">第一部分 · 产品需求<span class="pk">PRD</span></a><a class="ch" href="#ch-P1">1.1 一句话定义与交付形态</a><a class="ch" href="#ch-P2">1.2 背景与问题</a><a class="ch" href="#ch-P3">1.3 用户与角色</a><a class="ch" href="#ch-P4">1.4 核心场景</a><a class="ch" href="#ch-P5">1.5 需求清单（R-ID）</a><a class="ch" href="#ch-P6">1.6 非目标（明确不做）</a><a class="ch" href="#ch-P7">1.7 约束</a><a class="ch" href="#ch-P8">1.8 成功定义</a><a class="part" href="#part-A">第二部分 · 系统设计<span class="pk">SDD</span></a><a class="ch" href="#ch-A1">2.1 系统边界与上下文</a><a class="ch" href="#ch-A2">2.2 结构与模块职责</a><a class="ch" href="#ch-A3">2.3 关键链路（端到端）</a><a class="ch" href="#ch-A4">2.4 设计原则（本项目的硬规矩）</a><a class="ch" href="#ch-A5">2.5 决策记录（D-ID）</a><a class="ch" href="#ch-A6">2.6 风险与缓解</a><a class="part" href="#part-C">第三部分 · 数据与接口规格<span class="pk">SPEC</span></a><a class="ch" href="#ch-C1">3.1 数据模型</a><a class="ch" href="#ch-C2">3.2 枚举与状态机</a><a class="ch" href="#ch-C3">3.3 不变量与数据铁律</a><a class="ch" href="#ch-C4">3.4 对外接口契约</a><a class="ch" href="#ch-C5">3.5 内部模块接口</a><a class="ch" href="#ch-C6">3.6 错误码与错误语义</a><a class="ch" href="#ch-C7">3.7 配置与环境变量</a><a class="ch" href="#ch-C8">3.8 权限与安全边界</a><a class="ch" href="#ch-C9">3.9 观测与日志契约</a><a class="ch" href="#ch-C10">3.10 交互与呈现契约</a><a class="ch" href="#ch-C11">3.11 AI / Prompt 契约</a><a class="part" href="#part-T">第四部分 · 验收与交付<span class="pk">ACCEPTANCE</span></a><a class="ch" href="#ch-T1">4.1 验收清单</a><a class="ch" href="#ch-T2">4.2 指标与阈值</a><a class="ch" href="#ch-T3">4.3 停工线（出现即停，不得继续施工）</a><a class="ch" href="#ch-T4">4.4 交付前置（Definition of Done）</a><a class="ch" href="#ch-T5">4.5 施工范围与里程碑</a><a class="part" href="#appendix">附录 · 需求索引</a></nav>
+<main class="content">
+<header class="hero" id="cover">
+  <div class="kicker">产品需求与系统设计规格书</div>
+  <h1>PACT · PACT Platform 三阶段统一迁移</h1>
+  <p class="sub">本文档整合传统交付物中 PRD（产品需求）、SDD（系统设计）与 SPEC（技术规格）的全部内容，
+  以统一编号交叉引用，作为本项目唯一的对外规格交付物。</p>
+  <div class="stats"><div class="stat"><div class="n">27</div><div class="l">需求 R-ID</div></div><div class="stat"><div class="n">9</div><div class="l">决策（含已否决）</div></div><div class="stat"><div class="n">9</div><div class="l">不变量</div></div><div class="stat"><div class="n">5</div><div class="l">里程碑</div></div></div>
+  <div class="meta-line"><span class="badge frozen">已冻结 · 2026-08-11</span><span class="badge">创建日期 · 2026-08-11</span><span class="badge">更新日期 · 2026-08-11</span><span class="badge">完备度档位 · full</span><span class="badge">负责人 · renmengkai</span></div>
+  <p class="note">本文档由规格真源 <code>PACT.md</code> 自动生成，与真源逐字对应；
+  请勿直接修改本文件——修改真源后重新生成即可。规格冻结后的任何变更均记录于变更记录（changelog）。</p>
+</header>
+<nav class="toc-doc" id="toc"><h2>目录</h2><div class="toc-grid"><div class="toc-card"><div class="tp"><span class="pn">PIPELINE</span>
+    <a href="#pipeline">业务流水线 · 先看这里</a></div>
+    <ol><li><span class="cn">01</span><a href="#pipeline" data-jump="$ npm run platform:inspect">能力检查</a></li><li><span class="cn">02</span><a href="#pipeline" data-jump="$ npm run governance:check">治理验证</a></li><li><span class="cn">03</span><a href="#pipeline" data-jump="$ npm run migration:verify">导入检查</a></li><li><span class="cn">04</span><a href="#pipeline" data-jump="$ npm run verify:products">产品构建</a></li><li><span class="cn">05</span><a href="#pipeline" data-jump="$ npm run release:plan">变更计划</a></li><li><span class="cn">06</span><a href="#pipeline" data-jump="$ npm run release:pack">发布预演</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">PRD</span><a href="#part-P">第一部分 · 产品需求</a></div><ol><li><span class="cn">1.1</span><a href="#ch-P1">一句话定义与交付形态</a></li><li><span class="cn">1.2</span><a href="#ch-P2">背景与问题</a></li><li><span class="cn">1.3</span><a href="#ch-P3">用户与角色</a></li><li><span class="cn">1.4</span><a href="#ch-P4">核心场景</a></li><li><span class="cn">1.5</span><a href="#ch-P5">需求清单（R-ID）</a></li><li><span class="cn">1.6</span><a href="#ch-P6">非目标（明确不做）</a></li><li><span class="cn">1.7</span><a href="#ch-P7">约束</a></li><li><span class="cn">1.8</span><a href="#ch-P8">成功定义</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">SDD</span><a href="#part-A">第二部分 · 系统设计</a></div><ol><li><span class="cn">2.1</span><a href="#ch-A1">系统边界与上下文</a></li><li><span class="cn">2.2</span><a href="#ch-A2">结构与模块职责</a></li><li><span class="cn">2.3</span><a href="#ch-A3">关键链路（端到端）</a></li><li><span class="cn">2.4</span><a href="#ch-A4">设计原则（本项目的硬规矩）</a></li><li><span class="cn">2.5</span><a href="#ch-A5">决策记录（D-ID）</a></li><li><span class="cn">2.6</span><a href="#ch-A6">风险与缓解</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">SPEC</span><a href="#part-C">第三部分 · 数据与接口规格</a></div><ol><li><span class="cn">3.1</span><a href="#ch-C1">数据模型</a></li><li><span class="cn">3.2</span><a href="#ch-C2">枚举与状态机</a></li><li><span class="cn">3.3</span><a href="#ch-C3">不变量与数据铁律</a></li><li><span class="cn">3.4</span><a href="#ch-C4">对外接口契约</a></li><li><span class="cn">3.5</span><a href="#ch-C5">内部模块接口</a></li><li><span class="cn">3.6</span><a href="#ch-C6">错误码与错误语义</a></li><li><span class="cn">3.7</span><a href="#ch-C7">配置与环境变量</a></li><li><span class="cn">3.8</span><a href="#ch-C8">权限与安全边界</a></li><li><span class="cn">3.9</span><a href="#ch-C9">观测与日志契约</a></li><li><span class="cn">3.10</span><a href="#ch-C10">交互与呈现契约</a></li><li><span class="cn">3.11</span><a href="#ch-C11">AI / Prompt 契约</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">ACCEPTANCE</span><a href="#part-T">第四部分 · 验收与交付</a></div><ol><li><span class="cn">4.1</span><a href="#ch-T1">验收清单</a></li><li><span class="cn">4.2</span><a href="#ch-T2">指标与阈值</a></li><li><span class="cn">4.3</span><a href="#ch-T3">停工线（出现即停，不得继续施工）</a></li><li><span class="cn">4.4</span><a href="#ch-T4">交付前置（Definition of Done）</a></li><li><span class="cn">4.5</span><a href="#ch-T5">施工范围与里程碑</a></li></ol></div>
+  <div class="toc-card"><div class="tp"><span class="pn">APPENDIX</span><a href="#appendix">附录 · 需求索引（R-ID）</a></div></div></div></nav>
+<section class="pipe" id="pipeline">
+  <div class="ph"><span class="pk">PIPELINE</span><h2>业务流水线</h2></div>
+  <p class="pd">顺着业务真实的走法看这个系统：左边每个节点是一个<strong>能打开的页面</strong>或<strong>在跑的功能点</strong>，
+  点它，右边就是这个节点上的全部需求——用人话写，分成四组。
+  每条句子可以直接裁定：读着不对就点「有异议」写一句，最后导出给 AI 走变更。</p>
+  <div class="vbar">
+    <span id="vtext">共 27 条 · 未裁定 27</span>
+    <span class="track"><span class="tok" id="vok"></span><span class="tno" id="vno"></span></span>
+    <button type="button" id="vexport">导出裁定结果</button>
+    <button type="button" id="vreset">重置</button>
+  </div>
+  <div class="rig"><nav class="flow" id="flow"><div class="fscene">S1 · 判断需求并选择工程能力</div><button class="fnode" data-k="$ npm run platform:inspect" type="button"><span class="kd">页面</span><span class="nm">能力检查</span><span class="id">$ npm run platform:inspect</span><span class="ct">6</span></button><div class="fedge"><span class="ar">↓</span><span>读取结构化报告</span></div><button class="fnode" data-k="$ npm run governance:check" type="button"><span class="kd">页面</span><span class="nm">治理验证</span><span class="id">$ npm run governance:check</span><span class="ct">4</span></button><div class="fend">✓ 得到 Delivery Profile 与 adapter 选择</div><div class="fedge alt"><span class="ar">↳</span><span>治理验证：schema、兼容性或信息不足 → 能力检查</span></div><div class="fscene">S2 · 将两个产品迁入统一仓库</div><button class="fnode" data-k="$ npm run migration:verify" type="button"><span class="kd">页面</span><span class="nm">导入检查</span><span class="id">$ npm run migration:verify</span><span class="ct">4</span></button><div class="fedge"><span class="ar">↓</span><span>哈希一致</span></div><button class="fnode" data-k="$ npm run verify:products" type="button"><span class="kd">页面</span><span class="nm">产品构建</span><span class="id">$ npm run verify:products</span><span class="ct">4</span></button><div class="fend">✓ PACT 仓库成为唯一工程入口</div><div class="fedge alt"><span class="ar">↳</span><span>产品构建：任一哈希或构建失败，保留原目录 → 导入检查</span></div><div class="fscene">S3 · 规划、验证并打包独立发布单元</div><button class="fnode" data-k="$ npm run release:plan" type="button"><span class="kd">页面</span><span class="nm">变更计划</span><span class="id">$ npm run release:plan</span><span class="ct">5</span></button><div class="fedge"><span class="ar">↓</span><span>按受影响单元串行验证</span></div><button class="fnode" data-k="$ npm run release:pack" type="button"><span class="kd">页面</span><span class="nm">发布预演</span><span class="id">$ npm run release:pack</span><span class="ct">4</span></button><div class="fend">✓ 得到本地 tarball 与发布命令</div><div class="fedge alt"><span class="ar">↳</span><span>发布预演：验证或 pack 失败，不生成发布批准 → 变更计划</span></div><div class="fedge alt"><span class="ar">↳</span><span>变更计划：无变更 → 输出空计划并结束</span></div></nav><div id="nstack"><div class="nlist" data-k="$ npm run platform:inspect"><div class="nh"><span class="nt">能力检查</span><span class="nr">页面 · $ npm run platform:inspect</span><div class="ni">框架维护者或 Agent 在这里输入需求类别并读取选择理由。</div><div class="nsample"><b>样本</b> 来源于用户本轮要求：只有分析到“业务系统开发”时才使用 Vima Starter；Vima UI Admin 也不是必选项</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">PACT Core 在不导入任何 Vima 源码的情况下读取能力注册表。</div><div class="mt"><a class="rr" href="#req-R001">R001</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i1" data-v=""><div class="tx">注册表分别描述 PACT、UI Admin、Starter 和两个 adapter 的能力、限制、版本与 readiness。</div><div class="mt"><a class="rr" href="#req-R002">R002</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i2" data-v=""><div class="tx">Router 对通用规格工作选择 <code>generic</code>，对纯管理端界面选择 <code>admin-ui</code>，仅对完整业务系统选择 <code>business-system</code>。</div><div class="mt"><a class="rr" href="#req-R003">R003</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i3" data-v=""><div class="tx"><code>admin-ui</code> 与 <code>business-system</code> profile 都把 Vima 能力视为可选依赖。</div><div class="mt"><a class="rr" href="#req-R004">R004</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">未知需求类别、schema 非法或能力未 ready 时返回结构化诊断且不生成工程。</div><div class="mt"><a class="rr" href="#req-R005">R005</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">谁看得到什么</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">所有角色都能看到能力与限制；只有维护者决定是否把 readiness 从 blocked 提升。</div><div class="mt"><a class="rr" href="#req-R006">R006</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run governance:check"><div class="nh"><span class="nt">治理验证</span><span class="nr">页面 · $ npm run governance:check</span><div class="ni">CI 和维护者在这里验证声明是否有证据、版本是否兼容。</div><div class="nsample"><b>样本</b> 来源于用户本轮要求：只有分析到“业务系统开发”时才使用 Vima Starter；Vima UI Admin 也不是必选项</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s0n1i0" data-v=""><div class="tx">Schema 校验 capabilities、delivery profiles、adapter descriptors、compatibility、provenance 和 release units 六类治理 JSON。</div><div class="mt"><a class="rr" href="#req-R007">R007</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n1i1" data-v=""><div class="tx">兼容性使用包版本、内容哈希、公开契约版本和发布状态共同判断，不只比较 semver。</div><div class="mt"><a class="rr" href="#req-R008">R008</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n1i2" data-v=""><div class="tx">基准样例覆盖 generic、admin-ui、business-system 以及信息不足四类路由。</div><div class="mt"><a class="rr" href="#req-R009">R009</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">背后自动发生了什么</span></div><div class="gb"><div class="it" data-i="s0n1i0" data-v=""><div class="tx">Starter 权限、生产安全、测试与全栈生成尚未达标的事实被记录为限制，不能被输出成 ready 能力。</div><div class="mt"><a class="rr" href="#req-R010">R010</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run migration:verify"><div class="nh"><span class="nt">导入检查</span><span class="nr">页面 · $ npm run migration:verify</span><div class="ni">维护者核对导入来源、排除项和完整性。</div><div class="nsample"><b>样本</b> 来源目录 /home/renmk/projects/vima-ui-admin 与 /home/renmk/projects/vima-starter 当前均无独立 .git</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s1n2i0" data-v=""><div class="tx">UI Admin 迁入 <code>products/vima-ui-admin</code>，Starter 迁入 <code>templates/vima-starter</code>。</div><div class="mt"><a class="rr" href="#req-R011">R011</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n2i1" data-v=""><div class="tx">provenance 记录原绝对路径、导入时间、历史不可用事实、排除目录和规范化内容哈希。</div><div class="mt"><a class="rr" href="#req-R012">R012</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n2i2" data-v=""><div class="tx">导入快照只忽略契约列出的 8 个目录段，排除集合不可由调用方扩大；后续 bootstrap/build 产物不属于导入快照。</div><div class="mt"><a class="rr" href="#req-R013">R013</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s1n2i0" data-v=""><div class="tx">目标已有非预期内容、来源缺失或导入后哈希不同则失败，不覆盖、不删除来源。</div><div class="mt"><a class="rr" href="#req-R014">R014</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run verify:products"><div class="nh"><span class="nt">产品构建</span><span class="nr">页面 · $ npm run verify:products</span><div class="ni">维护者在统一目录中运行各产品原有门禁。</div><div class="nsample"><b>样本</b> 来源目录 /home/renmk/projects/vima-ui-admin 与 /home/renmk/projects/vima-starter 当前均无独立 .git</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s1n3i0" data-v=""><div class="tx">UI Admin 保持 <code>@vima-tech/ui-admin</code> 的公开入口和独立 npm 包。</div><div class="mt"><a class="rr" href="#req-R015">R015</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n3i1" data-v=""><div class="tx">Starter 保持 <code>create-vima-starter</code> CLI、frontend/backend 真源和 <code>cli/template</code> 同步规则。</div><div class="mt"><a class="rr" href="#req-R016">R016</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n3i2" data-v=""><div class="tx">根级串行编排调用产品自己的 lockfile 和验证命令，不引入重型 monorepo 构建系统。</div><div class="mt"><a class="rr" href="#req-R017">R017</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">背后自动发生了什么</span></div><div class="gb"><div class="it" data-i="s1n3i0" data-v=""><div class="tx">旧绝对路径先以软链完成过渡验收；在统一路径门禁通过后，精确退役两个软链接并进入不可回滚的 <code>finalized</code> 状态，备份仍保留。</div><div class="mt"><a class="rr" href="#req-R018">R018</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run release:plan"><div class="nh"><span class="nt">变更计划</span><span class="nr">页面 · $ npm run release:plan</span><div class="ni">发布维护者在这里查看哪些独立单元需要验证、打包或升版。</div><div class="nsample"><b>样本</b> 修改 UI Agent 公开契约时，UI unit 必须发布新版本，兼容性验证需覆盖 Starter，但 Starter 是否发版由其文件是否变化决定</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s2n4i0" data-v=""><div class="tx">release unit 注册表分别定义 PACT skills、UI Admin 和 Starter CLI 的路径、版本源、验证与 pack 命令。</div><div class="mt"><a class="rr" href="#req-R019">R019</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i1" data-v=""><div class="tx">changed-path 规则把 Git 变更稳定映射到直接受影响单元。</div><div class="mt"><a class="rr" href="#req-R020">R020</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i2" data-v=""><div class="tx">依赖传播把 UI 公开契约变化加入 Starter 兼容性验证，但不自动宣称 Starter 需要发布。</div><div class="mt"><a class="rr" href="#req-R021">R021</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i3" data-v=""><div class="tx">计划以稳定 JSON 和人读摘要输出，重复运行结果一致。</div><div class="mt"><a class="rr" href="#req-R022">R022</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s2n4i0" data-v=""><div class="tx">工作区基线不可判定、release unit schema 非法或同一文件归属冲突时失败。</div><div class="mt"><a class="rr" href="#req-R023">R023</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run release:pack"><div class="nh"><span class="nt">发布预演</span><span class="nr">页面 · $ npm run release:pack</span><div class="ni">发布维护者在本地完成可发布性验证，不接触远程 registry。</div><div class="nsample"><b>样本</b> 修改 UI Agent 公开契约时，UI unit 必须发布新版本，兼容性验证需覆盖 Starter，但 Starter 是否发版由其文件是否变化决定</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s2n5i0" data-v=""><div class="tx">UI 执行 check:ai、typecheck、test、verify:publish 并通过 runtime-size 预算。</div><div class="mt"><a class="rr" href="#req-R024">R024</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n5i1" data-v=""><div class="tx">Starter 执行 template check、前端 build check、Maven package 和 CLI 本地 pack。</div><div class="mt"><a class="rr" href="#req-R025">R025</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n5i2" data-v=""><div class="tx">PACT 执行脚本自测、物料 lint、graph、trace、book check 与 skill pack 检查。</div><div class="mt"><a class="rr" href="#req-R026">R026</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s2n5i0" data-v=""><div class="tx">默认命令只允许生成本地 tarball；任何真实 publish、push 或凭据读取都必须由人另行显式执行。</div><div class="mt"><a class="rr" href="#req-R027">R027</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div></div></div>
+  <pre id="vout"></pre>
+</section>
+<section class="scope">
+  <div class="st">范围边界 · 明确不做的事（摘自 P6）</div>
+  <div class="sb"><ul>
+<li><strong>不做</strong>把三个发布物合成一个 npm 包——会破坏 PACT 独立性和使用者升级边界。</li>
+<li><strong>不做</strong>真实 <code>npm publish</code>、Git push、PR 或远端发布——没有凭据与外部变更授权；本轮止于可审计 plan、verify 和本地归档。</li>
+<li><strong>不做</strong>把 UI Admin 或 Starter 设为 PACT 必选依赖——用户明确要求按需求选择。</li>
+<li><strong>不做</strong>完整 FullStackSpec/StarterAdapter 业务代码生成——本轮完成承载它们的治理与 adapter 边界；readiness 继续标 blocked/partial。</li>
+<li><strong>不做</strong>在迁移中一次性修复 Starter 的 RBAC、生产 secrets、migration、三份导航真源与全部测试——这些需要独立 PACT 物料，当前只禁止虚报能力。</li>
+<li><strong>不做</strong>引入 Nx、Turborepo 或常驻 MCP 服务——当前规模用确定性 Node/Shell 工具足够；多个远程客户端出现后再评估薄 MCP。</li>
+<li><strong>不做</strong>伪造两个来源项目不存在的 Git 历史——使用 provenance 与内容哈希代偿。</li>
+</ul>
+</div>
+</section>
+<section class="supp" id="supp">
+  <div class="sh">SUPPORTING MATERIAL</div>
+  <h2 style="font-size:1.35rem;margin:.35rem 0 0;letter-spacing:-.015em">支撑材料 · 四层完整规格</h2>
+  <p class="sd">上面的流水线是这份规格的<strong>视图</strong>，下面才是<strong>全文</strong>——施工方要的精度一分没少，
+  只是不再挡在需求方前面。展开任意一部分即可逐节阅读；正文中的 R-ID 可悬停预览、点击跳转。</p>
+</section>
+<details class="pack" id="part-P" open>
+<summary><span class="pn2">PRD</span>第一部分 · 产品需求<span class="pdesc">8 节</span></summary>
+<div class="packb"><section class="chp" id="ch-P1">
+<h3 class="ct"><span class="num">1.1</span>一句话定义与交付形态<span class="anch">P1</span></h3>
+<div class="bd"><p>把 PACT skills、<code>@vima-tech/ui-admin</code> 和 <code>create-vima-starter</code> 迁入同一个 PACT Platform Git 仓库统一治理、验证和发布编排，同时保持三者逻辑解耦与独立发布身份。交付形态是本地 Git monorepo 内的 skills、npm 组件库、全栈脚手架、JSON 治理契约及 Node/Shell CLI；由框架维护者在 Linux/macOS 开发机或 CI 部署，不新增常驻服务。</p>
+</div></section>
+<section class="chp" id="ch-P2">
+<h3 class="ct"><span class="num">1.2</span>背景与问题<span class="anch">P2</span></h3>
+<div class="bd"><p>PACT 已能约束 Product、Architecture、Contracts、Tests 与施工闭环，但不知道有哪些工程创建能力；UI 框架只负责前端组件和受信 Builder；Starter 才持有 Vue + Spring Boot 业务系统宿主。三者分散导致版本兼容、选择条件、验证与发布没有单一真源，AI 容易在没有业务契约时生成看似完整的空壳。现在需要把“工程创建工具”统一管理，但若简单合成一个包，会让 PACT Core 硬依赖 Vima、破坏独立发布，并把 Starter 尚未具备的权限和测试能力虚报为可靠。本迁移因此同时完成治理层、物理 workspace 和发布编排三阶段。</p>
+</div></section>
+<section class="chp" id="ch-P3">
+<h3 class="ct"><span class="num">1.3</span>用户与角色<span class="anch">P3</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>是谁</th>
+<th>主要目标</th>
+<th>数据可见范围</th>
+<th>可执行的写操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td class="nw">框架维护者</td>
+<td>修改 PACT、adapter、产品源码的人</td>
+<td>在统一仓库开发并验证</td>
+<td>整个仓库及本地来源快照</td>
+<td>修改源码与治理数据，不默认外部发布</td>
+</tr>
+<tr>
+<td class="nw">发布维护者</td>
+<td>决定版本和执行发布的人</td>
+<td>得到准确 changed plan 与独立包</td>
+<td>release units、变更和验证报告</td>
+<td>显式执行 pack；真实 publish 仍需人工授权</td>
+</tr>
+<tr>
+<td>AI Agent</td>
+<td>使用 PACT 分析并创建工程的代理</td>
+<td>按需求选择最小能力组合</td>
+<td>只读 capability/profile/compatibility 与项目物料</td>
+<td>默认仅生成 plan；写入受路径与 overwrite 策略限制</td>
+</tr>
+<tr>
+<td>生成项目维护者</td>
+<td>接手 Starter 或 UI 产物的人</td>
+<td>获得可构建、可追溯的工程</td>
+<td>自己的生成项目</td>
+<td>在生成项目内开发；不依赖 PACT 运行时</td>
+</tr>
+</tbody></table></div>
+<p>权限基调：仓库工具只操作当前仓库或显式输出目录；不持有 registry 凭据；真实发布不是自动流程。</p>
+</div></section>
+<section class="chp" id="ch-P4">
+<h3 class="ct"><span class="num">1.4</span>核心场景<span class="anch">P4</span></h3>
+<div class="bd"><h3>S1 · 判断需求并选择工程能力</h3>
+<ul>
+<li><strong>流程</strong>：能力检查 <code>$ npm run platform:inspect</code> --读取结构化报告--&gt; 治理验证 <code>$ npm run governance:check</code> --通过--&gt; ✓ 得到 Delivery Profile 与 adapter 选择</li>
+<li><strong>回头路</strong>：治理验证 --schema、兼容性或信息不足--&gt; 能力检查</li>
+<li><strong>样本</strong>：来源于用户本轮要求：只有分析到“业务系统开发”时才使用 Vima Starter；Vima UI Admin 也不是必选项</li>
+<li><strong>完成态</strong>：同一输入得到确定、可解释、可机检的 profile 和候选能力，不会默认选 Starter</li>
+</ul>
+<h4>能力检查 <code>$ npm run platform:inspect</code></h4>
+<blockquote>
+<p>框架维护者或 Agent 在这里输入需求类别并读取选择理由。</p>
+</blockquote>
+<ul>
+<li>能做什么<ul>
+<li>PACT Core 在不导入任何 Vima 源码的情况下读取能力注册表。 <code>R001</code></li>
+<li>注册表分别描述 PACT、UI Admin、Starter 和两个 adapter 的能力、限制、版本与 readiness。 <code>R002</code></li>
+<li>Router 对通用规格工作选择 <code>generic</code>，对纯管理端界面选择 <code>admin-ui</code>，仅对完整业务系统选择 <code>business-system</code>。 <code>R003</code></li>
+<li><code>admin-ui</code> 与 <code>business-system</code> profile 都把 Vima 能力视为可选依赖。 <code>R004</code></li>
+</ul>
+</li>
+<li>什么情况会被拦住<ul>
+<li>未知需求类别、schema 非法或能力未 ready 时返回结构化诊断且不生成工程。 <code>R005</code></li>
+</ul>
+</li>
+<li>谁看得到什么<ul>
+<li>所有角色都能看到能力与限制；只有维护者决定是否把 readiness 从 blocked 提升。 <code>R006</code></li>
+</ul>
+</li>
+</ul>
+<h4>治理验证 <code>$ npm run governance:check</code></h4>
+<blockquote>
+<p>CI 和维护者在这里验证声明是否有证据、版本是否兼容。</p>
+</blockquote>
+<ul>
+<li>能做什么<ul>
+<li>Schema 校验 capabilities、delivery profiles、adapter descriptors、compatibility、provenance 和 release units 六类治理 JSON。 <code>R007</code></li>
+<li>兼容性使用包版本、内容哈希、公开契约版本和发布状态共同判断，不只比较 semver。 <code>R008</code></li>
+<li>基准样例覆盖 generic、admin-ui、business-system 以及信息不足四类路由。 <code>R009</code></li>
+</ul>
+</li>
+<li>背后自动发生了什么<ul>
+<li>Starter 权限、生产安全、测试与全栈生成尚未达标的事实被记录为限制，不能被输出成 ready 能力。 <code>R010</code></li>
+</ul>
+</li>
+</ul>
+<h3>S2 · 将两个产品迁入统一仓库</h3>
+<ul>
+<li><strong>流程</strong>：导入检查 <code>$ npm run migration:verify</code> --哈希一致--&gt; 产品构建 <code>$ npm run verify:products</code> --过渡验收后退役旧入口--&gt; ✓ PACT 仓库成为唯一工程入口</li>
+<li><strong>回头路</strong>：产品构建 --任一哈希或构建失败，保留原目录--&gt; 导入检查</li>
+<li><strong>样本</strong>：来源目录 <code>/home/renmk/projects/vima-ui-admin</code> 与 <code>/home/renmk/projects/vima-starter</code> 当前均无独立 <code>.git</code></li>
+<li><strong>完成态</strong>：产品真实目录仅位于 PACT 仓库，两个旧绝对路径均不存在，包名、CLI 名和产品级约定保持；<code>.pre-pact-20260811</code> 快照备份继续保留</li>
+</ul>
+<h4>导入检查 <code>$ npm run migration:verify</code></h4>
+<blockquote>
+<p>维护者核对导入来源、排除项和完整性。</p>
+</blockquote>
+<ul>
+<li>能做什么<ul>
+<li>UI Admin 迁入 <code>products/vima-ui-admin</code>，Starter 迁入 <code>templates/vima-starter</code>。 <code>R011</code></li>
+<li>provenance 记录原绝对路径、导入时间、历史不可用事实、排除目录和规范化内容哈希。 <code>R012</code></li>
+<li>导入快照只忽略契约列出的 8 个目录段，排除集合不可由调用方扩大；后续 bootstrap/build 产物不属于导入快照。 <code>R013</code></li>
+</ul>
+</li>
+<li>什么情况会被拦住<ul>
+<li>目标已有非预期内容、来源缺失或导入后哈希不同则失败，不覆盖、不删除来源。 <code>R014</code></li>
+</ul>
+</li>
+</ul>
+<h4>产品构建 <code>$ npm run verify:products</code></h4>
+<blockquote>
+<p>维护者在统一目录中运行各产品原有门禁。</p>
+</blockquote>
+<ul>
+<li>能做什么<ul>
+<li>UI Admin 保持 <code>@vima-tech/ui-admin</code> 的公开入口和独立 npm 包。 <code>R015</code></li>
+<li>Starter 保持 <code>create-vima-starter</code> CLI、frontend/backend 真源和 <code>cli/template</code> 同步规则。 <code>R016</code></li>
+<li>根级串行编排调用产品自己的 lockfile 和验证命令，不引入重型 monorepo 构建系统。 <code>R017</code></li>
+</ul>
+</li>
+<li>背后自动发生了什么<ul>
+<li>旧绝对路径先以软链完成过渡验收；在统一路径门禁通过后，精确退役两个软链接并进入不可回滚的 <code>finalized</code> 状态，备份仍保留。 <code>R018</code></li>
+</ul>
+</li>
+</ul>
+<h3>S3 · 规划、验证并打包独立发布单元</h3>
+<ul>
+<li><strong>流程</strong>：变更计划 <code>$ npm run release:plan</code> --按受影响单元串行验证--&gt; 发布预演 <code>$ npm run release:pack</code> --人工审核--&gt; ✓ 得到本地 tarball 与发布命令</li>
+<li><strong>回头路</strong>：发布预演 --验证或 pack 失败，不生成发布批准--&gt; 变更计划；变更计划 --无变更--&gt; ✓ 输出空计划并结束</li>
+<li><strong>样本</strong>：修改 UI Agent 公开契约时，UI unit 必须发布新版本，兼容性验证需覆盖 Starter，但 Starter 是否发版由其文件是否变化决定</li>
+<li><strong>完成态</strong>：只计划发生变化的发布单元，依赖影响可解释，默认不会连接 registry 发布</li>
+</ul>
+<h4>变更计划 <code>$ npm run release:plan</code></h4>
+<blockquote>
+<p>发布维护者在这里查看哪些独立单元需要验证、打包或升版。</p>
+</blockquote>
+<ul>
+<li>能做什么<ul>
+<li>release unit 注册表分别定义 PACT skills、UI Admin 和 Starter CLI 的路径、版本源、验证与 pack 命令。 <code>R019</code></li>
+<li>changed-path 规则把 Git 变更稳定映射到直接受影响单元。 <code>R020</code></li>
+<li>依赖传播把 UI 公开契约变化加入 Starter 兼容性验证，但不自动宣称 Starter 需要发布。 <code>R021</code></li>
+<li>计划以稳定 JSON 和人读摘要输出，重复运行结果一致。 <code>R022</code></li>
+</ul>
+</li>
+<li>什么情况会被拦住<ul>
+<li>工作区基线不可判定、release unit schema 非法或同一文件归属冲突时失败。 <code>R023</code></li>
+</ul>
+</li>
+</ul>
+<h4>发布预演 <code>$ npm run release:pack</code></h4>
+<blockquote>
+<p>发布维护者在本地完成可发布性验证，不接触远程 registry。</p>
+</blockquote>
+<ul>
+<li>能做什么<ul>
+<li>UI 执行 check:ai、typecheck、test、verify:publish 并通过 runtime-size 预算。 <code>R024</code></li>
+<li>Starter 执行 template check、前端 build check、Maven package 和 CLI 本地 pack。 <code>R025</code></li>
+<li>PACT 执行脚本自测、物料 lint、graph、trace、book check 与 skill pack 检查。 <code>R026</code></li>
+</ul>
+</li>
+<li>什么情况会被拦住<ul>
+<li>默认命令只允许生成本地 tarball；任何真实 publish、push 或凭据读取都必须由人另行显式执行。 <code>R027</code></li>
+</ul>
+</li>
+</ul>
+</div></section>
+<section class="chp" id="ch-P5">
+<h3 class="ct"><span class="num">1.5</span>需求清单（R-ID）<span class="anch">P5</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>R-ID</th>
+<th>类型</th>
+<th>描述（可判真假）</th>
+<th>验收标准（可量化）</th>
+<th>优先级</th>
+<th>依赖</th>
+<th>来源</th>
+<th>假设</th>
+</tr>
+</thead>
+<tbody><tr>
+<td class="nw"><a href="#req-R001">R001</a></td>
+<td class="nw">架构</td>
+<td>PACT Core 零 Vima 源码依赖</td>
+<td>Core 路径扫描无 Vima import，Core 自测可独立运行</td>
+<td class="nw">P0</td>
+<td class="nw">—</td>
+<td class="nw">用户+设计</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R002">R002</a></td>
+<td class="nw">数据</td>
+<td>统一声明 3 个产品能力与 2 个 adapter</td>
+<td>registry 恰有对应 5 个稳定 ID，均含限制/readiness</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R001">R001</a></td>
+<td class="nw">设计</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R003">R003</a></td>
+<td class="nw">功能</td>
+<td>按需求类别选择 3 种 profile</td>
+<td>4 个基准输入输出与期望完全一致</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R002">R002</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R004">R004</a></td>
+<td class="nw">架构</td>
+<td>Vima 在 profile 中均为可选</td>
+<td>禁用 Vima 后 generic 仍通过；另两类返回可解释候选</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R003">R003</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R005">R005</a></td>
+<td class="nw">边界</td>
+<td>非法或信息不足时拒绝生成</td>
+<td>每类错误均返回非零码和稳定 code/path</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R007">R007</a></td>
+<td>UI 约定</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R006">R006</a></td>
+<td class="nw">治理</td>
+<td>readiness 变更必须显式且有证据</td>
+<td>validator 拒绝无 evidence 的 ready</td>
+<td class="nw">P1</td>
+<td class="nw"><a href="#req-R007">R007</a></td>
+<td class="nw">评估</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R007">R007</a></td>
+<td class="nw">数据</td>
+<td>六类治理 JSON 全部有 schema 与校验器</td>
+<td>合法 fixture 全过、每类非法 fixture 至少 1 个失败</td>
+<td class="nw">P0</td>
+<td class="nw">—</td>
+<td class="nw">设计</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R008">R008</a></td>
+<td class="nw">兼容</td>
+<td>版本+哈希+契约版本+发布状态判兼容</td>
+<td>同 semver 不同 hash fixture 被识别为冲突</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R007">R007</a></td>
+<td class="nw">评估</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R009">R009</a></td>
+<td class="nw">测试</td>
+<td>路由基准覆盖四类输入</td>
+<td>四类 fixture 全部自动断言</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R003">R003</a></td>
+<td class="nw">设计</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R010">R010</a></td>
+<td class="nw">真实性</td>
+<td>不虚报 Starter 未完成能力</td>
+<td>registry 含 C1 固定的 4 个 Starter/adapter 限制 ID</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R002">R002</a></td>
+<td class="nw">评估</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R011">R011</a></td>
+<td class="nw">迁移</td>
+<td>两产品进入约定目录</td>
+<td>两目录存在且源码清单与规范化来源一致</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R012">R012</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R012">R012</a></td>
+<td class="nw">追溯</td>
+<td>记录来源与规范化哈希</td>
+<td>provenance schema 通过且字段完整</td>
+<td class="nw">P0</td>
+<td class="nw">—</td>
+<td class="nw">评估</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R013">R013</a></td>
+<td class="nw">边界</td>
+<td>导入快照不包含闭集定义的可再生产目录</td>
+<td>link switch 前的 import manifest 对 8 个目录段零记录，调用方不能追加排除项</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R011">R011</a></td>
+<td class="nw">约定</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R014">R014</a></td>
+<td class="nw">安全</td>
+<td>导入冲突时无覆盖无删除</td>
+<td>冲突 fixture 失败且源/目标 hash 不变</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R012">R012</a></td>
+<td class="nw">评估</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R015">R015</a></td>
+<td class="nw">兼容</td>
+<td>UI 包身份与公开面保持</td>
+<td>package name 不变，exports 清单测试通过</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R011">R011</a></td>
+<td>UI package</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R016">R016</a></td>
+<td class="nw">兼容</td>
+<td>Starter CLI 身份和模板真源保持</td>
+<td>CLI name 不变且 <code>check:template</code> 通过</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R011">R011</a></td>
+<td>Starter 约定</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R017">R017</a></td>
+<td class="nw">构建</td>
+<td>根级串行编排各自门禁</td>
+<td>fixture 验证顺序/失败停止；产品迁入后同一命令跑真实门禁</td>
+<td class="nw">P0</td>
+<td><a href="#req-R007">R007</a>,<a href="#req-R019">R019</a></td>
+<td class="nw">评估</td>
+<td><strong>采用轻量 Node 编排，不引入 Nx/Turbo</strong></td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R018">R018</a></td>
+<td class="nw">迁移</td>
+<td>退役两个旧绝对路径入口</td>
+<td><code>finalized</code> 后两路径均不存在（含 dangling symlink），两个 canonical target 与两份备份 hash 一致，统一路径产品门通过</td>
+<td class="nw">P0</td>
+<td><a href="#req-R011">R011</a>,<a href="#req-R017">R017</a></td>
+<td class="nw">用户授权</td>
+<td><strong>只 unlink 已验证指向 canonical target 的两个精确软链接；不删除备份</strong></td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R019">R019</a></td>
+<td class="nw">发布</td>
+<td>三个独立 release unit</td>
+<td>registry 恰有 3 个 ID 且命令字段完整</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R007">R007</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R020">R020</a></td>
+<td class="nw">功能</td>
+<td>Git 路径映射直接影响单元</td>
+<td>fixture 的 added/modified/deleted 均映射正确</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R019">R019</a></td>
+<td class="nw">设计</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R021">R021</a></td>
+<td class="nw">兼容</td>
+<td>依赖影响与发布影响分离</td>
+<td>UI 公开变更触发 Starter verify 但不强制 Starter release</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R020">R020</a></td>
+<td class="nw">设计</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R022">R022</a></td>
+<td class="nw">数据</td>
+<td>release plan 稳定输出 JSON 与摘要</td>
+<td>同输入两次输出字节一致</td>
+<td class="nw">P1</td>
+<td class="nw"><a href="#req-R020">R020</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R023">R023</a></td>
+<td class="nw">边界</td>
+<td>基线未知或归属冲突时失败</td>
+<td>3 个失败 fixture 均非零退出</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R019">R019</a></td>
+<td class="nw">设计</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R024">R024</a></td>
+<td class="nw">质量</td>
+<td>UI 全部门禁通过且不抬 size 阈值</td>
+<td>四命令 exit 0，预算配置未变宽</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R015">R015</a></td>
+<td>AGENTS+评估</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R025">R025</a></td>
+<td class="nw">质量</td>
+<td>Starter 全部门禁与本地 pack 通过</td>
+<td>4 类命令 exit 0，生成 CLI tgz 且无远程发布</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R016">R016</a></td>
+<td class="nw">CLAUDE</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R026">R026</a></td>
+<td class="nw">质量</td>
+<td>PACT Core 与物料全门禁通过</td>
+<td>self-test/check/review exit 0</td>
+<td class="nw">P0</td>
+<td><a href="#req-R001">R001</a>,<a href="#req-R017">R017</a></td>
+<td>PACT 协议</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R027">R027</a></td>
+<td class="nw">安全</td>
+<td>真实外部发布默认不可达</td>
+<td>根 scripts 无 publish/push/token 读取；仅生成 3 个本地归档</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R019">R019</a></td>
+<td class="nw">访谈</td>
+<td class="nw">—</td>
+</tr>
+</tbody></table></div>
+<h3>横切项检查</h3>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 权限/角色：仓库工具按 P3/C8 仅允许当前仓库与显式输出路径；无业务 RBAC。</li>
+<li><input checked="" disabled="" type="checkbox"> 输入校验：<a href="#req-R005">R005</a>、<a href="#req-R007">R007</a>、<a href="#req-R014">R014</a>、<a href="#req-R023">R023</a>。</li>
+<li><input checked="" disabled="" type="checkbox"> 错误处理/回滚/幂等：<a href="#req-R014">R014</a>、<a href="#req-R022">R022</a>；迁移采用复制验证后切换。</li>
+<li><input checked="" disabled="" type="checkbox"> 破坏性操作二次确认：真实发布仍不可达；旧入口退役只在来源、目标、备份哈希和软链目标全部确认后，精确 unlink 两个软链接。</li>
+<li><input checked="" disabled="" type="checkbox"> 分页/排序/性能：本地小规模 registry，无分页；T2 约束验证时长与确定性。</li>
+<li><input checked="" disabled="" type="checkbox"> 审计/追溯：<a href="#req-R008">R008</a>、<a href="#req-R012">R012</a>、<a href="#req-R022">R022</a>。</li>
+<li><input checked="" disabled="" type="checkbox"> 敏感信息：不读取、不记录 registry token；见 <a href="#req-R027">R027</a>。</li>
+<li><input checked="" disabled="" type="checkbox"> 国际化/时区/单位：治理 JSON 使用 UTF-8，时间使用 RFC 3339 UTC，哈希字节单位；CLI 人读文案为中文。</li>
+</ul>
+<h3>覆盖声明</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>输入类别</th>
+<th>已归类位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户关于可控业务生成、PACT 可选对接和三阶段迁移的指令</td>
+<td><a href="#req-R001">R001</a>–<a href="#req-R010">R010</a>,<a href="#req-R017">R017</a>–<a href="#req-R027">R027</a>，P6</td>
+</tr>
+<tr>
+<td>PACT/UI/Starter 的现状代码与局部约定</td>
+<td><a href="#req-R011">R011</a>–<a href="#req-R018">R018</a>,<a href="#req-R024">R024</a>–<a href="#req-R026">R026</a>，P7</td>
+</tr>
+<tr>
+<td>ClearWorks 失败复盘与整体设计</td>
+<td><a href="#req-R002">R002</a>–<a href="#req-R010">R010</a>，A4，<a href="#ch-A5">D006</a>/<a href="#ch-A5">D008</a>，C11</td>
+</tr>
+<tr>
+<td>8 项来源冲突</td>
+<td><a href="#ch-A5">D001</a>–<a href="#ch-A5">D008</a></td>
+</tr>
+</tbody></table></div>
+<p>以上输入已全部归类为 <a href="#req-R001">R001</a>–<a href="#req-R027">R027</a>、非目标、约束或风险；这是 S8 来源反扫的审计结论，不是运行时代码需要重新推导的条件。</p>
+</div></section>
+<section class="chp" id="ch-P6">
+<h3 class="ct"><span class="num">1.6</span>非目标（明确不做）<span class="anch">P6</span></h3>
+<div class="bd"><ul>
+<li><strong>不做</strong>把三个发布物合成一个 npm 包——会破坏 PACT 独立性和使用者升级边界。</li>
+<li><strong>不做</strong>真实 <code>npm publish</code>、Git push、PR 或远端发布——没有凭据与外部变更授权；本轮止于可审计 plan、verify 和本地归档。</li>
+<li><strong>不做</strong>把 UI Admin 或 Starter 设为 PACT 必选依赖——用户明确要求按需求选择。</li>
+<li><strong>不做</strong>完整 FullStackSpec/StarterAdapter 业务代码生成——本轮完成承载它们的治理与 adapter 边界；readiness 继续标 blocked/partial。</li>
+<li><strong>不做</strong>在迁移中一次性修复 Starter 的 RBAC、生产 secrets、migration、三份导航真源与全部测试——这些需要独立 PACT 物料，当前只禁止虚报能力。</li>
+<li><strong>不做</strong>引入 Nx、Turborepo 或常驻 MCP 服务——当前规模用确定性 Node/Shell 工具足够；多个远程客户端出现后再评估薄 MCP。</li>
+<li><strong>不做</strong>伪造两个来源项目不存在的 Git 历史——使用 provenance 与内容哈希代偿。</li>
+</ul>
+</div></section>
+<section class="chp" id="ch-P7">
+<h3 class="ct"><span class="num">1.7</span>约束<span class="anch">P7</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>约束</th>
+<th>类型</th>
+<th>硬/倾向</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PACT Core 不 import Vima</td>
+<td class="nw">架构</td>
+<td class="nw">硬</td>
+<td>依赖方向为 profile/adapter → products/core</td>
+</tr>
+<tr>
+<td>包名与 CLI 名保持</td>
+<td class="nw">兼容</td>
+<td class="nw">硬</td>
+<td><code>@vima-tech/ui-admin</code>、<code>create-vima-starter</code>、PACT skills</td>
+</tr>
+<tr>
+<td>UI 产品规则原样生效</td>
+<td class="nw">质量</td>
+<td class="nw">硬</td>
+<td>Manifest、Recipe、VIcon、四个命令，不执行不可信函数/脚本</td>
+</tr>
+<tr>
+<td>Starter 模板真源保持</td>
+<td class="nw">质量</td>
+<td class="nw">硬</td>
+<td>frontend/backend → cli/template 单向同步</td>
+</tr>
+<tr>
+<td>两来源无独立 Git 历史</td>
+<td class="nw">存量</td>
+<td class="nw">硬</td>
+<td>记录 snapshot provenance，不声称保留不存在的 history</td>
+</tr>
+<tr>
+<td>PACT canonical 路径是唯一工程入口</td>
+<td class="nw">兼容</td>
+<td class="nw">硬</td>
+<td><code>products/vima-ui-admin</code> 与 <code>templates/vima-starter</code> 可用；两个旧绝对路径在 finalized 后必须不存在</td>
+</tr>
+<tr>
+<td>UI runtime gzip 预算不得放宽</td>
+<td class="nw">性能</td>
+<td class="nw">硬</td>
+<td>修根因，不修改 baseline 或 growth ratio 迁就实现</td>
+</tr>
+<tr>
+<td>不接触真实发布凭据</td>
+<td class="nw">安全</td>
+<td class="nw">硬</td>
+<td>根命令只 plan/verify/pack</td>
+</tr>
+<tr>
+<td>保留各自 lock/build 工具</td>
+<td class="nw">工程</td>
+<td class="nw">硬</td>
+<td>npm 与 Maven 并存，根级串行调用</td>
+</tr>
+<tr>
+<td>现有用户未跟踪文件不修改</td>
+<td class="nw">存量</td>
+<td class="nw">硬</td>
+<td><code>.playwright-mcp/</code> 与 <code>before-index.png</code> 不在本需求范围</td>
+</tr>
+<tr>
+<td>开发连续推进至三阶段全绿</td>
+<td class="nw">资源</td>
+<td class="nw">倾向</td>
+<td>不承诺外部 registry 上线</td>
+</tr>
+<tr>
+<td>用户已授权冻结与施工</td>
+<td class="nw">流程</td>
+<td class="nw">硬</td>
+<td>本轮“开始迁移，直到三阶段全部完成”即施工授权；S8 PASS 后直接冻结</td>
+</tr>
+<tr>
+<td>依赖安装为显式 bootstrap</td>
+<td class="nw">环境</td>
+<td class="nw">硬</td>
+<td>导入不携带 node_modules；维护者先运行受信 lockfile 的 <code>npm run bootstrap</code>，inspect/plan/MCP 永不隐式安装</td>
+</tr>
+</tbody></table></div>
+</div></section>
+<section class="chp" id="ch-P8">
+<h3 class="ct"><span class="num">1.8</span>成功定义<span class="anch">P8</span></h3>
+<div class="bd"><ul>
+<li>6 类治理 JSON 均有 schema，合法/非法 fixture 自动测试全绿，Router 真值表零误选。</li>
+<li>2 个产品真实目录位于 PACT 仓库，2 个旧路径均不存在，canonical target 与保留的来源快照哈希 100% 一致。</li>
+<li>3 个独立 release unit 可由 changed plan 稳定识别；同输入连续两次 JSON 字节完全一致。</li>
+<li>UI、Starter、PACT 三套既有硬门和根级全量验证全部 exit 0；UI runtime-size 阈值未放宽。</li>
+<li>本地 pack 产物可列出且无真实 publish/push；<code>pact-review.sh</code> 完成度 100%。</li>
+</ul>
+</div></section></div></details>
+<details class="pack" id="part-A">
+<summary><span class="pn2">SDD</span>第二部分 · 系统设计<span class="pdesc">6 节</span></summary>
+<div class="packb"><section class="chp" id="ch-A1">
+<h3 class="ct"><span class="num">2.1</span>系统边界与上下文<span class="anch">A1</span></h3>
+<div class="bd"><ul>
+<li><strong>本系统负责</strong>：PACT 规格/施工 Core；Vima 能力声明与选择；两个产品源码的统一承载；跨产品验证；变更到发布单元的确定性计划；本地 pack。</li>
+<li><strong>本系统不负责</strong>：自然语言模型服务、registry/Git 托管、生成业务系统的运行时、企业业务权限实现、真实发布审批。</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>外部依赖</th>
+<th>用途</th>
+<th>凭据</th>
+<th>失效行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td class="nw">Git</td>
+<td>changed baseline 与版本管理</td>
+<td>本地仓库，无远端凭据</td>
+<td>baseline 不可判定则 <code>E_BASELINE_UNKNOWN</code></td>
+</tr>
+<tr>
+<td>Node.js/npm</td>
+<td>UI、CLI、治理脚本构建测试</td>
+<td>依赖已锁定；publish token 不读取</td>
+<td>缺失则对应 verify 失败</td>
+</tr>
+<tr>
+<td>Java 21/Maven</td>
+<td>Starter backend 构建</td>
+<td class="nw">无凭据</td>
+<td>缺失则 Starter verify 失败</td>
+</tr>
+<tr>
+<td class="nw">文件系统</td>
+<td>产品迁移、软链、报告与 tarball</td>
+<td class="nw">当前用户权限</td>
+<td>越界或冲突则拒绝，不部分写入</td>
+</tr>
+</tbody></table></div>
+</div></section>
+<section class="chp" id="ch-A2">
+<h3 class="ct"><span class="num">2.2</span>结构与模块职责<span class="anch">A2</span></h3>
+<div class="bd"><pre><code class="language-text">pact/
+  pact*/                         # PACT Core skills，保持现有发布布局
+  platform/
+    schemas/                     # governance JSON Schema
+    registry/                    # capabilities, profiles, compatibility, release-units
+    adapters/                    # ui-admin / vima-starter 描述与选择边界
+    benchmarks/                  # router 与 release-plan fixtures
+    scripts/                     # inspect/check/plan/verify/pack/migration 工具
+    test/                        # 平台契约测试
+  products/vima-ui-admin/        # 独立 npm 产品
+  templates/vima-starter/        # 独立脚手架产品及发布模板
+  .pact/pact-platform-unification/
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>目录/模块</th>
+<th>职责</th>
+<th>关联 R-ID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pact/</code>、<code>pact-*</code></td>
+<td>通用 PACT Core 与既有命令</td>
+<td><a href="#req-R001">R001</a>,<a href="#req-R026">R026</a></td>
+</tr>
+<tr>
+<td><code>platform/registry</code></td>
+<td>六类治理数据真源</td>
+<td><a href="#req-R002">R002</a>,<a href="#req-R004">R004</a>,<a href="#req-R006">R006</a>–<a href="#req-R008">R008</a>,<a href="#req-R019">R019</a></td>
+</tr>
+<tr>
+<td><code>platform/scripts/capability-router.mjs</code></td>
+<td>确定性 profile 选择</td>
+<td><a href="#req-R003">R003</a>,<a href="#req-R005">R005</a>,<a href="#req-R009">R009</a></td>
+</tr>
+<tr>
+<td><code>platform/scripts/governance-check.mjs</code></td>
+<td>schema、证据、兼容性校验</td>
+<td><a href="#req-R006">R006</a>–<a href="#req-R010">R010</a></td>
+</tr>
+<tr>
+<td><code>platform/scripts/release-plan.mjs</code></td>
+<td>Git paths → verify/release units</td>
+<td><a href="#req-R020">R020</a>–<a href="#req-R023">R023</a></td>
+</tr>
+<tr>
+<td><code>platform/scripts/verify-products.mjs</code></td>
+<td class="nw">串行全量门禁</td>
+<td><a href="#req-R017">R017</a>,<a href="#req-R024">R024</a>–<a href="#req-R026">R026</a></td>
+</tr>
+<tr>
+<td><code>platform/scripts/migration-verify.mjs</code></td>
+<td>provenance、排除项、旧路径核验</td>
+<td><a href="#req-R011">R011</a>–<a href="#req-R014">R014</a>,<a href="#req-R018">R018</a></td>
+</tr>
+<tr>
+<td><code>products/vima-ui-admin</code></td>
+<td>UI 产品、Manifest、Agent Builder</td>
+<td><a href="#req-R015">R015</a>,<a href="#req-R024">R024</a></td>
+</tr>
+<tr>
+<td><code>templates/vima-starter</code></td>
+<td>全栈宿主、CLI 与模板</td>
+<td><a href="#req-R016">R016</a>,<a href="#req-R025">R025</a></td>
+</tr>
+</tbody></table></div>
+</div></section>
+<section class="chp" id="ch-A3">
+<h3 class="ct"><span class="num">2.3</span>关键链路（端到端）<span class="anch">A3</span></h3>
+<div class="bd"><h3>链路 1 · 能力选择</h3>
+<pre><code class="language-text">kind + constraints → input schema → Capability Router → Delivery Profile
+                                              ↓ readiness/compatibility 不满足
+                                      diagnostics，不生成 ArtifactPlan
+</code></pre>
+<ul>
+<li>输入只归一化为受控枚举；Router 不做自然语言解析。</li>
+<li>Router 读取 JSON 注册表，不 import 产品运行时代码。</li>
+<li>任何 unknown/blocked 都返回稳定 code/path 和非零退出码。</li>
+</ul>
+<h3>链路 2 · 快照迁移</h3>
+<figure class="fig" id="fig-A3-1"><!-- pact:src-hash=ed45d5c75930 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 300" font-family="inherit" font-size="13">
+  <defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--fg-faint)"/></marker></defs>
+  <rect x="18" y="28" width="110" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="73" y="57" text-anchor="middle" fill="var(--fg)">source</text>
+  <path d="M128,52 H170" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="170" y="28" width="140" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="240" y="57" text-anchor="middle" fill="var(--fg)">闭集排除</text>
+  <path d="M310,52 H352" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="352" y="28" width="130" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="417" y="57" text-anchor="middle" fill="var(--fg)">staging copy</text>
+  <path d="M482,52 H524" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="524" y="28" width="180" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--line)"/><text x="614" y="57" text-anchor="middle" fill="var(--fg)">normalized hash</text>
+  <path d="M704,52 H746" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="746" y="28" width="120" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="806" y="57" text-anchor="middle" fill="var(--fg)">target</text>
+  <path d="M806,76 V126" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/><text x="820" y="104" fill="var(--fg-dim)" font-size="12">全绿</text>
+  <rect x="500" y="126" width="366" height="50" rx="8" fill="var(--bg-soft)" stroke="var(--line)"/><text x="683" y="156" text-anchor="middle" fill="var(--fg)">原路径 rename 为备份 → symlink → realpath/verify</text>
+  <path d="M683,176 V216" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/><text x="698" y="202" fill="var(--fg-dim)" font-size="12">统一入口复验</text>
+  <rect x="500" y="216" width="366" height="50" rx="8" fill="var(--accent-soft)" stroke="var(--line)"/><text x="683" y="246" text-anchor="middle" fill="var(--fg)">unlink aliases → finalized（保留备份）</text>
+</svg>
+
+<figcaption><span class="fl">图 A3-1</span><details><summary>查看文本源（与真源逐字一致）</summary><pre>source → 闭集排除 → staging copy → normalized hash → target
+                                                       ↓ 全绿
+                                          原路径 rename 为备份 → symlink → realpath/verify
+                                                       ↓ 统一入口复验
+                                             unlink aliases → finalized</pre></details></figcaption></figure>
+<ul>
+<li>规范化哈希按 C3 的二进制 framing 计算；symlink 记录 link target，不跟随到范围外。</li>
+<li>只有 staging 与 target hash 相等、产品验证通过后才切换旧路径；linked 过渡态失败可回滚。</li>
+<li>finalized 前必须再次验证 target、backup hash 与两个精确软链；成功后只退役 aliases，备份继续保留且不自动删除。</li>
+</ul>
+<h3>链路 3 · 发布预演</h3>
+<figure class="fig" id="fig-A3-2"><!-- pact:src-hash=963e519d3c96 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 190" font-family="inherit" font-size="13">
+  <defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--fg-faint)"/></marker></defs>
+  <rect x="18" y="28" width="140" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="88" y="57" text-anchor="middle" fill="var(--fg)">git diff names</text>
+  <path d="M158,52 H198" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="198" y="28" width="150" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="273" y="57" text-anchor="middle" fill="var(--fg)">direct owners</text>
+  <path d="M348,52 H388" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="388" y="28" width="230" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--line)"/><text x="503" y="57" text-anchor="middle" fill="var(--fg)">compatibility propagation</text>
+  <path d="M618,52 H658" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="658" y="28" width="180" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="748" y="57" text-anchor="middle" fill="var(--fg)">stable plan.json</text>
+  <path d="M748,76 V122 H620" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="248" y="122" width="372" height="48" rx="8" fill="var(--bg-soft)" stroke="var(--line)"/><text x="434" y="151" text-anchor="middle" fill="var(--fg)">serial verify → three local archives</text>
+</svg>
+
+<figcaption><span class="fl">图 A3-2</span><details><summary>查看文本源（与真源逐字一致）</summary><pre>git diff names → direct owners → compatibility propagation → stable plan.json
+                                                           → serial verify → three local archives</pre></details></figcaption></figure>
+<ul>
+<li>direct release 与 verification impact 分开计算。</li>
+<li>JSON 对 key 和数组排序；不包含当前时间等非确定字段。</li>
+<li>pack 输出仅进忽略目录 <code>artifacts/release/</code>，根脚本不存在 publish/push。</li>
+</ul>
+</div></section>
+<section class="chp" id="ch-A4">
+<h3 class="ct"><span class="num">2.4</span>设计原则（本项目的硬规矩）<span class="anch">A4</span></h3>
+<div class="bd"><ol>
+<li><strong>治理与实现分层</strong>：PACT Core 永远不知道 Vima；adapter 只通过版本化契约引用产品。</li>
+<li><strong>选择最小能力</strong>：默认 generic；只有证据表明是业务系统才候选 Starter，候选不等于 ready。</li>
+<li><strong>声明必须有证据</strong>：capability/readiness/compatibility 都带可机检 evidence path 与 hash。</li>
+<li><strong>计划先于写入</strong>：inspect、release plan、migration plan/verify 只读；唯一写入口 <code>migration:apply</code> 需显式调用，冲突失败、不猜测、不覆盖。</li>
+<li><strong>独立产品，统一门禁</strong>：产品保留包名、版本源、lock 和原生命令；根只串行编排。</li>
+<li><strong>确定性</strong>：同一输入与同一工作树产生字节一致 JSON；错误使用稳定 code/path。</li>
+<li><strong>安全默认值</strong>：不读取 publish token，不执行外部模板脚本，不允许路径逃逸，不默认安装依赖。</li>
+<li><strong>不虚报能力</strong>：现有 Starter 只能标记实际证据支持的能力；缺权限/测试/生产门即 partial/blocked。</li>
+</ol>
+</div></section>
+<section class="chp" id="ch-A5">
+<h3 class="ct"><span class="num">2.5</span>决策记录（D-ID）<span class="anch">A5</span></h3>
+<div class="bd"><h4><a href="#ch-A5">D001</a> · 同仓还是单包</h4>
+<ul>
+<li><strong>选项</strong>：A. 保持三仓 / B. 同仓单包 / C. 同仓独立包</li>
+<li><strong>结论</strong>：采 C，同一 Git 仓库分层管理，保持三个 release unit。</li>
+<li><strong>理由</strong>：统一 changed plan 与兼容矩阵需要共享版本视图，但用户仍需独立安装 PACT、UI 或 Starter；单包会把不相关依赖带给所有用户。</li>
+<li><strong>已否决</strong>：A——继续缺少兼容与发布真源；B——破坏独立升级边界并让 Core 依赖产品。</li>
+<li><strong>影响</strong>：<a href="#req-R001">R001</a>,<a href="#req-R015">R015</a>,<a href="#req-R016">R016</a>,<a href="#req-R019">R019</a></li>
+</ul>
+<h4><a href="#ch-A5">D002</a> · 没有来源 Git 历史时的导入方式</h4>
+<ul>
+<li><strong>选项</strong>：A. 伪造 subtree 历史 / B. 当前快照加 provenance/hash / C. 阻塞迁移</li>
+<li><strong>结论</strong>：采 B。</li>
+<li><strong>理由</strong>：两个来源确实无 <code>.git</code>；可验证快照能忠实说明事实并支持完整性检查，伪造提交会制造错误审计结论。</li>
+<li><strong>已否决</strong>：A——历史不真实；C——用户已授权迁移且当前快照足以继续。</li>
+<li><strong>影响</strong>：<a href="#req-R011">R011</a>–<a href="#req-R014">R014</a></li>
+</ul>
+<h4><a href="#ch-A5">D003</a> · 同版本不同 UI 内容的处理</h4>
+<ul>
+<li><strong>选项</strong>：A. 只看 <code>0.1.0</code> / B. 版本加内容哈希、契约版本和发布状态 / C. 删除 Agent 入口</li>
+<li><strong>结论</strong>：采 B，并把 workspace 内容标为未发布变更，发布计划要求新 semver 后才允许发布。</li>
+<li><strong>理由</strong>：Starter lock 的 registry 0.1.0 与 workspace 0.1.0 公开面不同；只看版本会产生假兼容，删除新能力又倒退。</li>
+<li><strong>已否决</strong>：A——已被现状反例证伪；C——违背受控生成方向。</li>
+<li><strong>影响</strong>：<a href="#req-R008">R008</a>,<a href="#req-R015">R015</a>,<a href="#req-R021">R021</a>,<a href="#req-R024">R024</a></li>
+</ul>
+<h4><a href="#ch-A5">D004</a> · 根级构建编排</h4>
+<ul>
+<li><strong>选项</strong>：A. Nx/Turbo / B. 轻量 Node 串行编排 / C. 文档列手工命令</li>
+<li><strong>结论</strong>：采 B。</li>
+<li><strong>理由</strong>：只有三个发布单元且 npm/Maven 混合；Node 足以提供稳定顺序、失败传播和 JSON 报告，不新增大规模缓存与配置面。</li>
+<li><strong>已否决</strong>：A——当前收益不足以抵消工具迁移；C——无法形成可执行门禁。</li>
+<li><strong>影响</strong>：<a href="#req-R017">R017</a>,<a href="#req-R024">R024</a>–<a href="#req-R026">R026</a></li>
+</ul>
+<h4><a href="#ch-A5">D005</a> · 旧路径兼容</h4>
+<ul>
+<li><strong>选项</strong>：A. 立即失效 / B. 永久复制双写 / C. 原路径软链到新真源</li>
+<li><strong>结论</strong>：迁移过渡期采 C，并保留只读备份；统一入口验收完成后，本决策的“持续兼容”部分已被 <a href="#ch-A5">D009</a> 取代。</li>
+<li><strong>理由</strong>：软链让旧工具与新仓共享同一内容，不产生第二真源；用户环境明确是本机路径。</li>
+<li><strong>已否决</strong>：A——破坏既有工作流；B——必然漂移。</li>
+<li><strong>影响</strong>：<a href="#req-R014">R014</a>,<a href="#req-R018">R018</a></li>
+</ul>
+<h4><a href="#ch-A5">D006</a> · Starter 的选择时机</h4>
+<ul>
+<li><strong>选项</strong>：A. 所有 PACT 项目默认使用 / B. 仅业务系统分析结果候选 / C. 从不自动选择</li>
+<li><strong>结论</strong>：采 B；必须同时满足 <code>kind=business-system</code> 和 readiness/compatibility 条件。</li>
+<li><strong>理由</strong>：这是用户明确边界，既保留快速创建业务系统的价值，又不让通用规格任务被技术栈绑架。</li>
+<li><strong>已否决</strong>：A——过度耦合；C——失去能力路由价值。</li>
+<li><strong>影响</strong>：<a href="#req-R003">R003</a>–<a href="#req-R005">R005</a>,<a href="#req-R010">R010</a></li>
+</ul>
+<h4><a href="#ch-A5">D007</a> · 发布自动化边界</h4>
+<ul>
+<li><strong>选项</strong>：A. 自动 publish / B. plan+verify+本地归档，人工执行发布 / C. 只写发布文档</li>
+<li><strong>结论</strong>：采 B。</li>
+<li><strong>理由</strong>：本轮没有远端凭据授权，但仍可把发布前所有确定性工作自动化并产出可审计命令。</li>
+<li><strong>已否决</strong>：A——越权且有供应链风险；C——无法验证 tarball 内容。</li>
+<li><strong>影响</strong>：<a href="#req-R019">R019</a>–<a href="#req-R027">R027</a></li>
+</ul>
+<h4><a href="#ch-A5">D008</a> · Starter 深层技术债是否纳入迁移</h4>
+<ul>
+<li><strong>选项</strong>：A. 全部修复 / B. 全部忽略并标 ready / C. 如实登记限制，仅修迁移门阻断</li>
+<li><strong>结论</strong>：采 C。</li>
+<li><strong>理由</strong>：RBAC、迁移脚本、生产配置与 FullStackSpec 是独立产品改造；强塞本轮会失控，忽略又会重演不靠谱生成。</li>
+<li><strong>已否决</strong>：A——范围不可控且没有对应业务规格；B——违反可靠性目标。</li>
+<li><strong>影响</strong>：<a href="#req-R002">R002</a>,<a href="#req-R006">R006</a>,<a href="#req-R010">R010</a>,<a href="#req-R025">R025</a></li>
+</ul>
+<h4><a href="#ch-A5">D009</a> · 统一入口验收后的旧别名退役</h4>
+<ul>
+<li><strong>选项</strong>：A. 永久保留软链接 / B. 验证 canonical target 与备份后删除软链接 / C. 把产品移回旧路径</li>
+<li><strong>结论</strong>：采 B；<code>linked</code> 是可回滚过渡态，<code>finalized</code> 是 canonical-only 完成态。只删除两个精确软链接，<code>.vima-*.pre-pact-20260811</code> 快照不在本变更删除范围。</li>
+<li><strong>理由</strong>：用户已决定直接用 PACT 管理两个工程；永久别名会继续制造工作区身份歧义、工具 cwd 漂移和错误的双入口心智模型。canonical target、产品门和快照 hash 已提供独立完整性证据。</li>
+<li><strong>已否决</strong>：A——保留长期歧义且违背唯一入口目标；C——逆转已经验收的统一迁移。</li>
+<li><strong>影响</strong>：<a href="#req-R012">R012</a>,<a href="#req-R014">R014</a>,<a href="#req-R018">R018</a>,<a href="#req-R026">R026</a></li>
+</ul>
+</div></section>
+<section class="chp" id="ch-A6">
+<h3 class="ct"><span class="num">2.6</span>风险与缓解<span class="anch">A6</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>风险</th>
+<th>触发信号</th>
+<th>影响</th>
+<th>缓解手段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>迁移覆盖用户文件</td>
+<td>target 非空或 hash 异常</td>
+<td>数据不可逆丢失</td>
+<td>staging copy、冲突即停、保留来源备份、禁止自动删除</td>
+</tr>
+<tr>
+<td>软链工具兼容差</td>
+<td>realpath 或产品命令失败</td>
+<td class="nw">旧工作流中断</td>
+<td>双路径 smoke；失败回滚 rename</td>
+</tr>
+<tr>
+<td>UI 构建并发污染 dist</td>
+<td>并发验证出现随机 size</td>
+<td class="nw">假红/假绿</td>
+<td>根编排强制串行，单产品命令不并发</td>
+</tr>
+<tr>
+<td>npm/Maven 网络不可用</td>
+<td>dependency resolution 失败</td>
+<td>新安装无法验证</td>
+<td>优先使用现有 lock/cache；报告环境阻断，不跳过门禁</td>
+</tr>
+<tr>
+<td>Starter 被误选为可靠全栈生成器</td>
+<td>readiness 与证据不一致</td>
+<td>再次生成空壳系统</td>
+<td>governance validator 强制 evidence，限制写入 registry</td>
+</tr>
+<tr>
+<td>release plan 漏传播</td>
+<td>UI public contract 变更只测 UI</td>
+<td>Starter 兼容破坏</td>
+<td>direct/verification 两集合 + fixture</td>
+</tr>
+</tbody></table></div>
+</div></section></div></details>
+<details class="pack" id="part-C">
+<summary><span class="pn2">SPEC</span>第三部分 · 数据与接口规格<span class="pdesc">11 节</span></summary>
+<div class="packb"><section class="chp" id="ch-C1">
+<h3 class="ct"><span class="num">3.1</span>数据模型<span class="anch">C1</span></h3>
+<div class="bd"><h3>六类治理文档</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>文档</th>
+<th>固定路径</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>capabilities</td>
+<td><code>platform/registry/capabilities.v1.json</code></td>
+<td>产品/Core 能力、限制、readiness</td>
+</tr>
+<tr>
+<td>delivery profiles</td>
+<td><code>platform/registry/delivery-profiles.v1.json</code></td>
+<td>需求类别与 required/optional 能力</td>
+</tr>
+<tr>
+<td>adapters</td>
+<td><code>platform/registry/adapters.v1.json</code></td>
+<td>adapter 消费/提供契约及适用类别</td>
+</tr>
+<tr>
+<td>compatibility</td>
+<td><code>platform/registry/compatibility.v1.json</code></td>
+<td>consumer/provider 兼容关系</td>
+</tr>
+<tr>
+<td>provenance</td>
+<td><code>platform/registry/provenance.v1.json</code></td>
+<td>两个导入快照与备份事实</td>
+</tr>
+<tr>
+<td>release units</td>
+<td><code>platform/registry/release-units.v1.json</code></td>
+<td>直接发布归属、验证传播与命令</td>
+</tr>
+</tbody></table></div>
+<h3><code>capabilities.v1.json</code></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>version</code></td>
+<td>literal <code>1</code></td>
+<td class="nw">是</td>
+<td>schema 版本</td>
+</tr>
+<tr>
+<td><code>capabilities</code></td>
+<td class="nw">array</td>
+<td class="nw">是</td>
+<td>按 <code>id</code> 升序，ID 唯一</td>
+</tr>
+<tr>
+<td><code>capabilities[].id</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>pact-core</code>,<code>vima-ui-admin</code>,<code>vima-starter</code>,<code>ui-admin-adapter</code>,<code>vima-starter-adapter</code></td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>core</code>,<code>product</code>,<code>adapter</code></td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>string[]</td>
+<td class="nw">是</td>
+<td>只允许下述闭集</td>
+</tr>
+<tr>
+<td><code>limitations</code></td>
+<td class="nw">enum[]</td>
+<td class="nw">是</td>
+<td>只允许下述稳定 ID 闭集；无已知限制写 <code>none-evidenced</code></td>
+</tr>
+<tr>
+<td><code>readiness</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>ready</code>,<code>partial</code>,<code>blocked</code></td>
+</tr>
+<tr>
+<td><code>evidence</code></td>
+<td>object[]</td>
+<td class="nw">是</td>
+<td>每项含 repo-relative <code>path</code> 与 64-char <code>sha256</code>，至少 1 项且匹配</td>
+</tr>
+</tbody></table></div>
+<p><code>supports</code> 允许值：<code>pact-specification</code>、<code>action-graph</code>、<code>vue3-admin-ui</code>、<code>ui-artifact-plan</code>、<code>spring-boot-host</code>、<code>starter-cli</code>、<code>ui-admin-adaptation</code>、<code>starter-host-adaptation</code>。</p>
+<p><code>limitations</code> 允许值：<code>none-evidenced</code>、<code>standalone-ui-only</code>、<code>business-contracts-not-included</code>、<code>no-business-data-adapter</code>、<code>backend-business-permission-enforcement-missing</code>、<code>production-secret-migration-hardening-missing</code>、<code>backend-test-baseline-missing</code>、<code>full-stack-spec-adapter-not-implemented</code>。</p>
+<h3><code>delivery-profiles.v1.json</code></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>generic</code>,<code>admin-ui</code>,<code>business-system</code></td>
+</tr>
+<tr>
+<td><code>matchKind</code></td>
+<td>同 ID enum</td>
+<td class="nw">是</td>
+<td>与 <code>id</code> 相同</td>
+</tr>
+<tr>
+<td><code>requiredCapabilities</code></td>
+<td class="nw">ID[]</td>
+<td class="nw">是</td>
+<td>三者均含 <code>pact-core</code></td>
+</tr>
+<tr>
+<td><code>optionalCapabilities</code></td>
+<td class="nw">ID[]</td>
+<td class="nw">是</td>
+<td>generic 为空；admin-ui 为 UI product+adapter；business-system 为 UI/Starter products+两个 adapters</td>
+</tr>
+<tr>
+<td><code>requiredChecks</code></td>
+<td>string[]</td>
+<td class="nw">是</td>
+<td>只能引用 release unit 中存在的 check ID</td>
+</tr>
+</tbody></table></div>
+<h3><code>adapters.v1.json</code></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>ui-admin-adapter</code>,<code>vima-starter-adapter</code></td>
+</tr>
+<tr>
+<td><code>applicableKinds</code></td>
+<td class="nw">enum[]</td>
+<td class="nw">是</td>
+<td>UI 仅 admin/business；Starter 仅 business</td>
+</tr>
+<tr>
+<td><code>consumes</code>,<code>provides</code></td>
+<td>support ID[]</td>
+<td class="nw">是</td>
+<td>只能引用 <code>supports</code> 允许值闭集；consumes 必须由 required capability 或 Core 提供</td>
+</tr>
+<tr>
+<td><code>contractVersion</code></td>
+<td class="nw">string</td>
+<td class="nw">是</td>
+<td>UI 为 <code>app-spec.v1</code>；Starter 为 <code>full-stack-spec.v1-draft</code></td>
+</tr>
+<tr>
+<td><code>readiness</code></td>
+<td>Readiness</td>
+<td class="nw">是</td>
+<td>与 capability entry 一致</td>
+</tr>
+<tr>
+<td><code>requiredCapabilities</code></td>
+<td class="nw">ID[]</td>
+<td class="nw">是</td>
+<td>选择 adapter 时一并选择的产品能力</td>
+</tr>
+<tr>
+<td><code>evidence</code></td>
+<td>object[]</td>
+<td class="nw">是</td>
+<td>每项含 <code>path</code>,<code>sha256</code> 且匹配</td>
+</tr>
+</tbody></table></div>
+<h3><code>compatibility.v1.json</code></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>consumer</code>,<code>provider</code></td>
+<td>capability ID</td>
+<td class="nw">是</td>
+<td class="nw">不得相同</td>
+</tr>
+<tr>
+<td><code>consumerVersion</code>,<code>providerVersion</code></td>
+<td class="nw">semver</td>
+<td class="nw">是</td>
+<td>来自各自版本源</td>
+</tr>
+<tr>
+<td><code>providerContentSha256</code></td>
+<td>64-char hex</td>
+<td class="nw">是</td>
+<td>规范化公开契约 hash</td>
+</tr>
+<tr>
+<td><code>contractVersion</code></td>
+<td class="nw">string</td>
+<td class="nw">是</td>
+<td>如 <code>app-spec.v1</code></td>
+</tr>
+<tr>
+<td><code>releaseStatus</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>published</code>,<code>unpublished-changes</code>,<code>blocked</code></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>compatible</code>,<code>verify-required</code>,<code>incompatible</code></td>
+</tr>
+<tr>
+<td><code>evidence</code></td>
+<td>object[]</td>
+<td class="nw">是</td>
+<td>每项含 <code>path</code>,<code>sha256</code> 且匹配</td>
+</tr>
+</tbody></table></div>
+<h3><code>provenance.v1.json</code></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>originalPath</code>,<code>snapshotPath</code>,<code>targetPath</code></td>
+<td class="nw">path</td>
+<td class="nw">是</td>
+<td>planned 时 snapshot=original；linked/finalized 时 snapshot=backup；target 不可逃逸 repo</td>
+</tr>
+<tr>
+<td><code>phase</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>planned</code>、<code>linked</code> 或 <code>finalized</code></td>
+</tr>
+<tr>
+<td><code>importedAt</code></td>
+<td>RFC 3339 UTC/null</td>
+<td class="nw">是</td>
+<td>planned 为 null；linked/finalized 为真实时间，不进入确定性 plan</td>
+</tr>
+<tr>
+<td><code>retiredAt</code></td>
+<td>RFC 3339 UTC/null</td>
+<td class="nw">是</td>
+<td>仅 finalized 为真实时间；planned/linked 为 null</td>
+</tr>
+<tr>
+<td><code>historyAvailable</code></td>
+<td>boolean</td>
+<td class="nw">是</td>
+<td>两产品均为 false</td>
+</tr>
+<tr>
+<td><code>excludedSegments</code></td>
+<td>string[]</td>
+<td class="nw">是</td>
+<td>必须恰等于 C3 的 8 项闭集，不能增删</td>
+</tr>
+<tr>
+<td><code>normalizedSha256</code></td>
+<td>64-char hex</td>
+<td class="nw">是</td>
+<td>按 C3 算法</td>
+</tr>
+<tr>
+<td><code>backupPath</code></td>
+<td>absolute path</td>
+<td class="nw">是</td>
+<td>planned 时为计划值；linked/finalized 时必须存在且等于 snapshotPath</td>
+</tr>
+</tbody></table></div>
+<h3><code>release-units.v1.json</code></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>pact-skills</code>,<code>vima-ui-admin</code>,<code>vima-starter</code></td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td class="nw">glob[]</td>
+<td class="nw">是</td>
+<td>直接归属不可重叠，shared 规则除外</td>
+</tr>
+<tr>
+<td><code>versionSource</code></td>
+<td class="nw">path</td>
+<td class="nw">是</td>
+<td>文件存在；PACT 可使用 changelog 版本策略</td>
+</tr>
+<tr>
+<td><code>verify</code></td>
+<td>object[]</td>
+<td class="nw">是</td>
+<td>每项有 ID 与 argv 数组，首程序仅 node/npm/bash/mvn</td>
+</tr>
+<tr>
+<td><code>pack</code></td>
+<td>object[]</td>
+<td class="nw">是</td>
+<td>不得包含 publish/push</td>
+</tr>
+<tr>
+<td><code>verifyDependents</code></td>
+<td class="nw">ID[]</td>
+<td class="nw">是</td>
+<td>可空，必须无环</td>
+</tr>
+</tbody></table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>release unit</th>
+<th><code>versionSource</code></th>
+<th>verify check IDs</th>
+<th>pack</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pact-skills</code></td>
+<td>根 <code>package.json#version</code></td>
+<td><code>pact-self-test</code>,<code>pact-material-check</code></td>
+<td>deterministic tar.gz</td>
+</tr>
+<tr>
+<td><code>vima-ui-admin</code></td>
+<td><code>products/vima-ui-admin/package.json#version</code></td>
+<td><code>ui-check-ai</code>,<code>ui-typecheck</code>,<code>ui-test</code>,<code>ui-verify-publish</code></td>
+<td><code>npm pack</code> tgz</td>
+</tr>
+<tr>
+<td><code>vima-starter</code></td>
+<td><code>templates/vima-starter/cli/package.json#version</code></td>
+<td><code>starter-template</code>,<code>starter-frontend</code>,<code>starter-backend</code>,<code>starter-cli-pack</code></td>
+<td><code>npm pack</code> tgz</td>
+</tr>
+</tbody></table></div>
+<h3>Router 真值表</h3>
+<p>输入的 <code>preferredCapabilities</code> 缺省为空，表示只返回候选而不自动采用 Vima。</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>kind</th>
+<th>preferred</th>
+<th>adapter 状态/兼容</th>
+<th>selected</th>
+<th>candidates</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>generic</td>
+<td class="nw">空</td>
+<td class="nw">任意</td>
+<td><code>pact-core</code></td>
+<td class="nw">空</td>
+<td class="nw">ok</td>
+</tr>
+<tr>
+<td>generic</td>
+<td>任一 Vima</td>
+<td class="nw">任意</td>
+<td class="nw">空</td>
+<td class="nw">空</td>
+<td><code>E_CAPABILITY_NOT_APPLICABLE</code></td>
+</tr>
+<tr>
+<td>admin-ui</td>
+<td class="nw">空</td>
+<td class="nw">任意</td>
+<td><code>pact-core</code></td>
+<td><code>ui-admin-adapter</code></td>
+<td class="nw">ok</td>
+</tr>
+<tr>
+<td>admin-ui</td>
+<td><code>ui-admin-adapter</code></td>
+<td>ready+compatible</td>
+<td><code>pact-core</code>,<code>vima-ui-admin</code>,<code>ui-admin-adapter</code></td>
+<td class="nw">空</td>
+<td class="nw">ok</td>
+</tr>
+<tr>
+<td>business-system</td>
+<td class="nw">空</td>
+<td class="nw">任意</td>
+<td><code>pact-core</code></td>
+<td><code>vima-starter-adapter</code>,<code>ui-admin-adapter</code></td>
+<td class="nw">ok</td>
+</tr>
+<tr>
+<td>business-system</td>
+<td><code>ui-admin-adapter</code></td>
+<td>ready+compatible</td>
+<td><code>pact-core</code>,<code>vima-ui-admin</code>,<code>ui-admin-adapter</code></td>
+<td><code>vima-starter-adapter</code></td>
+<td class="nw">ok</td>
+</tr>
+<tr>
+<td>business-system</td>
+<td><code>vima-starter-adapter</code></td>
+<td>ready+compatible</td>
+<td><code>pact-core</code>,<code>vima-ui-admin</code>,<code>vima-starter</code>,<code>vima-starter-adapter</code></td>
+<td><code>ui-admin-adapter</code></td>
+<td class="nw">ok</td>
+</tr>
+<tr>
+<td>business-system</td>
+<td>两个 adapters</td>
+<td>都 ready+compatible</td>
+<td><code>pact-core</code>,<code>vima-ui-admin</code>,<code>vima-starter</code>,<code>ui-admin-adapter</code>,<code>vima-starter-adapter</code></td>
+<td class="nw">空</td>
+<td class="nw">ok</td>
+</tr>
+<tr>
+<td>admin/business</td>
+<td>适用 adapter</td>
+<td>partial/blocked/incompatible</td>
+<td><code>pact-core</code></td>
+<td>该 adapter</td>
+<td><code>E_CAPABILITY_BLOCKED</code> 或 <code>E_COMPATIBILITY</code></td>
+</tr>
+<tr>
+<td>unknown</td>
+<td class="nw">任意</td>
+<td class="nw">任意</td>
+<td class="nw">空</td>
+<td class="nw">空</td>
+<td><code>E_REQUIREMENT_INCOMPLETE</code></td>
+</tr>
+</tbody></table></div>
+<h3>迁移完成时的初始治理值</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>capability</th>
+<th>readiness</th>
+<th>supports</th>
+<th>limitations</th>
+<th>固定 evidence path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pact-core</code></td>
+<td class="nw">ready</td>
+<td><code>pact-specification</code>,<code>action-graph</code></td>
+<td><code>none-evidenced</code></td>
+<td><code>pact/SKILL.md</code></td>
+</tr>
+<tr>
+<td><code>vima-ui-admin</code></td>
+<td class="nw">ready</td>
+<td><code>vue3-admin-ui</code>,<code>ui-artifact-plan</code></td>
+<td><code>business-contracts-not-included</code></td>
+<td><code>products/vima-ui-admin/package.json</code>,<code>products/vima-ui-admin/dist/ai-manifest.json</code></td>
+</tr>
+<tr>
+<td><code>vima-starter</code></td>
+<td>partial</td>
+<td><code>spring-boot-host</code>,<code>starter-cli</code></td>
+<td><code>backend-business-permission-enforcement-missing</code>,<code>production-secret-migration-hardening-missing</code>,<code>backend-test-baseline-missing</code></td>
+<td><code>templates/vima-starter/package.json</code>,<code>templates/vima-starter/backend/src/main/java/com/vima/starter/config/SecurityConfig.java</code></td>
+</tr>
+<tr>
+<td><code>ui-admin-adapter</code></td>
+<td class="nw">ready</td>
+<td><code>ui-admin-adaptation</code></td>
+<td><code>standalone-ui-only</code>,<code>no-business-data-adapter</code></td>
+<td><code>products/vima-ui-admin/src/agent/builders.ts</code></td>
+</tr>
+<tr>
+<td><code>vima-starter-adapter</code></td>
+<td>blocked</td>
+<td><code>starter-host-adaptation</code></td>
+<td><code>full-stack-spec-adapter-not-implemented</code>,<code>backend-business-permission-enforcement-missing</code>,<code>production-secret-migration-hardening-missing</code>,<code>backend-test-baseline-missing</code></td>
+<td><code>platform/adapters/vima-starter-adapter.md</code></td>
+</tr>
+</tbody></table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>adapter</th>
+<th>consumes</th>
+<th>provides</th>
+<th>requiredCapabilities</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ui-admin-adapter</code></td>
+<td><code>pact-specification</code>,<code>ui-artifact-plan</code></td>
+<td><code>ui-admin-adaptation</code></td>
+<td><code>vima-ui-admin</code></td>
+</tr>
+<tr>
+<td><code>vima-starter-adapter</code></td>
+<td><code>pact-specification</code>,<code>vue3-admin-ui</code>,<code>spring-boot-host</code></td>
+<td><code>starter-host-adaptation</code></td>
+<td><code>vima-ui-admin</code>,<code>vima-starter</code></td>
+</tr>
+</tbody></table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>profile</th>
+<th>requiredChecks 精确集合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>generic</code></td>
+<td><code>pact-self-test</code>,<code>pact-material-check</code></td>
+</tr>
+<tr>
+<td><code>admin-ui</code></td>
+<td>generic 两项 + <code>ui-check-ai</code>,<code>ui-typecheck</code>,<code>ui-test</code>,<code>ui-verify-publish</code></td>
+</tr>
+<tr>
+<td><code>business-system</code></td>
+<td>admin-ui 六项 + <code>starter-template</code>,<code>starter-frontend</code>,<code>starter-backend</code>,<code>starter-cli-pack</code></td>
+</tr>
+</tbody></table></div>
+<p>兼容矩阵初始记录固定为：<code>ui-admin-adapter@1.0.0 → vima-ui-admin@0.1.0</code> 为 <code>compatible/unpublished-changes/app-spec.v1</code>；<code>vima-starter@1.0.0 → vima-ui-admin@0.1.0</code> 为 <code>verify-required/unpublished-changes/app-spec.v1</code>；<code>vima-starter-adapter@0.1.0-draft → vima-starter@1.0.0</code> 为 <code>incompatible/blocked/full-stack-spec.v1-draft</code>。所有 hash 在导入后由确定性工具计算并写入，不允许手填占位值。</p>
+<p>Router 通用规则：只接受去重后的 adapter ID 作为 preferred；先校验每项属于 profile.optionalCapabilities，再展开其 requiredCapabilities；任一 preferred 不是 ready+compatible 时，<code>selected</code> 只保留 profile.requiredCapabilities，失败项留在 candidates 并返回对应错误；全部满足时 selected 为 required + preferred + 展开依赖的字典序集合，candidates 为该 profile 中未 preferred 的适用 adapter。多 preferred 因此不靠额外猜测。</p>
+</div></section>
+<section class="chp" id="ch-C2">
+<h3 class="ct"><span class="num">3.2</span>枚举与状态机<span class="anch">C2</span></h3>
+<div class="bd"><h3><code>Readiness</code></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+<th>进入条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>blocked</code></td>
+<td class="nw">不允许生成</td>
+<td>缺硬契约、验证失败或兼容冲突</td>
+</tr>
+<tr>
+<td><code>partial</code></td>
+<td>只能展示/规划，不宣称完整</td>
+<td>有能力但 limitations 非空且缺交付门</td>
+</tr>
+<tr>
+<td><code>ready</code></td>
+<td>可用于对应 profile</td>
+<td>evidence 全存在且 profile requiredChecks 全过</td>
+</tr>
+</tbody></table></div>
+<h3>迁移状态机</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>当前状态 \ 事件</th>
+<th>inspect</th>
+<th>copy</th>
+<th>verify</th>
+<th>switch-links</th>
+<th>retire-aliases</th>
+<th>rollback</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>source</code></td>
+<td>→ inspected</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+</tr>
+<tr>
+<td><code>inspected</code></td>
+<td>→ inspected</td>
+<td>→ staged</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+</tr>
+<tr>
+<td><code>staged</code></td>
+<td class="nw">✗</td>
+<td>→ staged</td>
+<td>→ verified 或 failed</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td>→ source</td>
+</tr>
+<tr>
+<td><code>verified</code></td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td>→ verified</td>
+<td>→ linked</td>
+<td class="nw">✗</td>
+<td>→ source</td>
+</tr>
+<tr>
+<td><code>linked</code></td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td>→ linked</td>
+<td class="nw">✗</td>
+<td>→ finalized</td>
+<td>→ source</td>
+</tr>
+<tr>
+<td><code>finalized</code></td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td>→ finalized</td>
+<td class="nw">✗</td>
+<td>→ finalized</td>
+<td class="nw">✗</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td class="nw">✗</td>
+<td>→ source</td>
+</tr>
+</tbody></table></div>
+<p>非法迁移返回 <code>E_INVALID_TRANSITION</code>，不改变文件系统。</p>
+<p>状态持久化在被 <code>.gitignore</code> 排除的 <code>artifacts/migration/state.v1.json</code>；每次状态变更先写同目录临时文件、<code>fsync</code> 后原子 rename。<code>migration:plan</code> 只读并输出计划；<code>migration:apply</code> 是唯一迁移写入口，分 staged、linked、finalized 三次显式推进；<code>migration:verify</code> 只读复算 hash、入口状态和产品身份。staging 固定为 <code>artifacts/migration/staging/{vima-ui-admin|vima-starter}</code>，备份固定为 <code>/home/renmk/projects/.vima-ui-admin.pre-pact-20260811</code> 与 <code>/home/renmk/projects/.vima-starter.pre-pact-20260811</code>。中断后按 state 处理：<code>staged/verified</code> 可重入继续，<code>linked</code> 可验证、回滚或 finalize，<code>finalized</code> 只允许幂等验证且不得 rollback，<code>failed</code> 只能显式 <code>--rollback</code>。planned phase 的 <code>snapshotPath=originalPath</code>；linked/finalized phase 的 <code>snapshotPath=backupPath</code>，snapshot 与 target hash 均须等于 provenance。linked 另要求 <code>realpath(originalPath)=realpath(targetPath)</code>；finalized 则要求 originalPath 不存在（<code>lstat</code> 也必须 ENOENT）。</p>
+<p>分段协议：① <code>migration:apply --plan artifacts/migration/plan.v1.json --until staged</code> 复制到固定 staging，生成 import manifest 并校验 hash；目标不存在时再把 staging 原子 rename 为 target（目标已有同 hash 时删除本次空 staging 并复用目标），此刻 <code>staged</code> 的精确定义是 target 已就位、staging 不存在、旧入口仍是原目录；不安装依赖、不切旧路径。② 维护者显式运行 <code>npm run bootstrap</code>；③ <code>npm run verify:products -- --report artifacts/migration/product-verification.v1.json</code> 串行验证并记录 <code>targetSha256</code>、固定 check IDs、退出码与 <code>passed</code>；④ <code>migration:apply --plan ... --until linked --verification-report ...</code> 先确认 report 的 target hash 等于当前 target、全部固定 checks 通过，将状态推进 verified，随后 rename 原目录为 backup 并创建软链，推进 linked。⑤ 重新运行步骤③生成绑定当前 target hash 的报告；<code>migration:apply --plan ... --until finalized --verification-report ...</code> 仅接受两个条目均为 linked：在任何 unlink 前一次性验证报告、target/snapshot hash、backup 存在，并要求 <code>lstat(originalPath).isSymbolicLink()</code> 且 <code>readlink(originalPath)</code> 的字节文本严格等于 plan 的绝对 <code>targetAbsolute</code>（不接受相对链接、中间链接或仅 realpath 相等）。全部通过后才按 journal 协议退役两个入口；成功后 <code>phase=finalized</code>、写同一 <code>retiredAt</code>，两个 old path 均须 lstat ENOENT。缺报告、报告失败、hash 不一致或入口身份不符均失败且不得修改入口。</p>
+<p>finalize 的单写与崩溃恢复协议：所有迁移写命令先以 <code>open(...,&#39;wx&#39;)</code> 独占 <code>artifacts/migration/write.lock</code>，锁覆盖最终一次 link identity 复核、unlink、元数据提交和恢复；同工具并发调用稳定返回 <code>E_INVALID_TRANSITION</code>。锁存在时不自动猜测 stale；只有显式 <code>migration:apply --recover-finalize</code> 可在维护者确认原进程已结束后接管。unlink 前原子写 <code>finalize-journal.v1.json</code>，其中固定 plan hash、同一 <code>retiredAt</code>、两个 <code>{id,originalPath,targetAbsolute,linkText}</code> 和 <code>status=prepared</code>；每次 unlink 后原子更新 <code>removedIds</code>。若普通异常发生且 provenance 仍 linked，按 journal 为所有 lstat ENOENT 的入口重建绝对软链，写 state=linked，再删除 journal；遇到普通文件、目录或 linkText 不同则 <code>E_MIGRATION_CONFLICT</code>，绝不覆盖。若进程崩溃，显式 recover 根据磁盘而非 <code>removedIds</code> 复核：provenance 全 linked 时恢复缺失 aliases；provenance 全 finalized 时要求 aliases 全不存在、复核 hash 并补写 state=finalized；混合 provenance、未知入口或 hash 不一致均停住人工审阅。正常提交顺序固定为：unlink 两项 → 复核 aliases 缺失及 target/backup hash → 原子写全部 finalized provenance → 原子写 finalized state → 删除 journal → 释放锁。这样 provenance 是 commit point；其前崩溃回 linked，其后崩溃只补齐 finalized state。</p>
+<p>finalize 成功后再以 canonical 路径运行一次全量产品门作为交付证据；该门失败不会改变已提交的迁移 phase，也不得复活旧入口，因为别名退役不改变 target 内容。此时 S10 保持未完成并在 canonical target 上前向修复，直至产品门通过。<code>migration:verify</code> 只验证结构与 hash，不把历史产品报告冒充当前构建结果。</p>
+<p>目标冲突判定：目标不存在时可 staging copy；目标是目录且规范化 hash 与来源相同则视为幂等已有；其他情况一律 <code>E_MIGRATION_CONFLICT</code>。备份路径不存在才允许 link switch；若备份已存在但不等于 provenance 中记录的 source hash，也按冲突处理。</p>
+</div></section>
+<section class="chp" id="ch-C3">
+<h3 class="ct"><span class="num">3.3</span>不变量与数据铁律<span class="anch">C3</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>INV-ID</th>
+<th>断言</th>
+<th>违反后果</th>
+<th>对应检查</th>
+</tr>
+</thead>
+<tbody><tr>
+<td class="nw">INV-1</td>
+<td>PACT Core 源码不 import/reference Vima 产品路径</td>
+<td>Core 失去通用性</td>
+<td>boundary test</td>
+</tr>
+<tr>
+<td class="nw">INV-2</td>
+<td>同一 capability 身份由 version+hash+contractVersion+releaseStatus 决定</td>
+<td class="nw">假兼容</td>
+<td>compatibility fixture</td>
+</tr>
+<tr>
+<td class="nw">INV-3</td>
+<td><code>kind!=business-system</code> 时 Starter 不得进入 selected</td>
+<td class="nw">技术栈误选</td>
+<td>router benchmark</td>
+</tr>
+<tr>
+<td class="nw">INV-4</td>
+<td>target hash 未验证前旧路径不得切换</td>
+<td class="nw">数据丢失</td>
+<td>migration conflict test</td>
+</tr>
+<tr>
+<td class="nw">INV-5</td>
+<td>package/CLI identity 在迁移前后不变</td>
+<td class="nw">下游破坏</td>
+<td>identity test</td>
+</tr>
+<tr>
+<td class="nw">INV-6</td>
+<td>release direct units 与 verify units 分开保存</td>
+<td>无谓发版或漏测</td>
+<td>release-plan fixture</td>
+</tr>
+<tr>
+<td class="nw">INV-7</td>
+<td>根级发布命令不含 publish、push、registry token</td>
+<td class="nw">越权外部变更</td>
+<td>static command scan</td>
+</tr>
+<tr>
+<td class="nw">INV-8</td>
+<td>UI runtime budget baseline/growth 不因迁移放宽</td>
+<td class="nw">质量门失真</td>
+<td>budget snapshot test</td>
+</tr>
+<tr>
+<td class="nw">INV-9</td>
+<td>finalized 时 canonical target 与 backup hash 一致，两个 old alias 均 lstat 不存在，且不存在未处理 finalize journal</td>
+<td>双入口复活或来源丢失</td>
+<td>finalized migration/recovery test</td>
+</tr>
+</tbody></table></div>
+<h3>规范化树哈希算法</h3>
+<ol>
+<li>排除任意路径段名称恰为：<code>node_modules</code>、<code>dist</code>、<code>dist-site</code>、<code>target</code>、<code>reports</code>、<code>.vite</code>、<code>.qoder</code>、<code>.playwright-mcp</code>；闭集不可由 CLI 覆盖。</li>
+<li>只记录 regular file 与 symlink，目录隐含；相对路径转 POSIX <code>/</code>、Unicode NFC，拒绝无法稳定编码的路径、绝对 symlink 或逃逸 symlink；权限位与 mtime 不入 hash。</li>
+<li>按规范化路径 UTF-8 字节升序。每条记录为：1 byte 类型（<code>0x66</code> file / <code>0x6c</code> link）+ 4 byte big-endian 路径字节长度 + 路径 UTF-8 + 8 byte big-endian 内容长度 + 内容。file 内容为原始 bytes；link 内容为 link target 的 UTF-8 bytes。</li>
+<li>依次送入 SHA-256，输出小写 64 位 hex。目标的同一算法结果必须与 provenance 相等。</li>
+</ol>
+<p><code>migration:apply</code> 在 bootstrap/build 之前生成 <code>artifacts/migration/import-manifest.v1.json</code>，逐项记录实际复制的规范化相对路径并断言其中不含上述 8 个目录段。<a href="#req-R013">R013</a> 只验该不可变 import manifest 与 link-switch 前 staging；bootstrap 后出现的 <code>node_modules</code>、<code>dist</code>、<code>target</code> 是验证产物，由 <code>.gitignore</code> 和清理规则管理，不反向计入导入快照。</p>
+</div></section>
+<section class="chp" id="ch-C4">
+<h3 class="ct"><span class="num">3.4</span>对外接口契约<span class="anch">C4</span></h3>
+<div class="bd"><h3><code>platform:inspect</code></h3>
+<p><strong>输入</strong></p>
+<pre><code class="language-json">{&quot;version&quot;:&quot;1&quot;,&quot;kind&quot;:&quot;business-system&quot;,&quot;constraints&quot;:{&quot;frontend&quot;:&quot;vue3&quot;,&quot;backend&quot;:&quot;spring-boot&quot;}}
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>校验</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>version</code></td>
+<td>literal <code>1</code></td>
+<td class="nw">是</td>
+<td class="nw">其他版本拒绝</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td class="nw">enum</td>
+<td class="nw">是</td>
+<td><code>generic</code>,<code>admin-ui</code>,<code>business-system</code>,<code>unknown</code></td>
+</tr>
+<tr>
+<td><code>constraints</code></td>
+<td class="nw">object</td>
+<td class="nw">否</td>
+<td>仅允许 <code>frontend</code>,<code>backend</code> 字符串键，未知键拒绝</td>
+</tr>
+<tr>
+<td><code>preferredCapabilities</code></td>
+<td>capability ID[]</td>
+<td class="nw">否</td>
+<td>缺省空；必须符合 C1 Router 真值表</td>
+</tr>
+</tbody></table></div>
+<p><strong>成功输出</strong></p>
+<pre><code class="language-json">{&quot;ok&quot;:true,&quot;profile&quot;:&quot;business-system&quot;,&quot;selected&quot;:[&quot;pact-core&quot;],&quot;candidates&quot;:[&quot;ui-admin-adapter&quot;,&quot;vima-starter-adapter&quot;],&quot;diagnostics&quot;:[]}
+</code></pre>
+<p><strong>失败输出</strong></p>
+<pre><code class="language-json">{&quot;ok&quot;:false,&quot;profile&quot;:null,&quot;selected&quot;:[],&quot;candidates&quot;:[],&quot;diagnostics&quot;:[{&quot;code&quot;:&quot;E_REQUIREMENT_INCOMPLETE&quot;,&quot;path&quot;:&quot;kind&quot;,&quot;message&quot;:&quot;需求类别不足，不能选择工程模板&quot;}]}
+</code></pre>
+<h3><code>release:plan</code></h3>
+<p><strong>CLI</strong>：<code>npm run release:plan -- --base &lt;git-ref&gt; [--json &lt;path&gt;]</code></p>
+<p><strong>输出</strong></p>
+<pre><code class="language-json">{&quot;version&quot;:&quot;1&quot;,&quot;base&quot;:&quot;HEAD^&quot;,&quot;directReleaseUnits&quot;:[&quot;vima-ui-admin&quot;],&quot;verificationUnits&quot;:[&quot;vima-ui-admin&quot;,&quot;vima-starter&quot;],&quot;reasons&quot;:{&quot;vima-starter&quot;:[&quot;verify-dependent:vima-ui-admin&quot;]}}
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>错误情形</th>
+<th>错误码</th>
+<th align="right">退出码</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输入 schema 非法</td>
+<td><code>E_SCHEMA</code></td>
+<td align="right">2</td>
+<td>输出 diagnostics，不写 plan</td>
+</tr>
+<tr>
+<td>capability blocked</td>
+<td><code>E_CAPABILITY_BLOCKED</code></td>
+<td align="right">3</td>
+<td>不生成工程计划</td>
+</tr>
+<tr>
+<td>Git baseline 不存在</td>
+<td><code>E_BASELINE_UNKNOWN</code></td>
+<td align="right">4</td>
+<td>不猜测全量或空集</td>
+</tr>
+<tr>
+<td class="nw">文件归属冲突</td>
+<td><code>E_PATH_OWNERSHIP</code></td>
+<td align="right">5</td>
+<td>列出冲突 unit/path</td>
+</tr>
+<tr>
+<td class="nw">迁移冲突</td>
+<td><code>E_MIGRATION_CONFLICT</code></td>
+<td align="right">6</td>
+<td>源/目标均保持原样</td>
+</tr>
+</tbody></table></div>
+<p>Git 变更集合固定为四者并集并去重：<code>git diff --name-status --find-renames &lt;base&gt;...HEAD</code>、<code>git diff --cached --name-status --find-renames</code>、<code>git diff --name-status --find-renames</code>、<code>git ls-files --others --exclude-standard</code>。rename 的旧/新路径都参与归属，delete 使用旧路径。归属表：<code>pact/**</code> 与 <code>pact-*/**</code> 直接发布 <code>pact-skills</code>；<code>products/vima-ui-admin/**</code> 直接发布 UI；<code>templates/vima-starter/**</code> 直接发布 Starter；<code>platform/**</code>、根 <code>package*.json</code>、<code>README.md</code>、<code>CLAUDE.md</code>、<code>.gitignore</code> 不直接发布但验证三单元；<code>.pact/**</code> 只验证 PACT；<code>artifacts/**</code> 忽略。任一路径命中两个直接规则即 <code>E_PATH_OWNERSHIP</code>。</p>
+</div></section>
+<section class="chp" id="ch-C5">
+<h3 class="ct"><span class="num">3.5</span>内部模块接口<span class="anch">C5</span></h3>
+<div class="bd"><pre><code class="language-ts">type Diagnostic = { code: string; path: string; message: string };
+type InspectResult = { ok: boolean; profile: string | null; selected: string[]; candidates: string[]; diagnostics: Diagnostic[] };
+validateDocument(schemaId: string, input: unknown): { ok: boolean; diagnostics: Diagnostic[] };
+routeCapability(input: InspectInput, registry: Registry): InspectResult;
+normalizedTreeHash(root: string): string;
+planRelease(changedPaths: string[], units: ReleaseUnit[]): ReleasePlan;
+runSerial(checks: CommandSpec[]): Promise&lt;CheckReport&gt;;
+planMigration(): MigrationPlan;
+applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>接口</th>
+<th>副作用</th>
+<th>责任边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>validateDocument</code></td>
+<td class="nw">无</td>
+<td>validator 负责稳定 code/path，不修输入</td>
+</tr>
+<tr>
+<td><code>routeCapability</code></td>
+<td class="nw">无</td>
+<td>router 只选择，不生成文件</td>
+</tr>
+<tr>
+<td><code>normalizedTreeHash</code></td>
+<td class="nw">只读</td>
+<td>不跟随越界 symlink</td>
+</tr>
+<tr>
+<td><code>planRelease</code></td>
+<td class="nw">无</td>
+<td>caller 提供已排序 paths，函数仍规范化排序</td>
+</tr>
+<tr>
+<td><code>runSerial</code></td>
+<td>执行白名单命令</td>
+<td>首个失败停止，收集 stdout/stderr 摘要</td>
+</tr>
+<tr>
+<td><code>planMigration</code></td>
+<td>默认无；指定 output 仅写 artifact</td>
+<td>不改变 source/target/link</td>
+</tr>
+<tr>
+<td><code>applyMigration</code></td>
+<td>staging/target/backup/link-retirement/state</td>
+<td>只接受 repo 内 plan，按 C2 可重入；finalized 不可 rollback</td>
+</tr>
+</tbody></table></div>
+<h3>精确命令入口</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>根命令</th>
+<th>副作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>npm run bootstrap</code></td>
+<td>显式执行 UI <code>npm ci</code>、Starter 根 <code>npm ci</code>；只信任入库 lock/package scripts，不由 inspect/plan 自动调用</td>
+</tr>
+<tr>
+<td><code>npm run migration:plan</code></td>
+<td>只读，生成 stdout JSON；显式 <code>--output</code> 才写 repo 内 plan 文件</td>
+</tr>
+<tr>
+<td><code>npm run migration:apply -- --plan artifacts/migration/plan.v1.json --until staged</code></td>
+<td>staging 复制/校验后原子就位 target、写 import manifest 并暂停；不 bootstrap、不切链</td>
+</tr>
+<tr>
+<td><code>npm run verify:products -- --report artifacts/migration/product-verification.v1.json</code></td>
+<td>对 target 串行跑固定 checks 并写绑定 target hash 的报告</td>
+</tr>
+<tr>
+<td><code>npm run migration:apply -- --plan artifacts/migration/plan.v1.json --until linked --verification-report artifacts/migration/product-verification.v1.json</code></td>
+<td>校验报告后才备份原目录并切软链</td>
+</tr>
+<tr>
+<td><code>npm run migration:apply -- --plan artifacts/migration/plan.v1.json --until finalized --verification-report artifacts/migration/product-verification.v1.json</code></td>
+<td>预检新鲜产品报告、两个精确绝对软链、target 与 backup hash 后按 journal 协议退役旧入口；保留备份</td>
+</tr>
+<tr>
+<td><code>npm run migration:apply -- --recover-finalize</code></td>
+<td>仅用于崩溃遗留 lock/journal；按 C2 commit point 恢复 linked 或补齐 finalized，不接受任意路径参数</td>
+</tr>
+<tr>
+<td><code>npm run migration:verify</code></td>
+<td>只读 hash/identity/入口 phase 检查；linked 验 realpath，finalized 验 old path 不存在</td>
+</tr>
+<tr>
+<td><code>npm run release:pack</code></td>
+<td>依次生成 <code>pact-skills-&lt;version&gt;.tar.gz</code>、<code>vima-tech-ui-admin-&lt;version&gt;.tgz</code>、<code>create-vima-starter-&lt;version&gt;.tgz</code> 到 <code>artifacts/release/</code></td>
+</tr>
+</tbody></table></div>
+<p>PACT 归档用 <code>tar</code> 固定排序、mtime=<code>2026-08-11T00:00:00Z</code>、uid/gid=0；UI 与 Starter 分别执行 <code>npm pack --pack-destination &lt;absolute artifacts/release&gt;</code>，生成真实 tgz 而非 dry-run。pack 可以读取本地依赖和 npm 配置，但禁止任何 registry publish、Git push 或远端状态写操作。</p>
+</div></section>
+<section class="chp" id="ch-C6">
+<h3 class="ct"><span class="num">3.6</span>错误码与错误语义<span class="anch">C6</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>错误码</th>
+<th>含义</th>
+<th>用户文案</th>
+<th>调用方动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>E_SCHEMA</code></td>
+<td>JSON 不符合 schema</td>
+<td>治理文件格式错误</td>
+<td>按 path 修复，不继续</td>
+</tr>
+<tr>
+<td><code>E_REQUIREMENT_INCOMPLETE</code></td>
+<td class="nw">需求类别不足</td>
+<td>需求信息不足，不能选择工程模板</td>
+<td>回 PACT 访谈补白</td>
+</tr>
+<tr>
+<td><code>E_CAPABILITY_BLOCKED</code></td>
+<td>候选能力未 ready</td>
+<td>当前能力未达到交付门</td>
+<td>展示 limitations，不生成</td>
+</tr>
+<tr>
+<td><code>E_COMPATIBILITY</code></td>
+<td>版本/哈希/契约冲突</td>
+<td>能力版本不兼容</td>
+<td class="nw">先升级或重验</td>
+</tr>
+<tr>
+<td><code>E_BASELINE_UNKNOWN</code></td>
+<td>Git baseline 无法解析</td>
+<td>无法确定变更基线</td>
+<td>显式提供有效 ref</td>
+</tr>
+<tr>
+<td><code>E_PATH_OWNERSHIP</code></td>
+<td>release path 归属冲突</td>
+<td>发布单元路径配置冲突</td>
+<td>修 registry</td>
+</tr>
+<tr>
+<td><code>E_MIGRATION_CONFLICT</code></td>
+<td>来源、目标或哈希冲突</td>
+<td>迁移冲突，未修改原文件</td>
+<td class="nw">人工审阅冲突</td>
+</tr>
+<tr>
+<td><code>E_COMMAND_FAILED</code></td>
+<td class="nw">子门禁失败</td>
+<td class="nw">验证失败</td>
+<td>保留命令和退出码，停止后续</td>
+</tr>
+<tr>
+<td><code>E_INVALID_TRANSITION</code></td>
+<td class="nw">非法迁移状态</td>
+<td>当前迁移状态不允许此操作</td>
+<td>回到 inspect 或 rollback</td>
+</tr>
+</tbody></table></div>
+</div></section>
+<section class="chp" id="ch-C7">
+<h3 class="ct"><span class="num">3.7</span>配置与环境变量<span class="anch">C7</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>单一来源</th>
+<th>类型</th>
+<th>默认值</th>
+<th>敏感</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>capabilities</td>
+<td><code>platform/registry/capabilities.v1.json</code></td>
+<td class="nw">JSON</td>
+<td class="nw">入库文件</td>
+<td class="nw">否</td>
+<td class="nw">能力真源</td>
+</tr>
+<tr>
+<td>profiles</td>
+<td><code>platform/registry/delivery-profiles.v1.json</code></td>
+<td class="nw">JSON</td>
+<td class="nw">入库文件</td>
+<td class="nw">否</td>
+<td class="nw">选择规则</td>
+</tr>
+<tr>
+<td>compatibility</td>
+<td><code>platform/registry/compatibility.v1.json</code></td>
+<td class="nw">JSON</td>
+<td class="nw">入库文件</td>
+<td class="nw">否</td>
+<td>版本/哈希关系</td>
+</tr>
+<tr>
+<td>release units</td>
+<td><code>platform/registry/release-units.v1.json</code></td>
+<td class="nw">JSON</td>
+<td class="nw">入库文件</td>
+<td class="nw">否</td>
+<td>发布/验证命令真源</td>
+</tr>
+<tr>
+<td>provenance</td>
+<td><code>platform/registry/provenance.v1.json</code></td>
+<td class="nw">JSON</td>
+<td class="nw">入库文件</td>
+<td class="nw">否</td>
+<td class="nw">来源快照事实</td>
+</tr>
+<tr>
+<td>release output</td>
+<td>CLI <code>--output</code></td>
+<td>repo-relative path</td>
+<td><code>artifacts/release</code></td>
+<td class="nw">否</td>
+<td>必须在 repo 内且被 gitignore</td>
+</tr>
+<tr>
+<td>Git base</td>
+<td>CLI <code>--base</code></td>
+<td>git ref</td>
+<td class="nw">无</td>
+<td class="nw">否</td>
+<td>不提供则失败，不猜测</td>
+</tr>
+<tr>
+<td>npm token</td>
+<td class="nw">禁止配置</td>
+<td class="nw">secret</td>
+<td class="nw">不读取</td>
+<td class="nw">是</td>
+<td>本项目不实现真实 publish</td>
+</tr>
+</tbody></table></div>
+<p>外部产品契约防漂移：provenance 锁定两个完整规范化产品树；compatibility 另锁定 UI <code>package.json</code> exports、<code>dist/ai-manifest.json</code> 与 Agent schema 的组合 hash。产品源码变化必须更新对应 evidence/hash 并触发 governance check，不允许只改产品文件而保持声明不变。</p>
+</div></section>
+<section class="chp" id="ch-C8">
+<h3 class="ct"><span class="num">3.8</span>权限与安全边界<span class="anch">C8</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>AI Agent</th>
+<th>框架维护者</th>
+<th>发布维护者</th>
+<th>强制边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>inspect/check/plan</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td>只读当前 repo</td>
+</tr>
+<tr>
+<td class="nw">写治理/源码</td>
+<td class="nw">仅显式任务</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td>目标 realpath 必须在 repo 内，overwrite deny 默认</td>
+</tr>
+<tr>
+<td>migration link/finalize/recover</td>
+<td class="nw">不默认</td>
+<td>显式迁移任务允许</td>
+<td class="nw">允许</td>
+<td>独占迁移锁；已 verified、路径精确、保留备份；finalize 仅 unlink 精确绝对软链</td>
+</tr>
+<tr>
+<td>local pack</td>
+<td class="nw">不默认</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td>输出仅在 repo 忽略目录</td>
+</tr>
+<tr>
+<td>npm publish/git push</td>
+<td class="nw">禁止</td>
+<td class="nw">根工具不提供</td>
+<td class="nw">根工具不提供</td>
+<td>必须脱离本自动化另行人工执行</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li>不可信 template、handler、script 不进入治理执行路径。</li>
+<li>命令白名单首程序仅允许 <code>node</code>、<code>npm</code>、<code>bash</code>、<code>mvn</code>；参数由入库 registry 固定，不接受用户拼接 shell。</li>
+<li>日志不读取或输出 <code>NPM_TOKEN</code>、registry auth、SSH key；测试扫描相关键名。</li>
+</ul>
+</div></section>
+<section class="chp" id="ch-C9">
+<h3 class="ct"><span class="num">3.9</span>观测与日志契约<span class="anch">C9</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>事件</th>
+<th>级别</th>
+<th>记录字段</th>
+<th>必须脱敏/禁止字段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>capability inspection</td>
+<td class="nw">INFO</td>
+<td>kind, profile, selected, candidate, diagnostic codes</td>
+<td>原始自由文本需求不记录</td>
+</tr>
+<tr>
+<td>governance check</td>
+<td class="nw">INFO</td>
+<td>schema id, file, pass/fail, code/path</td>
+<td>文件内容不整份输出</td>
+</tr>
+<tr>
+<td>migration verify</td>
+<td class="nw">INFO</td>
+<td>sourcePath, targetPath, hash, excluded count, phase/state</td>
+<td>文件内容、凭据不记录</td>
+</tr>
+<tr>
+<td>release plan</td>
+<td class="nw">INFO</td>
+<td>base, direct units, verify units, reasons</td>
+<td>环境变量、token 不记录</td>
+</tr>
+<tr>
+<td>command failure</td>
+<td class="nw">ERROR</td>
+<td>unit, command id, exit code, 最后 40 行摘要</td>
+<td>auth 配置行脱敏</td>
+</tr>
+</tbody></table></div>
+<p>结构化命令 stdout 只输出 JSON；人读摘要写 stderr。确定性 JSON 不含 timestamp、绝对临时目录或随机 ID。</p>
+</div></section>
+<section class="chp" id="ch-C10">
+<h3 class="ct"><span class="num">3.10</span>交互与呈现契约<span class="anch">C10</span></h3>
+<div class="bd"><p>N/A（本项目交付 CLI、JSON 和 Markdown，不新增 Web UI。UI 产品迁移必须保持既有视觉与 Manifest/VIcon 规则，本轮不设计新页面。）</p>
+</div></section>
+<section class="chp" id="ch-C11">
+<h3 class="ct"><span class="num">3.11</span>AI / Prompt 契约<span class="anch">C11</span></h3>
+<div class="bd"><p>本项目不内置模型调用；AI Agent 通过 skill 读取治理资源，所有输出仍需确定性工具验证。</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>契约</th>
+</tr>
+</thead>
+<tbody><tr>
+<td class="nw">自然语言判断</td>
+<td>由 PACT 访谈先收敛为 <code>kind</code> 枚举；Router 不解析自由文本</td>
+</tr>
+<tr>
+<td>AI 输入</td>
+<td><code>PACT.md</code>、capability/profile/compatibility JSON、Manifest/Recipe（仅已选择 UI 时）</td>
+</tr>
+<tr>
+<td>AI 输出</td>
+<td>受 schema 校验的 inspect/spec/plan；不得直接执行模板 handler/script</td>
+</tr>
+<tr>
+<td class="nw">输出失败</td>
+<td>schema 不合法即 <code>E_SCHEMA</code>，最多修复两轮；仍失败回访谈或人工审核</td>
+</tr>
+<tr>
+<td>Starter 使用门</td>
+<td>只有 <code>kind=business-system</code> 且 adapter readiness 满足时；否则只报告候选/限制</td>
+</tr>
+<tr>
+<td class="nw">兜底</td>
+<td>required、permission、危险操作只接受显式需求；缺契约返回诊断，不生成空壳</td>
+</tr>
+</tbody></table></div>
+</div></section></div></details>
+<details class="pack" id="part-T">
+<summary><span class="pn2">ACCEPTANCE</span>第四部分 · 验收与交付<span class="pdesc">5 节</span></summary>
+<div class="packb"><section class="chp" id="ch-T1">
+<h3 class="ct"><span class="num">4.1</span>验收清单<span class="anch">T1</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>R-ID</th>
+<th>验收方式（可执行）</th>
+<th>判定标准</th>
+<th>检查者</th>
+</tr>
+</thead>
+<tbody><tr>
+<td class="nw"><a href="#req-R001">R001</a></td>
+<td><code>npm test -- --test-name-pattern=&#39;core boundary&#39;</code></td>
+<td>Core 扫描零 Vima 引用且自测通过</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R002">R002</a></td>
+<td>governance schema test</td>
+<td>恰有 5 个 capability ID，字段齐全</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R003">R003</a></td>
+<td>router benchmark test</td>
+<td>generic/admin/business 三类 profile 正确</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R004">R004</a></td>
+<td>router test 禁用 Vima fixtures</td>
+<td>generic 成功，另两类只给候选/诊断</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R005">R005</a></td>
+<td>invalid inspect fixtures</td>
+<td>全部非零退出且 code/path 稳定</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R006">R006</a></td>
+<td>readiness evidence test</td>
+<td>无 evidence 的 ready 被拒绝</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R007">R007</a></td>
+<td><code>npm run governance:check</code></td>
+<td>六类合法 JSON 全过，每类非法 fixture 全失败</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R008">R008</a></td>
+<td>same-version-different-hash fixture</td>
+<td>返回 <code>E_COMPATIBILITY</code> 或 verify-required</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R009">R009</a></td>
+<td>benchmark snapshot</td>
+<td>4 类输入全部匹配期望 JSON</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R010">R010</a></td>
+<td>Starter registry assertion</td>
+<td>C1 的 4 个稳定限制 ID 均存在，Starter 为 partial、adapter 为 blocked</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R011">R011</a></td>
+<td><code>npm run migration:verify</code></td>
+<td>两目标目录存在且 hash 一致</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R012">R012</a></td>
+<td>provenance schema/hash test</td>
+<td>全字段合法、hash 可复算</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R013">R013</a></td>
+<td>import manifest scan（必须早于 bootstrap/build）</td>
+<td>manifest 对 C3 的 8 个目录段零记录且附加 exclude 参数被拒</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R014">R014</a></td>
+<td>temp fixture conflict test</td>
+<td>非零退出且两端 hash 不变</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R015">R015</a></td>
+<td>UI identity/export test</td>
+<td>name 为 <code>@vima-tech/ui-admin</code>，声明 exports 均存在</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R016">R016</a></td>
+<td>Starter identity + <code>npm --prefix templates/vima-starter run check:template</code></td>
+<td>CLI name 保持且无模板漂移</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R017">R017</a></td>
+<td>root verify order test</td>
+<td>日志顺序固定，注入失败后后续不运行</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R018">R018</a></td>
+<td>finalized alias retirement</td>
+<td>退役前 2/2 是指向 canonical target 的软链；退役后 <code>test ! -e &amp;&amp; test ! -L</code>、target/backup hash 与统一路径产品门全部通过</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R019">R019</a></td>
+<td>release unit schema test</td>
+<td>恰有 3 个 unit 且 verify/pack 完整</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R020">R020</a></td>
+<td>changed path fixture</td>
+<td>added/modified/deleted 映射 100% 正确</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R021">R021</a></td>
+<td>UI public change fixture</td>
+<td>direct 仅 UI，verification 含 UI+Starter</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R022">R022</a></td>
+<td>plan deterministic test</td>
+<td>连跑两次 SHA-256 相同</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R023">R023</a></td>
+<td>3 类 release error fixture</td>
+<td>baseline/schema/ownership 均按约定失败</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R024">R024</a></td>
+<td>UI 四命令 + budget snapshot</td>
+<td>全 exit 0，预算基线/比例未增加</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R025">R025</a></td>
+<td>Starter template/frontend/backend/CLI pack</td>
+<td>全 exit 0，生成命名正确 tgz，无 publish</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R026">R026</a></td>
+<td>PACT self-test + 当前物料 check/review</td>
+<td>全 exit 0，review 100%</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R027">R027</a></td>
+<td>static scripts scan + archive listing</td>
+<td>无 publish/push/token 读取；恰有 3 个本地归档</td>
+<td class="nw">脚本</td>
+</tr>
+</tbody></table></div>
+</div></section>
+<section class="chp" id="ch-T2">
+<h3 class="ct"><span class="num">4.2</span>指标与阈值<span class="anch">T2</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>阈值</th>
+<th>测量方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Router 正确率</td>
+<td>4/4 fixtures</td>
+<td><code>npm test</code> benchmark</td>
+</tr>
+<tr>
+<td>治理 schema 负例检出</td>
+<td>六类每类至少 1 个，检出率 100%</td>
+<td>governance tests</td>
+</tr>
+<tr>
+<td class="nw">迁移完整性</td>
+<td>规范化 hash 100% 相等</td>
+<td><code>npm run migration:verify</code></td>
+</tr>
+<tr>
+<td>release plan 确定性</td>
+<td>同输入两次 SHA-256 相同</td>
+<td>deterministic test</td>
+</tr>
+<tr>
+<td>UI runtime gzip</td>
+<td>不超过既有 <code>runtime-budget.json</code> 计算上限</td>
+<td><code>npm --prefix products/vima-ui-admin run check:size</code></td>
+</tr>
+<tr>
+<td class="nw">全量验证</td>
+<td>所有子命令 exit 0，串行</td>
+<td><code>npm run verify</code></td>
+</tr>
+<tr>
+<td>canonical-only 入口</td>
+<td>两个旧路径 2/2 不存在，两个 canonical target 与备份 hash 100% 相等</td>
+<td>migration test</td>
+</tr>
+<tr>
+<td>PACT 完成度</td>
+<td class="nw">100%</td>
+<td><code>pact-review.sh</code></td>
+</tr>
+</tbody></table></div>
+</div></section>
+<section class="chp" id="ch-T3">
+<h3 class="ct"><span class="num">4.3</span>停工线（出现即停，不得继续施工）<span class="anch">T3</span></h3>
+<div class="bd"><ul>
+<li>来源或用户文件出现未授权的不可逆删除、覆盖；<a href="#req-R018">R018</a> 只允许删除两个已验证软链接且必须保留 target 与快照备份。finalized commit point 之前按 journal 回滚，之后只在 canonical target 前向修复，不得用“先回滚”复活已退役入口。</li>
+<li>PACT Core 引入 Vima 源码依赖，或 generic profile 在无 Vima 时不能工作。</li>
+<li>Router 在非 <code>business-system</code> 输入中选择 Starter。</li>
+<li>为通过门禁而抬高 UI runtime budget、跳过现有产品测试或把失败标记为 ready。</li>
+<li>根脚本执行真实 <code>npm publish</code>、Git push、读取 registry token 或运行不可信模板脚本。</li>
+<li>package/CLI identity 被无规格变更地合并或重命名。</li>
+<li>测试为迁就实现而放宽断言；任何 C3 不变量被破坏。</li>
+</ul>
+<p>命中后立即停止，记录 <code>needs input:</code> 与证据；先回滚到可验证状态，再走 <code>/pact-change</code>。</p>
+</div></section>
+<section class="chp" id="ch-T4">
+<h3 class="ct"><span class="num">4.4</span>交付前置（Definition of Done）<span class="anch">T4</span></h3>
+<div class="bd"><ul>
+<li><input disabled="" type="checkbox"> <code>npm run governance:check</code>、<code>npm test</code>、<code>npm run migration:verify</code> 通过。</li>
+<li><input disabled="" type="checkbox"> UI 的 <code>check:ai</code>、<code>typecheck</code>、<code>test</code>、<code>verify:publish</code> 全部通过。</li>
+<li><input disabled="" type="checkbox"> 显式 <code>npm run bootstrap</code> 成功；此后验证命令不隐式安装依赖。</li>
+<li><input disabled="" type="checkbox"> Starter 的 <code>check:template</code>、frontend <code>build:check</code>、backend <code>mvn package</code>、CLI 本地 <code>npm pack</code> 全部通过。</li>
+<li><input disabled="" type="checkbox"> PACT scripts self-test、<code>pact-check.sh</code>、<code>pact-review.sh</code> 全部通过。</li>
+<li><input disabled="" type="checkbox"> <code>npm run release:plan -- --base HEAD^</code> 输出合法稳定计划；<code>npm run release:pack</code> 只生成本地 artifacts。</li>
+<li><input disabled="" type="checkbox"> 两个旧绝对路径已退役且 lstat 不存在；canonical target 与 provenance 记录的来源备份均可复算且 hash 一致。</li>
+<li><input disabled="" type="checkbox"> T1 的 <a href="#req-R001">R001</a>–<a href="#req-R027">R027</a> 全部有真实执行证据；<code>action-graph.json</code> 完成度 100%。</li>
+<li><input disabled="" type="checkbox"> 根 <code>README.md</code>、<code>CLAUDE.md</code>、产品局部约定与实际目录/命令一致。</li>
+<li><input disabled="" type="checkbox"> 无临时源文件、无未解释的待办占位、无本需求引入的 secrets；用户既有未跟踪文件保持未修改。</li>
+</ul>
+</div></section>
+<section class="chp" id="ch-T5">
+<h3 class="ct"><span class="num">4.5</span>施工范围与里程碑<span class="anch">T5</span></h3>
+<div class="bd"><div class="tw"><table>
+<thead>
+<tr>
+<th>里程碑</th>
+<th>包含 R-ID</th>
+<th>出口条件</th>
+<th>明确不含</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M0 · 安全前置与工具骨架</td>
+<td><a href="#req-R001">R001</a>,<a href="#req-R007">R007</a>,<a href="#req-R012">R012</a>,<a href="#req-R014">R014</a></td>
+<td>Core 边界、六类 schema/负例、planned provenance 与迁移冲突 fixture 全绿</td>
+<td>live 产品 evidence、物理目录切换</td>
+</tr>
+<tr>
+<td>M1 · 统一 workspace</td>
+<td><a href="#req-R011">R011</a>,<a href="#req-R013">R013</a>,<a href="#req-R015">R015</a>–<a href="#req-R019">R019</a>,<a href="#req-R024">R024</a>,<a href="#req-R025">R025</a></td>
+<td>import manifest 先验通过；产品迁入、identity/release-unit/串行编排就位，经 linked 过渡验收后进入 canonical-only finalized；bootstrap 与两产品真实门禁全绿</td>
+<td>Starter RBAC/FullStackSpec 深化</td>
+</tr>
+<tr>
+<td>M2 · 治理数据与能力选择</td>
+<td><a href="#req-R002">R002</a>–<a href="#req-R006">R006</a>,<a href="#req-R008">R008</a>–<a href="#req-R010">R010</a></td>
+<td>基于迁入产品的 evidence/hash 完成 registry、profile、adapter、compatibility 与 Router 真值表</td>
+<td>新的业务生成 adapter 实现</td>
+</tr>
+<tr>
+<td>M3 · changed release 与收尾</td>
+<td><a href="#req-R020">R020</a>–<a href="#req-R023">R023</a>,<a href="#req-R026">R026</a>,<a href="#req-R027">R027</a></td>
+<td>changed plan/传播/错误 fixtures、3 个本地归档、PACT self-test/check/review 100%，T4 全勾</td>
+<td>外部 registry/Git 状态变更</td>
+</tr>
+<tr>
+<td>M4 · 旧入口退役 CR</td>
+<td><a href="#req-R018">R018</a>,<a href="#req-R026">R026</a></td>
+<td>finalized 状态、两个 old alias 不存在、target/backup hash 与全量门禁通过、图谱重新 100%</td>
+<td>删除 <code>.pre-pact-*</code> 备份</td>
+</tr>
+</tbody></table></div>
+<h3>降级策略</h3>
+<ul>
+<li><strong>可牺牲（砍宽度）</strong>：人读 release 摘要的排版、额外 benchmark 数量、重型 monorepo 缓存、远程 MCP 外壳。</li>
+<li><strong>不可牺牲（保深度）</strong>：Core 独立、业务系统才候选 Starter、finalized 前迁移可回滚、canonical-only 入口、备份保留、独立包身份、全部既有硬门、确定性 changed plan、默认不发布、C3 全部不变量。</li>
+<li><strong>触发条件</strong>：非必要打磨导致核心门连续两轮无进展时，只删除 P2 打磨，不降低任何 P0/P1 验收。</li>
+<li><strong>决策人</strong>：renmengkai；涉及冻结需求时必须走 <code>/pact-change</code>。</li>
+</ul>
+<p>判据：宁可不增加更多 adapter 和自动化外壳，也不交付一个会误选 Starter、无法回滚或门禁不绿的统一仓库。</p>
+</div></section></div></details>
+<section class="apx" id="appendix"><h2>附录 · 需求索引（R-ID）</h2>
+<p class="pd">全部需求条目一览。每条的验收方式见 <a href="#ch-T1">4.1 验收清单</a>；★ 为强制项。正文中的 R-ID 引用悬停可预览、点击跳回本表。</p>
+<div class="tw"><table><thead><tr><th>R-ID</th><th>需求</th><th>类型</th><th>优先级</th><th>里程碑</th></tr></thead>
+<tbody><tr id="req-R001"><td class="rid">R001</td><td>PACT Core 零 Vima 源码依赖</td><td>架构</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R002"><td class="rid">R002</td><td>统一声明 3 个产品能力与 2 个 adapter</td><td>数据</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R003"><td class="rid">R003</td><td>按需求类别选择 3 种 profile</td><td>功能</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R004"><td class="rid">R004</td><td>Vima 在 profile 中均为可选</td><td>架构</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R005"><td class="rid">R005</td><td>非法或信息不足时拒绝生成</td><td>边界</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R006"><td class="rid">R006</td><td>readiness 变更必须显式且有证据</td><td>治理</td><td>P1</td><td class="rid">M2</td></tr><tr id="req-R007"><td class="rid">R007</td><td>六类治理 JSON 全部有 schema 与校验器</td><td>数据</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R008"><td class="rid">R008</td><td>版本+哈希+契约版本+发布状态判兼容</td><td>兼容</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R009"><td class="rid">R009</td><td>路由基准覆盖四类输入</td><td>测试</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R010"><td class="rid">R010</td><td>不虚报 Starter 未完成能力</td><td>真实性</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R011"><td class="rid">R011</td><td>两产品进入约定目录</td><td>迁移</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R012"><td class="rid">R012</td><td>记录来源与规范化哈希</td><td>追溯</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R013"><td class="rid">R013</td><td>导入快照不包含闭集定义的可再生产目录</td><td>边界</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R014"><td class="rid">R014</td><td>导入冲突时无覆盖无删除</td><td>安全</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R015"><td class="rid">R015</td><td>UI 包身份与公开面保持</td><td>兼容</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R016"><td class="rid">R016</td><td>Starter CLI 身份和模板真源保持</td><td>兼容</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R017"><td class="rid">R017</td><td>根级串行编排各自门禁</td><td>构建</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R018"><td class="rid">R018</td><td>退役两个旧绝对路径入口</td><td>迁移</td><td>P0</td><td class="rid">M1, M4</td></tr><tr id="req-R019"><td class="rid">R019</td><td>三个独立 release unit</td><td>发布</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R020"><td class="rid">R020</td><td>Git 路径映射直接影响单元</td><td>功能</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R021"><td class="rid">R021</td><td>依赖影响与发布影响分离</td><td>兼容</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R022"><td class="rid">R022</td><td>release plan 稳定输出 JSON 与摘要</td><td>数据</td><td>P1</td><td class="rid">M3</td></tr><tr id="req-R023"><td class="rid">R023</td><td>基线未知或归属冲突时失败</td><td>边界</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R024"><td class="rid">R024</td><td>UI 全部门禁通过且不抬 size 阈值</td><td>质量</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R025"><td class="rid">R025</td><td>Starter 全部门禁与本地 pack 通过</td><td>质量</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R026"><td class="rid">R026</td><td>PACT Core 与物料全门禁通过</td><td>质量</td><td>P0</td><td class="rid">M3, M4</td></tr><tr id="req-R027"><td class="rid">R027</td><td>真实外部发布默认不可达</td><td>安全</td><td>P0</td><td class="rid">M3</td></tr></tbody></table></div></section>
+<footer class="foot">本规格书为单文件自包含产物：无外部依赖、无网络请求，可直接作为附件分发；需要纸质版直接打印（Ctrl+P）。<br>
+  真源：<code>PACT.md</code>（含 30 个机器可校验锚点）· 需求 27 · 决策 9 · 不变量 9 · 里程碑 5</footer>
+</main>
+</div>
+<div id="card"></div>
+<button id="toTop" title="回到顶部">↑</button>
+<script>window.PACT_DOC="PACT · PACT Platform 三阶段统一迁移";window.PACT_FILE="PACT.md";
+
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)]
+/* 主题 */
+const setTheme=t=>{document.documentElement.dataset.theme=t
+  try{localStorage.setItem('pact-doc-theme',t)}catch(e){}
+  const b=$('#theme'); if(b)b.textContent=t==='dark'?'☾':'☀'}
+$('#theme').onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')
+try{setTheme(localStorage.getItem('pact-doc-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'))}
+catch(e){setTheme('light')}
+/* 阅读进度 */
+const bar=$('#bar')
+addEventListener('scroll',()=>{const h=document.documentElement
+  bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'
+  $('#toTop').style.display=h.scrollTop>800?'block':'none'},{passive:true})
+$('#toTop').onclick=()=>scrollTo({top:0,behavior:'smooth'})
+/* 侧栏滚动定位 */
+const links=$$('.side a[href^="#"]'), map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]))
+const obs=new IntersectionObserver(es=>{for(const e of es){if(!e.isIntersecting)continue
+  links.forEach(a=>a.classList.remove('on'));const a=map.get(e.target.id);if(a){a.classList.add('on')
+  const r=a.getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)a.scrollIntoView({block:'nearest'})}}},
+  {rootMargin:'-10% 0px -80% 0px'})
+map.forEach((_,id)=>{const t=document.getElementById(id);if(t)obs.observe(t)})
+/* R-ID 悬停预览卡：数据直接读附录表行，零额外负载 */
+const card=$('#card')
+document.addEventListener('mouseover',e=>{
+  const a=e.target.closest('a[href^="#req-R"]'); if(!a){card.style.display='none';return}
+  const tr=document.getElementById(a.getAttribute('href').slice(1)); if(!tr)return
+  const td=tr.children
+  card.innerHTML='<div class="ct">'+td[0].textContent.trim()+'</div><div>'+td[1].textContent.trim()+'</div>'+
+    '<div class="cm">'+[td[2],td[3],td[4]].map(c=>c.textContent.trim()).filter(x=>x&&x!=='—').join(' · ')+'</div>'
+  card.style.display='block'
+  const b=a.getBoundingClientRect(),h=card.offsetHeight
+  card.style.left=Math.min(b.left,innerWidth-card.offsetWidth-12)+'px'
+  card.style.top=(b.bottom+h+12>innerHeight?b.top-h-8:b.bottom+8)+'px'
+})
+document.addEventListener('mouseout',e=>{if(e.target.closest('a[href^="#req-R"]'))card.style.display='none'})
+/* 支撑材料默认折叠：跳向被折叠的章节时先展开，否则侧栏/交叉引用点了没反应 */
+const reveal=(id,scroll)=>{const t=id&&document.getElementById(id); if(!t)return
+  for(let d=t.closest('details');d;d=d.parentElement&&d.parentElement.closest('details'))d.open=true
+  // 直接带 #hash 打开时，目标还在折叠的 details 里、没有布局，浏览器的首次跳转会落空 → 展开后补跳一次
+  // 补跳用 auto：html{scroll-behavior:smooth} 会把它变成动画，而带 hash 打开应当直接落位
+  if(scroll)requestAnimationFrame(()=>t.scrollIntoView({behavior:'auto'}))}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]'); if(a)reveal(a.getAttribute('href').slice(1))})
+addEventListener('hashchange',()=>reveal(location.hash.slice(1)))
+if(location.hash)reveal(location.hash.slice(1),true)
+
+/* ── 业务流水线：节点切换 + 逐句裁定 + 导出 ──
+   裁定状态存 localStorage（本文件零后端、零外部请求，不能自动回写真源）；
+   导出的是一段可直接粘回对话的结构化文本，由 AI 据此走 /pact-change。 */
+;(function(){
+  const stack=$('#nstack'), flow=$('#flow'); if(!stack||!flow) return
+  const lists=$$('.nlist',stack), items=$$('.it',stack)
+  const KEY='pact-verdict:'+(window.PACT_DOC||'doc')
+  let V={}; try{V=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){V={}}
+  const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(V))}catch(e){}}
+  const vOf=id=>(V[id]||{}).v||''
+
+  function show(k){
+    let hit=false
+    lists.forEach(l=>{const m=l.dataset.k===k; l.hidden=!m; if(m)hit=true})
+    if(!hit&&lists.length){lists.forEach((l,i)=>l.hidden=i!==0); k=lists[0].dataset.k}
+    $$('.fnode',flow).forEach(b=>b.classList.toggle('on',b.dataset.k===k))
+  }
+  function paint(it){
+    const v=vOf(it.dataset.i)
+    it.dataset.v=v
+    $$('.vb',it).forEach(b=>b.classList.toggle('on',b.dataset.a===v))
+    const nb=$('.nb',it); if(nb) nb.value=(V[it.dataset.i]||{}).n||''
+  }
+  function stat(){
+    let ok=0,no=0
+    items.forEach(i=>{const v=vOf(i.dataset.i); if(v==='ok')ok++; else if(v==='no')no++})
+    const t=items.length||1
+    $('#vok').style.width=(ok/t*100)+'%'; $('#vno').style.width=(no/t*100)+'%'
+    $('#vtext').textContent=(ok+no===items.length&&items.length)
+      ? ('全部裁定完 · 认了 '+ok+' · 异议 '+no)
+      : ('共 '+items.length+' 条 · 未裁定 '+(items.length-ok-no)+' · 认了 '+ok+' · 异议 '+no)
+  }
+  flow.addEventListener('click',e=>{const b=e.target.closest('.fnode'); if(b)show(b.dataset.k)})
+  $$('[data-jump]').forEach(a=>a.addEventListener('click',()=>show(a.getAttribute('data-jump'))))
+  stack.addEventListener('click',e=>{
+    const b=e.target.closest('.vb'); if(!b) return
+    const it=b.closest('.it'), id=it.dataset.i, a=b.dataset.a
+    const nv=vOf(id)===a?'':a
+    V[id]=V[id]||{}; V[id].v=nv
+    if(nv!=='no') delete V[id].n
+    if(!nv&&!V[id].n) delete V[id]
+    paint(it); persist(); stat()
+  })
+  stack.addEventListener('input',e=>{
+    if(!e.target.classList||!e.target.classList.contains('nb')) return
+    const id=e.target.closest('.it').dataset.i
+    V[id]=V[id]||{}; V[id].n=e.target.value; persist()
+  })
+  $('#vreset').addEventListener('click',()=>{
+    V={}; persist(); items.forEach(paint); stat(); $('#vout').style.display='none'
+  })
+  $('#vexport').addEventListener('click',()=>{
+    const ok=[],no=[],todo=[],rids={}
+    items.forEach(i=>{
+      const v=vOf(i.dataset.i)
+      const rs=$$('.rr',i).map(a=>a.textContent.trim()).join('/')||'(无R-ID)'
+      const nd=(i.closest('.nlist').querySelector('.nt')||{}).textContent||''
+      if(v==='ok') ok.push(rs)
+      else if(v==='no'){
+        no.push('  '+rs+'  @'+nd.trim()+'\n    「'+(((V[i.dataset.i]||{}).n||'').trim()||'(未写原因)')+'」')
+        rs.split('/').forEach(r=>{if(/^R\d{3}$/.test(r))rids[r]=1})
+      } else todo.push(rs)
+    })
+    const uniq=a=>[...new Set(a)]
+    const el=$('#vout')
+    el.textContent='PACT-VERDICT v1 · '+(window.PACT_FILE||'PACT.md')+'\n'
+      +'逐句裁定 · 共 '+items.length+' 句 / '+lists.length+' 个节点\n\n'
+      +'认了     '+(uniq(ok).join(' ')||'—')+'\n\n'
+      +'有异议\n'+(no.length?no.join('\n'):'  —')+'\n\n'
+      +'未裁定   '+(uniq(todo).join(' ')||'—')+'\n\n'
+      +(no.length
+        ? '→ 下一步：/pact-change 处理 '+no.length+' 条异议（涉及 '+Object.keys(rids).sort().join(' ')+'）\n'
+          +'  回 P5 改 R-ID → T1 补验收 → 改 C 层契约 → 记 changelog → 同步执行图谱 → 重生成本书'
+        : '→ 无异议。')
+    el.style.display='block'
+    el.scrollIntoView({block:'nearest',behavior:'smooth'})
+  })
+  items.forEach(paint); stat()
+  show(lists.length?lists[0].dataset.k:'')
+})()
+</script>
+</body>
+</html>

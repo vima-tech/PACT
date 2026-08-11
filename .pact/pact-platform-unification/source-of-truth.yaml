@@ -1,0 +1,25 @@
+version: '1'
+pact: 'pact-platform-unification'
+frozen_at: '2026-08-11'
+
+excluded_from_agent_context:
+  - docs/
+  - pact-book/
+  - assessment.md
+  - interview.md
+  - source-merge.md
+  - cold-read.md
+
+authoritative_files:
+  - path: PACT.md
+    sha256: '39dc3c5cc89dc922a45fe89e57a3b316431890280aba991038f6ebd5d00cab36'
+    role: 单文件完备规格
+  - path: action-graph.json
+    sha256: 'd42f8e6cb95de84cb6cca385f104980b73c1c52ff58e33d7fa46ea423c097cab'
+    role: 施工执行态唯一真源
+    mutable: true
+
+input_materials:
+  - path: docs/pact-controlled-generation-design.md
+    sha256: 'abb43601841bb4bedf535d5437ea5087390868eeedce4109d5b203b92c724480'
+    merged_at: '2026-08-11'

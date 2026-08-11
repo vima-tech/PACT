@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"adapters.v1","title":"PACT Platform adapters","type":"object","required":["version","adapters"],"_pact":"@pact R002,R006,R007,R010"}

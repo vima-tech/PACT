@@ -1,0 +1,26 @@
+{
+  "version": "1",
+  "_pact": "@pact R002,R006,R010",
+  "adapters": [
+    {
+      "id": "ui-admin-adapter",
+      "applicableKinds": ["admin-ui", "business-system"],
+      "consumes": ["pact-specification", "ui-artifact-plan"],
+      "provides": ["ui-admin-adaptation"],
+      "requiredCapabilities": ["vima-ui-admin"],
+      "contractVersion": "app-spec.v1",
+      "readiness": "ready",
+      "evidence": [{"path":"platform/adapters/ui-admin-adapter.md","sha256":"d9476869849f4255cf9f01a85c29a2c14b16b10c54a1390d6ae172c2f6ca1244"}]
+    },
+    {
+      "id": "vima-starter-adapter",
+      "applicableKinds": ["business-system"],
+      "consumes": ["pact-specification", "spring-boot-host", "vue3-admin-ui"],
+      "provides": ["starter-host-adaptation"],
+      "requiredCapabilities": ["vima-starter", "vima-ui-admin"],
+      "contractVersion": "full-stack-spec.v1-draft",
+      "readiness": "blocked",
+      "evidence": [{"path":"platform/adapters/vima-starter-adapter.md","sha256":"a53bacfe5c7006be7fe71313985658de94bb723beff3a06af56c50dd920eea65"}]
+    }
+  ]
+}

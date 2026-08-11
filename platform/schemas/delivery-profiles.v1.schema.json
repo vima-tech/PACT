@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"delivery-profiles.v1","title":"PACT Platform delivery profiles","type":"object","required":["version","profiles"],"_pact":"@pact R003,R004,R007,R009"}

@@ -1,0 +1,4173 @@
+{
+  "VAlert": {
+    "name": "VAlert",
+    "description": "展示需要持续可见的状态或警告信息。",
+    "category": "feedback",
+    "props": [
+      {
+        "name": "type",
+        "type": "'info' | 'success' | 'warning' | 'error'",
+        "default": "info",
+        "required": false,
+        "desc": "提示语义类型",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "提示标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "补充说明",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "closable",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "是否允许关闭",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showIcon",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示语义 SVG 图标",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "center",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "内容是否居中",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "closeText",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "自定义关闭文案",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "close"
+    ],
+    "events": [
+      {
+        "name": "close",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "description",
+      "title"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "description",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "title",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VAvatar": {
+    "name": "VAvatar",
+    "description": "展示用户或实体头像。",
+    "category": "basic",
+    "props": [
+      {
+        "name": "size",
+        "type": "string | number",
+        "default": "md",
+        "required": false,
+        "desc": "预设尺寸或像素值",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "shape",
+        "type": "'circle' | 'square'",
+        "default": "circle",
+        "required": false,
+        "desc": "圆形或方形",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "src",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "头像图片地址",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "无图片时的图标名",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "text",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "无图片时的文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "color",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "文字头像背景色",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "fit",
+        "type": "'fill' | 'contain' | 'cover' | 'none' | 'scale-down'",
+        "default": "cover",
+        "required": false,
+        "desc": "图片 object-fit 方式",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VAvatarGroup": {
+    "name": "VAvatarGroup",
+    "description": "紧凑展示一组头像。",
+    "category": "basic",
+    "props": [
+      {
+        "name": "max",
+        "type": "number | string",
+        "default": "0",
+        "required": false,
+        "desc": "最多展示的头像数，0 表示不限",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VBadge": {
+    "name": "VBadge",
+    "description": "在内容旁展示数量或状态徽标。",
+    "category": "data",
+    "props": [
+      {
+        "name": "value",
+        "type": "string | number",
+        "default": "",
+        "required": false,
+        "desc": "徽标数值或文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "max",
+        "type": "string | number",
+        "default": "99",
+        "required": false,
+        "desc": "数值上限，超出后显示加号",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "dot",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否仅显示圆点",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "type",
+        "type": "'primary' | 'success' | 'warning' | 'danger' | 'info'",
+        "default": "danger",
+        "required": false,
+        "desc": "徽标语义类型",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showZero",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "值为零时是否显示",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "hidden",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否隐藏徽标",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VBreadcrumb": {
+    "name": "VBreadcrumb",
+    "description": "展示当前页面的层级导航路径。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "separator",
+        "type": "string",
+        "default": "/",
+        "required": false,
+        "desc": "层级分隔文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "separatorIcon",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "层级分隔 SVG 图标名",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VBreadcrumbItem": {
+    "name": "VBreadcrumbItem",
+    "description": "面包屑导航中的单个层级。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "to",
+        "type": "string | object",
+        "default": "",
+        "required": false,
+        "desc": "目标路由或地址",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "replace",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "导航时是否替换历史记录",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VBody": {
+    "name": "VBody",
+    "description": "后台布局的主体区域。",
+    "category": "layout",
+    "props": [],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VColumnSetting": {
+    "name": "VColumnSetting",
+    "description": "配置表格列的显示、隐藏与顺序。",
+    "category": "data",
+    "props": [
+      {
+        "name": "source",
+        "type": "ColumnLike[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "全量列定义，顺序即默认顺序",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "modelValue",
+        "type": "ColumnLike[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "v-model：生效的列，直接喂给 VTable 的 columns",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "storageKey",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "记忆用的键，同一张表在不同页面要用不同的键。留空 = 不落盘",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "default": "列设置",
+        "required": false,
+        "desc": "触发按钮文案",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止调整列",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "ColumnLike[]",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "change",
+        "payload": "ColumnLike[]",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VButton": {
+    "name": "VButton",
+    "description": "触发操作或提交的按钮。",
+    "category": "basic",
+    "props": [
+      {
+        "name": "type",
+        "type": "string",
+        "default": "default",
+        "required": false,
+        "desc": "按钮语义与视觉类型",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "size",
+        "type": "string",
+        "default": "md",
+        "required": false,
+        "desc": "按钮尺寸",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示加载态",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "nativeType",
+        "type": "'button' | 'submit' | 'reset'",
+        "default": "button",
+        "required": false,
+        "desc": "原生 button 类型",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "borderStyle",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "边框样式，none 为无边框",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VButtonGroup": {
+    "name": "VButtonGroup",
+    "description": "将相关按钮组织成连续操作组。",
+    "category": "basic",
+    "props": [],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VCard": {
+    "name": "VCard",
+    "description": "承载后台页面信息区块的卡片。",
+    "category": "layout",
+    "props": [
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "卡片标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "shadow",
+        "type": "'always' | 'hover' | 'never'",
+        "default": "always",
+        "required": false,
+        "desc": "阴影显示策略",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default",
+      "extra",
+      "title"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "extra",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "title",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VCheckbox": {
+    "name": "VCheckbox",
+    "description": "在有限选项中切换单个多选状态。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "unknown",
+        "default": "false",
+        "required": false,
+        "desc": "独立使用时的当前值",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "value",
+        "type": "CheckboxValue",
+        "default": "",
+        "required": false,
+        "desc": "在复选框组中的选项值",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "选项显示文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "indeterminate",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示半选态",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "trueValue",
+        "type": "unknown",
+        "default": "true",
+        "required": false,
+        "desc": "选中时写入的值",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "falseValue",
+        "type": "unknown",
+        "default": "false",
+        "required": false,
+        "desc": "未选中时写入的值",
+        "extractionStatus": "unknown"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "PropValue",
+        "extractionStatus": "exact",
+        "description": "更新后的独立复选值"
+      },
+      {
+        "name": "change",
+        "payload": "PropValue",
+        "extractionStatus": "exact",
+        "description": "值变更"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VCheckboxGroup": {
+    "name": "VCheckboxGroup",
+    "description": "管理一组多选项的值。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "CheckboxValue[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "当前选中的值数组",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用整组",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "options",
+        "type": "CheckboxOption[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "可选项列表",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "CheckboxValue[]",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "change",
+        "payload": "CheckboxValue[]",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VCol": {
+    "name": "VCol",
+    "description": "24 栅格中的列。",
+    "category": "layout",
+    "props": [
+      {
+        "name": "md",
+        "type": "number | string",
+        "default": "24",
+        "required": false,
+        "desc": "中等屏幕默认占用栅格数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "span",
+        "type": "number | string",
+        "default": "undefined",
+        "required": false,
+        "desc": "占用的 24 栅格数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "offset",
+        "type": "number | string",
+        "default": "0",
+        "required": false,
+        "desc": "左侧偏移栅格数",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VCollapse": {
+    "name": "VCollapse",
+    "description": "管理一组可折叠内容。",
+    "category": "data",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "当前展开项键或键数组",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "accordion",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否手风琴单开",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "string | number",
+        "extractionStatus": "exact",
+        "description": "更新后的展开项键"
+      },
+      {
+        "name": "change",
+        "payload": "string | number",
+        "extractionStatus": "exact",
+        "description": "展开项变更"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VCollapseItem": {
+    "name": "VCollapseItem",
+    "description": "折叠面板中的单个内容项。",
+    "category": "data",
+    "props": [
+      {
+        "name": "id",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "内容项唯一键",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "内容项标题",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VContainer": {
+    "name": "VContainer",
+    "description": "页面内容容器。",
+    "category": "layout",
+    "props": [],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VCountdown": {
+    "name": "VCountdown",
+    "description": "展示到目标时间的倒计时。",
+    "category": "data",
+    "props": [
+      {
+        "name": "value",
+        "type": "number | Date",
+        "default": "0",
+        "required": false,
+        "desc": "目标时间戳或 Date",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "format",
+        "type": "string",
+        "default": "HH:mm:ss",
+        "required": false,
+        "desc": "倒计时格式模板",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "指标标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "prefix",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "倒计时前缀",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "suffix",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "倒计时后缀",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "finish",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "finish",
+        "payload": "void",
+        "extractionStatus": "exact",
+        "description": "倒计时结束"
+      },
+      {
+        "name": "change",
+        "payload": "number",
+        "extractionStatus": "exact",
+        "description": "剩余毫秒数变更"
+      }
+    ],
+    "slots": [
+      "default",
+      "prefix",
+      "suffix",
+      "title"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "prefix",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "suffix",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "title",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VDatePicker": {
+    "name": "VDatePicker",
+    "description": "输入单个日期、时间或日期范围。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "当前日期、时间或范围值。",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "default": "date",
+        "required": false,
+        "desc": "日期选择精度。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "未选择时显示的提示。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止选择。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否向表单语义声明必填。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "range",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否选择起止范围。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "allowClear",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否允许清空当前值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "min",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "可选择的最小日期。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "max",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "可选择的最大日期。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "string | string[]",
+        "extractionStatus": "exact",
+        "description": "更新后的日期值"
+      },
+      {
+        "name": "change",
+        "payload": "string | string[]",
+        "extractionStatus": "exact",
+        "description": "日期变更"
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VDescriptions": {
+    "name": "VDescriptions",
+    "description": "按分组网格展示实体详情。",
+    "category": "data",
+    "props": [
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "详情区域标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "column",
+        "type": "number | string",
+        "default": "3",
+        "required": false,
+        "desc": "每行列数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "border",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示边框",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "labelWidth",
+        "type": "number | string",
+        "default": "",
+        "required": false,
+        "desc": "标签列宽度",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VDescriptionsItem": {
+    "name": "VDescriptionsItem",
+    "description": "详情描述列表中的单个字段。",
+    "category": "data",
+    "props": [
+      {
+        "name": "label",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "字段标签",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "span",
+        "type": "number | string",
+        "default": "1",
+        "required": false,
+        "desc": "跨越的列数",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VDivider": {
+    "name": "VDivider",
+    "description": "分隔相邻内容区块。",
+    "category": "layout",
+    "props": [
+      {
+        "name": "content",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "分隔线文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "theme",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "分隔线颜色",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "direction",
+        "type": "'horizontal' | 'vertical'",
+        "default": "horizontal",
+        "required": false,
+        "desc": "水平或垂直方向",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "contentPosition",
+        "type": "'left' | 'center' | 'right'",
+        "default": "center",
+        "required": false,
+        "desc": "文字对齐位置",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VDrawer": {
+    "name": "VDrawer",
+    "description": "从视口边缘展开辅助任务面板。",
+    "category": "overlay",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "抽屉是否可见",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "抽屉标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "direction",
+        "type": "'rtl' | 'ltr' | 'ttb' | 'btt'",
+        "default": "rtl",
+        "required": false,
+        "desc": "抽屉展开方向",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "size",
+        "type": "string | number",
+        "default": "30%",
+        "required": false,
+        "desc": "抽屉宽度或高度",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "modal",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "是否显示遮罩",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showClose",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "是否显示关闭按钮",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "closeOnClickModal",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "点击遮罩是否关闭",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "closeOnPressEscape",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "按 Escape 是否关闭",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "beforeClose",
+        "type": "(done: () => void) => void",
+        "default": "undefined",
+        "required": false,
+        "desc": "关闭前钩子",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "destroyOnClose",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "关闭后是否销毁内容",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "withHeader",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "是否渲染头部",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "open",
+      "close",
+      "opened",
+      "closed"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "boolean",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "open",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "close",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "opened",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "closed",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default",
+      "footer",
+      "title"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "footer",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "title",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VDropdown": {
+    "name": "VDropdown",
+    "description": "与上游 ui-v3 已分歧：面板从「贴着触发器的 absolute」改成 teleport 到 body 的 fixed。 重跑 scripts/extract-from-ui-v3.mjs 会把这段覆盖回去，理由见 src/floating.ts 的文件注释。",
+    "category": "overlay",
+    "props": [
+      {
+        "name": "visible",
+        "type": "boolean",
+        "default": "undefined",
+        "required": false,
+        "desc": "受控的面板可见状态",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "placement",
+        "type": "string",
+        "default": "bottom-start",
+        "required": false,
+        "desc": "面板相对触发器的位置",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "content",
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "content",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VDropdownMenu": {
+    "name": "VDropdownMenu",
+    "description": "下拉操作中的菜单容器。",
+    "category": "navigation",
+    "props": [],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VDropdownMenuItem": {
+    "name": "VDropdownMenuItem",
+    "description": "下拉菜单中的单个操作项。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用该菜单项",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VEmpty": {
+    "name": "VEmpty",
+    "description": "在集合或页面无数据时展示空状态。",
+    "category": "feedback",
+    "props": [
+      {
+        "name": "description",
+        "type": "string",
+        "default": "暂无数据",
+        "required": false,
+        "desc": "空状态说明",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "image",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "自定义图片地址",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "imageSize",
+        "type": "number | string",
+        "default": "0",
+        "required": false,
+        "desc": "图片尺寸",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default",
+      "footer",
+      "image"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "footer",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "image",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VForm": {
+    "name": "VForm",
+    "description": "管理表单模型、规则和字段校验。",
+    "category": "form",
+    "props": [
+      {
+        "name": "model",
+        "type": "Record<string, unknown>",
+        "default": "() => ({})",
+        "required": false,
+        "desc": "表单响应式数据模型",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "rules",
+        "type": "Record<string, Array<Record<string, unknown>>>",
+        "default": "() => ({})",
+        "required": false,
+        "desc": "按字段名组织的校验规则",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否将全部绑定字段标记为必填",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "pane",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否使用带分隔边框的面板样式",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "labelWidth",
+        "type": "string | number",
+        "default": "100",
+        "required": false,
+        "desc": "水平布局标签宽度",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "layout",
+        "type": "'horizontal' | 'vertical' | 'inline'",
+        "default": "horizontal",
+        "required": false,
+        "desc": "表单字段排列方式",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VFormItem": {
+    "name": "VFormItem",
+    "description": "组合字段标签、控件和校验反馈。",
+    "category": "form",
+    "props": [
+      {
+        "name": "label",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "展示在控件旁的字段名称",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "labelWidth",
+        "type": "string | number",
+        "default": "undefined",
+        "required": false,
+        "desc": "覆盖当前字段的标签宽度",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "prop",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "字段在表单模型中的键",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显式要求当前字段必填",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "mode",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "字段展示模式",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VFullscreen": {
+    "name": "VFullscreen",
+    "description": "为指定元素提供全屏切换能力。",
+    "category": "utility",
+    "props": [],
+    "emits": [
+      "fullscreenchange"
+    ],
+    "events": [
+      {
+        "name": "fullscreenchange",
+        "payload": "boolean",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "{ toggle, isFullscreen: isFullscreen.value }",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ]
+  },
+  "VHeader": {
+    "name": "VHeader",
+    "description": "后台布局的顶部区域。",
+    "category": "layout",
+    "props": [],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VIcon": {
+    "name": "VIcon",
+    "description": "从统一 SVG 注册表渲染图标。",
+    "category": "icon",
+    "props": [
+      {
+        "name": "type",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "兼容旧调用的图标名或别名",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "注册表中的规范图标名",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "color",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "图标颜色，默认继承 currentColor",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "size",
+        "type": "number | string",
+        "default": "1em",
+        "required": false,
+        "desc": "图标尺寸",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "无障碍标题，提供后图标不再隐藏",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VInput": {
+    "name": "VInput",
+    "description": "输入单行文本。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "string | number | boolean",
+        "default": "",
+        "required": false,
+        "desc": "当前输入值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "default": "text",
+        "required": false,
+        "desc": "原生输入类型。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "无值时显示的输入提示。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止输入和交互。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "readonly",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否仅允许读取。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否向表单语义声明必填。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "prefixIcon",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "前缀图标",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "suffixIcon",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "后缀图标",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "prefix",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "前缀文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "suffix",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "后缀文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "clearable",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否可清空",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showPassword",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示密码切换（仅 type=\"password\" 时有效）",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "rows",
+        "type": "number | string",
+        "default": "undefined",
+        "required": false,
+        "desc": "多行输入模式下的可见行数。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "blur",
+      "change",
+      "input",
+      "clear",
+      "focus"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "string | number | boolean",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "blur",
+        "payload": "FocusEvent",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "change",
+        "payload": "string | number | boolean",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "input",
+        "payload": "string",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "clear",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "focus",
+        "payload": "FocusEvent",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "prefix",
+      "suffix"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "prefix",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "suffix",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VInputNumber": {
+    "name": "VInputNumber",
+    "description": "输入带范围约束的数值。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "number",
+        "default": "undefined",
+        "required": false,
+        "desc": "当前数值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "default": "undefined",
+        "required": false,
+        "desc": "允许输入的最小值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "default": "undefined",
+        "required": false,
+        "desc": "允许输入的最大值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止输入和步进操作。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "number",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "change",
+        "payload": "number",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VLayer": {
+    "name": "VLayer",
+    "description": "在模态浮层中承载需要用户处理的内容。",
+    "category": "overlay",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "浮层是否可见",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "浮层标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "area",
+        "type": "string | number | Array<string | number>",
+        "default": "",
+        "required": false,
+        "desc": "面板宽高",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "shadeClose",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "点击遮罩是否关闭",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "closeBtn",
+        "type": "boolean | number | string",
+        "default": "true",
+        "required": false,
+        "desc": "是否显示关闭按钮",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示处理遮罩",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "type",
+        "type": "string | number",
+        "default": "1",
+        "required": false,
+        "desc": "兼容层类型",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "close",
+      "open"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "boolean",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "close",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "open",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default",
+      "footer"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "footer",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VLayout": {
+    "name": "VLayout",
+    "description": "后台系统页面骨架的根布局。",
+    "category": "layout",
+    "props": [],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VLoading": {
+    "name": "VLoading",
+    "description": "展示局部或全屏加载状态。",
+    "category": "feedback",
+    "props": [
+      {
+        "name": "loading",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示加载遮罩",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "text",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "遮罩上的文案，留空则只有转圈",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "fullscreen",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "铺满视口而不是包裹的内容区。此时组件本身不需要有默认插槽",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VLink": {
+    "name": "VLink",
+    "description": "页面导航或低强调文字操作。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "href",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "目标地址",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "target",
+        "type": "'_self' | '_blank' | '_parent' | '_top'",
+        "default": "_self",
+        "required": false,
+        "desc": "链接打开方式",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "default": "default",
+        "required": false,
+        "desc": "链接语义类型",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "underline",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "悬停时是否显示下划线",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "download",
+        "type": "boolean | string",
+        "default": "false",
+        "required": false,
+        "desc": "是否作为下载链接",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "click"
+    ],
+    "events": [
+      {
+        "name": "click",
+        "payload": "MouseEvent",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VPagination": {
+    "name": "VPagination",
+    "description": "在分页数据集合之间导航。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "current",
+        "type": "number",
+        "default": "1",
+        "required": false,
+        "desc": "当前页码",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "total",
+        "type": "number",
+        "default": "0",
+        "required": false,
+        "desc": "数据总条数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "pageSize",
+        "type": "number",
+        "default": "10",
+        "required": false,
+        "desc": "每页条数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "pageSizes",
+        "type": "number[]",
+        "default": "() => [10, 20, 30, 50, 100]",
+        "required": false,
+        "desc": "可选每页条数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "layout",
+        "type": "string",
+        "default": "prev, pager, next, jumper, total",
+        "required": false,
+        "desc": "分页子控件布局",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "pagerCount",
+        "type": "number",
+        "default": "7",
+        "required": false,
+        "desc": "最多显示的页码按钮数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "hideOnSinglePage",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "单页时是否隐藏",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "background",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "页码按钮是否有背景",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:current",
+      "update:pageSize",
+      "change",
+      "sizeChange"
+    ],
+    "events": [
+      {
+        "name": "update:current",
+        "payload": "number",
+        "extractionStatus": "exact",
+        "description": "更新后的页码"
+      },
+      {
+        "name": "update:pageSize",
+        "payload": "number",
+        "extractionStatus": "exact",
+        "description": "更新后的每页条数"
+      },
+      {
+        "name": "change",
+        "payload": "[number, number]",
+        "extractionStatus": "exact",
+        "description": "页码和每页条数变更"
+      },
+      {
+        "name": "sizeChange",
+        "payload": "number",
+        "extractionStatus": "exact",
+        "description": "每页条数变更"
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VPopover": {
+    "name": "VPopover",
+    "description": "在目标附近展示可交互的浮层内容。",
+    "category": "overlay",
+    "props": [
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "浮层标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "content",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "浮层正文",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "placement",
+        "type": "TooltipPlacement",
+        "default": "bottom",
+        "required": false,
+        "desc": "浮层相对目标的位置",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "trigger",
+        "type": "'hover' | 'click' | 'focus'",
+        "default": "click",
+        "required": false,
+        "desc": "触发方式",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "width",
+        "type": "string | number",
+        "default": "",
+        "required": false,
+        "desc": "浮层宽度",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showAfter",
+        "type": "number",
+        "default": "0",
+        "required": false,
+        "desc": "显示延迟毫秒数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "hideAfter",
+        "type": "number",
+        "default": "200",
+        "required": false,
+        "desc": "隐藏延迟毫秒数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "enterable",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "鼠标是否可进入浮层",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "popperClass",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "浮层附加类名",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "show",
+      "hide"
+    ],
+    "events": [
+      {
+        "name": "show",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "hide",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "content",
+      "default",
+      "title"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "content",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "title",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VProgress": {
+    "name": "VProgress",
+    "description": "展示任务或流程完成进度。",
+    "category": "data",
+    "props": [
+      {
+        "name": "percent",
+        "type": "number",
+        "default": "0",
+        "required": false,
+        "desc": "完成百分比，范围 0–100",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "进度状态样式",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VRadio": {
+    "name": "VRadio",
+    "description": "在有限选项中选择一个值。",
+    "category": "form",
+    "props": [
+      {
+        "name": "value",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "当前单选项代表的值。",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止选择当前项。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VRadioGroup": {
+    "name": "VRadioGroup",
+    "description": "管理一组互斥单选项的值。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "当前选中值。",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止组内所有选项。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "options",
+        "type": "Array<{ label: string; value: unknown; disabled?: boolean }>",
+        "default": "() => []",
+        "required": false,
+        "desc": "无需插槽时使用的结构化选项。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "string | number | boolean",
+        "extractionStatus": "exact",
+        "description": "更新后的单选值"
+      },
+      {
+        "name": "change",
+        "payload": "string | number | boolean",
+        "extractionStatus": "exact",
+        "description": "单选变更"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VRow": {
+    "name": "VRow",
+    "description": "24 栅格中的行容器。",
+    "category": "layout",
+    "props": [
+      {
+        "name": "gutter",
+        "type": "number | string",
+        "default": "12",
+        "required": false,
+        "desc": "列间距（像素）",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "justify",
+        "type": "'start' | 'center' | 'end' | 'space-between' | 'space-around'",
+        "default": "start",
+        "required": false,
+        "desc": "主轴对齐方式",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "align",
+        "type": "'top' | 'middle' | 'bottom'",
+        "default": "top",
+        "required": false,
+        "desc": "交叉轴对齐方式",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VSelect": {
+    "name": "VSelect",
+    "description": "从有限选项中选择单值或多值。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "当前选中值；多选模式使用数组。",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "default": "请选择",
+        "required": false,
+        "desc": "未选择时显示的提示。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止选择。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否允许选择多个值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "clearable",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否提供清空入口。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否向表单语义声明必填。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showSearch",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否强制显示选项检索框。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "searchPlaceholder",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "选项检索框的提示。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "dropdownMinWidth",
+        "type": "number",
+        "default": "0",
+        "required": false,
+        "desc": "下拉面板最小宽度。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "dropdownMaxWidth",
+        "type": "number",
+        "default": "400",
+        "required": false,
+        "desc": "下拉面板最大宽度。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "dropdownAlignToParent",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否将下拉面板右边缘与父元素对齐。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "autoWidth",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "下拉宽度是否自动适应内容",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "items",
+        "type": "Array<Record<string, unknown>>",
+        "default": "() => []",
+        "required": false,
+        "desc": "兼容旧接口的选项集合。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "options",
+        "type": "Array<Record<string, unknown>>",
+        "default": "() => []",
+        "required": false,
+        "desc": "结构化选项集合。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "string | number | Array<string | number> | null",
+        "extractionStatus": "exact",
+        "description": "更新后的选择值"
+      },
+      {
+        "name": "change",
+        "payload": "string | number | Array<string | number> | null",
+        "extractionStatus": "exact",
+        "description": "选择变更"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VSelectOption": {
+    "name": "VSelectOption",
+    "description": "声明 VSelect 的插槽式选项。",
+    "category": "form",
+    "props": [
+      {
+        "name": "value",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "选项提交值",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "label",
+        "type": "string | number",
+        "default": "",
+        "required": false,
+        "desc": "选项显示文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用该选项",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VSide": {
+    "name": "VSide",
+    "description": "后台布局的侧边区域。",
+    "category": "layout",
+    "props": [],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VSkeleton": {
+    "name": "VSkeleton",
+    "description": "在内容加载前展示结构占位。",
+    "category": "feedback",
+    "props": [
+      {
+        "name": "loading",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示骨架而非真实内容",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "type",
+        "type": "SkeletonType",
+        "default": "text",
+        "required": false,
+        "desc": "骨架的内容形态",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "rows",
+        "type": "number | string",
+        "default": "3",
+        "required": false,
+        "desc": "正文行数 / 表格行数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "columns",
+        "type": "number | string",
+        "default": "4",
+        "required": false,
+        "desc": "表格骨架的列数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "animated",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "关掉扫光动画（长列表里几十个骨架同时扫光会很吵）",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VStatistic": {
+    "name": "VStatistic",
+    "description": "突出展示关键统计数值。",
+    "category": "data",
+    "props": [
+      {
+        "name": "value",
+        "type": "number | string",
+        "default": "0",
+        "required": false,
+        "desc": "统计值",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "指标标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "precision",
+        "type": "number",
+        "default": "undefined",
+        "required": false,
+        "desc": "小数位数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "prefix",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "数值前缀",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "suffix",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "数值后缀",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "valueStyle",
+        "type": "object",
+        "default": "() => ({})",
+        "required": false,
+        "desc": "数值区域样式",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "groupSeparator",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "千位分隔符",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default",
+      "prefix",
+      "suffix",
+      "title"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "prefix",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "suffix",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "title",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VStep": {
+    "name": "VStep",
+    "description": "步骤条中的单个步骤。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "步骤标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "步骤说明",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "步骤 SVG 图标名",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "status",
+        "type": "'wait' | 'process' | 'finish' | 'error' | 'success'",
+        "default": "",
+        "required": false,
+        "desc": "覆盖自动计算的状态",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VSteps": {
+    "name": "VSteps",
+    "description": "展示多步骤流程的当前进度。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "active",
+        "type": "number",
+        "default": "0",
+        "required": false,
+        "desc": "当前步骤索引",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "direction",
+        "type": "'horizontal' | 'vertical'",
+        "default": "horizontal",
+        "required": false,
+        "desc": "排列方向",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "processStatus",
+        "type": "'wait' | 'process' | 'finish' | 'error' | 'success'",
+        "default": "process",
+        "required": false,
+        "desc": "当前步骤状态",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "finishStatus",
+        "type": "'wait' | 'process' | 'finish' | 'error' | 'success'",
+        "default": "finish",
+        "required": false,
+        "desc": "已完成步骤状态",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "alignCenter",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否居中对齐",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "simple",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否使用简洁模式",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "change"
+    ],
+    "events": [
+      {
+        "name": "change",
+        "payload": "number",
+        "extractionStatus": "exact",
+        "description": "点击的步骤索引"
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VSwitch": {
+    "name": "VSwitch",
+    "description": "在两个互斥状态之间切换。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "boolean | string | number",
+        "default": "false",
+        "required": false,
+        "desc": "当前开关值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止切换。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "boolean | string | number",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "change",
+        "payload": "boolean | string | number",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VTab": {
+    "name": "VTab",
+    "description": "在同一区域切换多组内容。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "当前激活的标签页键",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "标签页视觉类型",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "allowClose",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否允许关闭标签页",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change",
+      "close"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "string | number",
+        "extractionStatus": "exact",
+        "description": "更新后的标签页键"
+      },
+      {
+        "name": "change",
+        "payload": "string | number",
+        "extractionStatus": "exact",
+        "description": "标签页变更"
+      },
+      {
+        "name": "close",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VTabItem": {
+    "name": "VTabItem",
+    "description": "标签页中的单个内容面板。",
+    "category": "navigation",
+    "props": [
+      {
+        "name": "id",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "面板唯一键",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "标签标题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "closable",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "该标签是否可关闭",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VTable": {
+    "name": "VTable",
+    "description": "展示、选择、排序和分页处理结构化数据。",
+    "category": "data",
+    "props": [
+      {
+        "name": "columns",
+        "type": "TableColumn[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "表格列定义。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "dataSource",
+        "type": "RowData[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "当前展示的数据行。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "page",
+        "type": "Record<string, any> | false",
+        "default": "false",
+        "required": false,
+        "desc": "分页配置；false 表示不展示内部分页。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否展示加载状态。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "selectedKeys",
+        "type": "unknown[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "当前选中行的唯一键集合。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showCheckbox",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否展示行选择框。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "defaultToolbar",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否展示默认工具栏。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "height",
+        "type": "string | number",
+        "default": "",
+        "required": false,
+        "desc": "表格内容区高度。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "default": "_id",
+        "required": false,
+        "desc": "行数据中的唯一键字段名。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "size",
+        "type": "string",
+        "default": "md",
+        "required": false,
+        "desc": "表格密度。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "rowClassName",
+        "type": "string | ((row: RowData, index: number) => string)",
+        "default": "",
+        "required": false,
+        "desc": "行类名或行类名计算函数。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "treeProps",
+        "type": "Record<string, string>",
+        "default": "() => ({})",
+        "required": false,
+        "desc": "树形数据的字段映射。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "defaultExpandAll",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否默认展开全部树节点。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "resize",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否允许拖动列边缘调整宽度。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "draggable",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "启用表头列拖拽排序",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "exportAllData",
+        "type": "RowData[]",
+        "default": "undefined",
+        "required": false,
+        "desc": "全量数据，用于导出全部数据。如果提供此属性，导出时会使用此数据而非 dataSource",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "fetchAllData",
+        "type": "() => Promise<RowData[]>",
+        "default": "undefined",
+        "required": false,
+        "desc": "异步获取全量数据的函数，用于导出全部数据",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:selectedKeys",
+      "change",
+      "sortChange",
+      "columnOrderChange"
+    ],
+    "events": [
+      {
+        "name": "update:selectedKeys",
+        "payload": "unknown[]",
+        "extractionStatus": "exact",
+        "description": "更新后的选中行键"
+      },
+      {
+        "name": "change",
+        "payload": "Record<string, unknown>",
+        "extractionStatus": "exact",
+        "description": "表格分页或查询状态变更"
+      },
+      {
+        "name": "sortChange",
+        "payload": "[string, 'asc' | 'desc' | '']",
+        "extractionStatus": "exact",
+        "description": "排序字段和方向"
+      },
+      {
+        "name": "columnOrderChange",
+        "payload": "[TableColumn[], { fromIndex: number; toIndex: number }]",
+        "extractionStatus": "exact",
+        "description": "列顺序变更"
+      }
+    ],
+    "slots": [
+      "rowDoubleClick",
+      "toolbar"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "rowDoubleClick",
+        "props": "{ row, rowIndex: index }",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "toolbar",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VTag": {
+    "name": "VTag",
+    "description": "展示状态、分类或可移除关键词。",
+    "category": "data",
+    "props": [
+      {
+        "name": "type",
+        "type": "string",
+        "default": "default",
+        "required": false,
+        "desc": "标签的语义色类型。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "closable",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否展示移除按钮。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止移除操作。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "close"
+    ],
+    "events": [
+      {
+        "name": "close",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VTagInput": {
+    "name": "VTagInput",
+    "description": "输入和维护一组标签值。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "unknown[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "当前标签值集合。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "allowClear",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否允许清空全部标签。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabledInput",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止新增标签但允许查看现有值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止全部交互。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "unknown[]",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "change",
+        "payload": "unknown[]",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VTimePicker": {
+    "name": "VTimePicker",
+    "description": "输入或选择一天中的时间。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "HH:mm 格式的当前时间",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "min",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "允许选择的最早时间",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "max",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "允许选择的最晚时间",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "step",
+        "type": "number | string",
+        "default": "60",
+        "required": false,
+        "desc": "分钟步长",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "readonly",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否只读",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "clearable",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "是否允许清空",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change",
+      "focus",
+      "blur",
+      "clear"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "string",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "change",
+        "payload": "string",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "focus",
+        "payload": "FocusEvent",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "blur",
+        "payload": "FocusEvent",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "clear",
+        "payload": "void",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VTextarea": {
+    "name": "VTextarea",
+    "description": "输入多行文本。",
+    "category": "form",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "当前多行文本值。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "无值时显示的输入提示。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁止输入。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "readonly",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否仅允许读取。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "rows",
+        "type": "number | string",
+        "default": "3",
+        "required": false,
+        "desc": "默认可见行数。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "autosize",
+        "type": "boolean | object",
+        "default": "false",
+        "required": false,
+        "desc": "是否根据内容自动调整高度。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "change"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "string",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "change",
+        "payload": "string",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  },
+  "VTooltip": {
+    "name": "VTooltip",
+    "description": "为目标内容展示简短文字提示。",
+    "category": "overlay",
+    "props": [
+      {
+        "name": "content",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "提示文字",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "placement",
+        "type": "TooltipPlacement",
+        "default": "top",
+        "required": false,
+        "desc": "提示相对目标的位置",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否禁用提示",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "trigger",
+        "type": "'hover' | 'click' | 'focus'",
+        "default": "hover",
+        "required": false,
+        "desc": "触发方式",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showAfter",
+        "type": "number",
+        "default": "0",
+        "required": false,
+        "desc": "显示延迟毫秒数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "hideAfter",
+        "type": "number",
+        "default": "200",
+        "required": false,
+        "desc": "隐藏延迟毫秒数",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "effect",
+        "type": "'dark' | 'light'",
+        "default": "dark",
+        "required": false,
+        "desc": "深色或浅色主题",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "enterable",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "desc": "鼠标是否可进入提示层",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "content",
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "content",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VTree": {
+    "name": "VTree",
+    "description": "展示和选择层级数据。",
+    "category": "data",
+    "props": [
+      {
+        "name": "data",
+        "type": "RowData[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "树节点数据",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "checkedKeys",
+        "type": "unknown[]",
+        "default": "() => []",
+        "required": false,
+        "desc": "当前勾选的节点键",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "selectedKey",
+        "type": "unknown",
+        "default": "",
+        "required": false,
+        "desc": "当前选中的节点键",
+        "extractionStatus": "unknown"
+      },
+      {
+        "name": "showCheckbox",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示复选框",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "showIcon",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否显示节点图标",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "draggable",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否允许拖拽节点",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "defaultExpandAll",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否默认展开全部节点",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "expandedKeys",
+        "type": "unknown[]",
+        "default": "undefined",
+        "required": false,
+        "desc": "受控的已展开节点键",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "replaceFields",
+        "type": "Record<string, string>",
+        "default": "() => ({})",
+        "required": false,
+        "desc": "自定义字段映射",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:checkedKeys",
+      "update:selectedKey",
+      "update:expandedKeys",
+      "check",
+      "select",
+      "nodeClick",
+      "nodeDblclick",
+      "nodeContextmenu",
+      "expand",
+      "dragstart",
+      "dragover",
+      "drop",
+      "dragend"
+    ],
+    "events": [
+      {
+        "name": "update:checkedKeys",
+        "payload": "unknown[]",
+        "extractionStatus": "exact",
+        "description": "更新后的勾选键"
+      },
+      {
+        "name": "update:selectedKey",
+        "payload": "PropertyKey | null",
+        "extractionStatus": "exact",
+        "description": "更新后的选中键"
+      },
+      {
+        "name": "update:expandedKeys",
+        "payload": "unknown[]",
+        "extractionStatus": "exact",
+        "description": "更新后的展开键"
+      },
+      {
+        "name": "check",
+        "payload": "[unknown[], Record<string, unknown>]",
+        "extractionStatus": "exact",
+        "description": "勾选状态变更"
+      },
+      {
+        "name": "select",
+        "payload": "RowData",
+        "extractionStatus": "exact",
+        "description": "节点选择"
+      },
+      {
+        "name": "nodeClick",
+        "payload": "[RowData, Record<string, unknown>, MouseEvent]",
+        "extractionStatus": "exact",
+        "description": "节点单击"
+      },
+      {
+        "name": "nodeDblclick",
+        "payload": "[RowData, Record<string, unknown>, MouseEvent]",
+        "extractionStatus": "exact",
+        "description": "节点双击"
+      },
+      {
+        "name": "nodeContextmenu",
+        "payload": "[RowData, Record<string, unknown>, MouseEvent]",
+        "extractionStatus": "exact",
+        "description": "节点上下文菜单"
+      },
+      {
+        "name": "expand",
+        "payload": "[boolean, RowData]",
+        "extractionStatus": "exact",
+        "description": "展开状态变更"
+      },
+      {
+        "name": "dragstart",
+        "payload": "[RowData, DragEvent]",
+        "extractionStatus": "exact",
+        "description": "开始拖拽"
+      },
+      {
+        "name": "dragover",
+        "payload": "[RowData, DragEvent]",
+        "extractionStatus": "exact",
+        "description": "拖拽经过节点"
+      },
+      {
+        "name": "drop",
+        "payload": "[RowData, RowData, string, DragEvent]",
+        "extractionStatus": "exact",
+        "description": "放置节点"
+      },
+      {
+        "name": "dragend",
+        "payload": "[RowData, DragEvent]",
+        "extractionStatus": "exact",
+        "description": "结束拖拽"
+      }
+    ],
+    "slots": [
+      "icon",
+      "leafIcon",
+      "operations",
+      "title"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "icon",
+        "props": "nodeContext",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "leafIcon",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      },
+      {
+        "name": "operations",
+        "props": "nodeContext",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "title",
+        "props": "nodeContext",
+        "extractionStatus": "partial",
+        "description": ""
+      }
+    ]
+  },
+  "VUpload": {
+    "name": "VUpload",
+    "description": "选择文件并交由业务逻辑上传。",
+    "category": "form",
+    "props": [
+      {
+        "name": "url",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "业务上传端点；组件本身只负责文件选择。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "accept",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "原生文件类型过滤表达式。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "accpet",
+        "type": "string",
+        "default": "",
+        "required": false,
+        "desc": "accept 的历史拼写兼容属性。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "multiple",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "是否允许一次选择多个文件。",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "beforeUpload",
+        "type": "(files: FileList | File[]) => unknown",
+        "default": "undefined",
+        "required": false,
+        "desc": "文件选择后的业务处理函数。",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [],
+    "events": [],
+    "slots": [
+      "default"
+    ],
+    "slotDefinitions": [
+      {
+        "name": "default",
+        "props": "void",
+        "extractionStatus": "exact",
+        "description": ""
+      }
+    ]
+  },
+  "VTemplateEditor": {
+    "name": "VTemplateEditor",
+    "description": "可视化编辑并预览 Template DSL。",
+    "category": "template",
+    "props": [
+      {
+        "name": "modelValue",
+        "type": "Template",
+        "default": "—",
+        "required": true,
+        "desc": "被编辑的模板。编辑器内部持有副本，通过 update:modelValue 回吐",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "readonly",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "desc": "只读模式：仍可浏览与选中，但不能改动",
+        "extractionStatus": "exact"
+      },
+      {
+        "name": "categories",
+        "type": "string[]",
+        "default": "undefined",
+        "required": false,
+        "desc": "组件面板只显示这些分类名，不传则全部显示",
+        "extractionStatus": "exact"
+      }
+    ],
+    "emits": [
+      "update:modelValue",
+      "save",
+      "select"
+    ],
+    "events": [
+      {
+        "name": "update:modelValue",
+        "payload": "Template",
+        "extractionStatus": "partial",
+        "description": ""
+      },
+      {
+        "name": "save",
+        "payload": "Template",
+        "extractionStatus": "exact",
+        "description": "保存当前模板"
+      },
+      {
+        "name": "select",
+        "payload": "string[]",
+        "extractionStatus": "exact",
+        "description": "选中节点 ID 集合"
+      }
+    ],
+    "slots": [],
+    "slotDefinitions": []
+  }
+}

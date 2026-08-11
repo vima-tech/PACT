@@ -10,6 +10,34 @@
 > 一个对本项目**一无所知**的人或 AI，**只读这一份文件**即可开始编码，
 > 且不需要追问背景、不需要猜测意图、不会遗漏约束。
 
+## PACT Platform：统一治理，独立交付
+
+<!-- @pact R001,R002,R003,R004,R010,R015,R016,R019,R027 -->
+
+本仓库现同时承载三类工程创建工具，但不把它们合成一个包：
+
+- `pact/` 与 `pact-*`：通用规格、执行图谱和验收闭环，始终不依赖 Vima；
+- `products/vima-ui-admin/`：独立的 `@vima-tech/ui-admin` npm 包；
+- `templates/vima-starter/`：独立的 `create-vima-starter` 全栈脚手架；
+- `platform/`：能力、限制、兼容矩阵、选择规则和三单元发布编排。
+
+Agent 必须先把需求归类为 `generic`、`admin-ui` 或 `business-system`。Vima 是可选能力；只有
+`business-system` 才会看到 Starter adapter 候选。当前 Starter 产品为 `partial`，全栈 adapter
+为 `blocked`，因为业务权限、生产安全、后端测试和 FullStackSpec adapter 尚未达标，平台不会
+把现有空壳能力描述成“可稳定生成完整业务系统”。
+
+```bash
+npm run governance:check
+printf '%s\n' '{"version":"1","kind":"business-system"}' | npm run platform:inspect
+npm run release:plan -- --base HEAD^
+npm run verify
+npm run release:pack       # 仅写 artifacts/release，不发布、不 push
+```
+
+PACT 仓库内的 `products/vima-ui-admin` 与 `templates/vima-starter` 是唯一工程入口；旧的两个
+`/home/renmk/projects/vima-*` 别名已退役。导入来源、保留备份、规范化哈希和 finalized 时间记录在
+`platform/registry/provenance.v1.json`；`.pre-pact-20260811` 快照不随别名删除。
+
 ## 七个命令
 
 | 命令 | 干什么 | 停止条件 |

@@ -1,0 +1,19 @@
+# 由 pact-book.sh 生成。装了 mdbook 就能 `mdbook build`；没装也不影响直接读 src/ 下的 md。
+[book]
+title = "PACT · PACT Platform 三阶段统一迁移"
+language = "zh-CN"
+src = "src"
+
+[output.html]
+default-theme = "light"
+no-section-label = true
+
+[output.html.fold]
+enable = true
+level = 1
+
+# 依赖图谱用 mermaid。需要 mdbook-mermaid：
+#   cargo install mdbook-mermaid  （或从 GitHub releases 取预编译二进制）
+# 没装也能 build，只是 mermaid 块会显示为代码块。
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

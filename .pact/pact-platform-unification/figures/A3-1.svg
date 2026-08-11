@@ -1,0 +1,17 @@
+<!-- pact:src-hash=ed45d5c75930 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 300" font-family="inherit" font-size="13">
+  <defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--fg-faint)"/></marker></defs>
+  <rect x="18" y="28" width="110" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="73" y="57" text-anchor="middle" fill="var(--fg)">source</text>
+  <path d="M128,52 H170" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="170" y="28" width="140" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="240" y="57" text-anchor="middle" fill="var(--fg)">闭集排除</text>
+  <path d="M310,52 H352" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="352" y="28" width="130" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="417" y="57" text-anchor="middle" fill="var(--fg)">staging copy</text>
+  <path d="M482,52 H524" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="524" y="28" width="180" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--line)"/><text x="614" y="57" text-anchor="middle" fill="var(--fg)">normalized hash</text>
+  <path d="M704,52 H746" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/>
+  <rect x="746" y="28" width="120" height="48" rx="8" fill="var(--panel)" stroke="var(--line)"/><text x="806" y="57" text-anchor="middle" fill="var(--fg)">target</text>
+  <path d="M806,76 V126" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/><text x="820" y="104" fill="var(--fg-dim)" font-size="12">全绿</text>
+  <rect x="500" y="126" width="366" height="50" rx="8" fill="var(--bg-soft)" stroke="var(--line)"/><text x="683" y="156" text-anchor="middle" fill="var(--fg)">原路径 rename 为备份 → symlink → realpath/verify</text>
+  <path d="M683,176 V216" stroke="var(--fg-faint)" fill="none" marker-end="url(#ar)"/><text x="698" y="202" fill="var(--fg-dim)" font-size="12">统一入口复验</text>
+  <rect x="500" y="216" width="366" height="50" rx="8" fill="var(--accent-soft)" stroke="var(--line)"/><text x="683" y="246" text-anchor="middle" fill="var(--fg)">unlink aliases → finalized（保留备份）</text>
+</svg>

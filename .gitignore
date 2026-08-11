@@ -1,0 +1,12 @@
+# @pact R013,R027
+artifacts/
+products/vima-ui-admin/node_modules/
+products/vima-ui-admin/dist/
+products/vima-ui-admin/dist-site/
+products/vima-ui-admin/reports/
+templates/vima-starter/node_modules/
+templates/vima-starter/frontend/node_modules/
+templates/vima-starter/frontend/dist/
+templates/vima-starter/backend/target/
+*.tgz
+

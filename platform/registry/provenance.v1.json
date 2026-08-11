@@ -1,0 +1,50 @@
+{
+  "_pact": "@pact R011,R012,R013,R014,R018",
+  "imports": [
+    {
+      "backupPath": "/home/renmk/projects/.vima-ui-admin.pre-pact-20260811",
+      "excludedSegments": [
+        "node_modules",
+        "dist",
+        "dist-site",
+        "target",
+        "reports",
+        ".vite",
+        ".qoder",
+        ".playwright-mcp"
+      ],
+      "historyAvailable": false,
+      "id": "vima-ui-admin",
+      "importedAt": "2026-08-11T09:18:31.063Z",
+      "normalizedSha256": "dfd35dc952f193ac5915b1c12c8c6534ce8c44127398349c3bdd98046f43e9c9",
+      "originalPath": "/home/renmk/projects/vima-ui-admin",
+      "phase": "finalized",
+      "retiredAt": "2026-08-11T09:55:54.686Z",
+      "snapshotPath": "/home/renmk/projects/.vima-ui-admin.pre-pact-20260811",
+      "targetPath": "products/vima-ui-admin"
+    },
+    {
+      "backupPath": "/home/renmk/projects/.vima-starter.pre-pact-20260811",
+      "excludedSegments": [
+        "node_modules",
+        "dist",
+        "dist-site",
+        "target",
+        "reports",
+        ".vite",
+        ".qoder",
+        ".playwright-mcp"
+      ],
+      "historyAvailable": false,
+      "id": "vima-starter",
+      "importedAt": "2026-08-11T09:18:31.063Z",
+      "normalizedSha256": "f73225f12af489ced0af74a41112c027597a0c49d9e13d6219aebd6b04e74315",
+      "originalPath": "/home/renmk/projects/vima-starter",
+      "phase": "finalized",
+      "retiredAt": "2026-08-11T09:55:54.686Z",
+      "snapshotPath": "/home/renmk/projects/.vima-starter.pre-pact-20260811",
+      "targetPath": "templates/vima-starter"
+    }
+  ],
+  "version": "1"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "vima-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vue 3 + Java 21 + Spring Boot scaffolding",
+  "workspaces": [
+    "frontend",
+    "cli"
+  ],
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "create": "cd cli && node index.js",
+    "sync:template": "node scripts/sync-template.mjs",
+    "check:template": "node scripts/sync-template.mjs --check"
+  }
+}

@@ -76,7 +76,9 @@ done
 sort -u -o "$TMP/spec-all" "$TMP/spec-all"
 
 # ── ② 实现：代码里的 @pact 标注 ────────────────────────────────────────────
-grep -rEnoI '@pact[[:space:]]+R[0-9]{3}([[:space:],]*R[0-9]{3})*' "$CODE_ROOT" \
+# 只接受真实注释行或 JSON `_pact` 字段。Markdown 正文中的反引号示例（例如
+# “一个 `@pact R079` 不能证明行为成立”）不是实现证据，也不应制造野生 R-ID。
+grep -rEnoI '(^[[:space:]]*(//|#|<!--[[:space:]]*)[[:space:]]*@pact[[:space:]]+R[0-9]{3}([[:space:],]*R[0-9]{3})*)|("_pact"[[:space:]]*:[[:space:]]*"@pact[[:space:]]+R[0-9]{3}([[:space:],]*R[0-9]{3})*)' "$CODE_ROOT" \
   --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.pact \
   --exclude-dir=dist --exclude-dir=build --exclude-dir=target \
   --exclude-dir=vendor --exclude-dir=.next --exclude-dir=coverage \

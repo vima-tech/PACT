@@ -1,0 +1,256 @@
+{
+  "version": "2",
+  "frozenAt": "2026-08-11",
+  "tasks": [
+    {
+      "id": "dev-form-basic",
+      "set": "development",
+      "category": "form",
+      "requirement": "生成姓名和邮箱必填的新增用户表单。",
+      "kind": "page",
+      "input": { "id": "user-create", "type": "form", "title": "新增用户", "fields": [{ "key": "name", "label": "姓名", "dataType": "string", "required": true }, { "key": "email", "label": "邮箱", "dataType": "string", "format": "email", "required": true }] },
+      "expected": { "ok": true, "types": ["form", "form-item", "input", "button"] },
+      "acceptance": ["必填规则来自显式契约", "提交动作可键盘触发"]
+    },
+    {
+      "id": "dev-form-complex",
+      "set": "development",
+      "category": "form",
+      "requirement": "生成包含枚举、布尔、日期范围、多值标签和长文本的编辑表单。",
+      "kind": "page",
+      "input": { "id": "policy-edit", "type": "form", "title": "策略编辑", "fields": [{ "key": "level", "label": "级别", "dataType": "string", "format": "enum", "options": [{ "label": "高", "value": "high" }, { "label": "低", "value": "low" }] }, { "key": "enabled", "label": "启用", "dataType": "boolean" }, { "key": "period", "label": "有效期", "dataType": "date", "cardinality": "tuple", "format": "date-range" }, { "key": "tags", "label": "标签", "dataType": "string", "cardinality": "list" }, { "key": "remark", "label": "说明", "dataType": "string", "format": "textarea" }] },
+      "expected": { "ok": true, "types": ["select", "switch", "datepicker", "tag-input", "textarea"] },
+      "acceptance": ["多值与数据类型分离", "日期范围不由字段名推断"]
+    },
+    {
+      "id": "dev-form-file",
+      "set": "development",
+      "category": "form",
+      "requirement": "生成带附件上传和数字限额的审批表单。",
+      "kind": "page",
+      "input": { "id": "expense", "type": "form", "title": "费用申请", "fields": [{ "key": "amount", "label": "金额", "dataType": "number", "required": true }, { "key": "receipt", "label": "凭证", "dataType": "object", "format": "file", "required": true }] },
+      "expected": { "ok": true, "types": ["input-number", "upload"] },
+      "acceptance": ["数字与文本输入分离", "附件不使用字符串输入框"]
+    },
+    {
+      "id": "dev-crud-standard",
+      "set": "development",
+      "category": "crud",
+      "requirement": "生成用户查询、表格、空状态、错误、加载和分页。",
+      "kind": "page",
+      "input": { "id": "users", "type": "crud", "title": "用户管理", "rowKey": "id", "fields": [{ "key": "name", "label": "姓名", "dataType": "string" }, { "key": "status", "label": "状态", "dataType": "string", "format": "enum", "options": [{ "label": "启用", "value": "active" }, { "label": "停用", "value": "disabled" }] }], "actions": [{ "key": "create", "label": "新增", "kind": "primary", "icon": "plus" }] },
+      "expected": { "ok": true, "types": ["table", "pagination", "empty", "loading", "alert"] },
+      "acceptance": ["五种列表状态有明确分支", "操作图标来自 SVG 注册表"]
+    },
+    {
+      "id": "dev-crud-bulk",
+      "set": "development",
+      "category": "crud",
+      "requirement": "生成资产列表并显式提供导入、导出和删除动作。",
+      "kind": "page",
+      "input": { "id": "assets", "type": "crud", "title": "资产", "rowKey": "assetId", "fields": [{ "key": "assetId", "label": "编号", "dataType": "string" }, { "key": "name", "label": "名称", "dataType": "string" }], "actions": [{ "key": "import", "label": "导入", "icon": "upload" }, { "key": "export", "label": "导出", "icon": "download" }, { "key": "delete", "label": "删除", "kind": "danger", "icon": "trash" }] },
+      "expected": { "ok": true, "types": ["button-group", "button", "table"] },
+      "acceptance": ["危险动作显式标记", "批量权限由宿主在落盘前裁剪"]
+    },
+    {
+      "id": "dev-detail",
+      "set": "development",
+      "category": "detail",
+      "requirement": "生成订单只读详情。",
+      "kind": "page",
+      "input": { "id": "order-detail", "type": "detail", "title": "订单详情", "fields": [{ "key": "number", "label": "订单号", "dataType": "string" }, { "key": "createdAt", "label": "创建时间", "dataType": "date" }, { "key": "amount", "label": "金额", "dataType": "number" }] },
+      "expected": { "ok": true, "types": ["descriptions", "descriptions-item"] },
+      "acceptance": ["只读数据不伪装成 disabled 表单"]
+    },
+    {
+      "id": "dev-dashboard",
+      "set": "development",
+      "category": "dashboard",
+      "requirement": "生成四个核心经营指标。",
+      "kind": "page",
+      "input": { "id": "overview", "type": "dashboard", "title": "经营概览", "metrics": [{ "key": "revenue", "label": "收入", "prefix": "¥" }, { "key": "orders", "label": "订单" }, { "key": "customers", "label": "客户" }, { "key": "rate", "label": "转化率", "suffix": "%" }] },
+      "expected": { "ok": true, "types": ["row", "col", "statistic"] },
+      "acceptance": ["四列自适应栅格", "指标顺序稳定"]
+    },
+    {
+      "id": "dev-app-shell",
+      "set": "development",
+      "category": "application",
+      "requirement": "生成含概览和用户页的后台壳层。",
+      "kind": "app",
+      "input": { "version": "1", "name": "管理端", "shell": { "title": "管理端", "navigation": [{ "label": "概览", "route": "/overview", "icon": "chart-bar" }, { "label": "用户", "route": "/users", "icon": "users" }] }, "pages": [{ "id": "overview", "type": "dashboard", "title": "概览", "metrics": [{ "key": "users", "label": "用户数", "value": 1 }] }, { "id": "users", "type": "crud", "title": "用户", "rowKey": "id", "fields": [{ "key": "name", "label": "姓名", "dataType": "string" }] }], "routes": [{ "path": "/overview", "pageId": "overview" }, { "path": "/users", "pageId": "users" }] },
+      "expected": { "ok": true, "files": 5, "readiness": "scaffold", "integrations": 1 },
+      "acceptance": ["路由、导航和页面闭包", "主入口使用统一插件"]
+    },
+    {
+      "id": "dev-master-detail",
+      "set": "development",
+      "category": "application",
+      "requirement": "生成主列表与独立详情路由。",
+      "kind": "app",
+      "input": { "version": "1", "name": "工单", "shell": { "title": "工单", "navigation": [{ "label": "工单", "route": "/tickets", "icon": "list" }] }, "pages": [{ "id": "tickets", "type": "crud", "title": "工单", "rowKey": "id", "fields": [{ "key": "subject", "label": "主题", "dataType": "string" }] }, { "id": "ticket-detail", "type": "detail", "title": "工单详情", "fields": [{ "key": "subject", "label": "主题", "dataType": "string" }] }], "routes": [{ "path": "/tickets", "pageId": "tickets" }, { "path": "/tickets/detail", "pageId": "ticket-detail" }] },
+      "expected": { "ok": true, "files": 5, "readiness": "scaffold", "integrations": 2 },
+      "acceptance": ["主从页产物独立可编译"]
+    },
+    {
+      "id": "dev-step-flow",
+      "set": "development",
+      "category": "application",
+      "requirement": "将分步表单拆分为两个显式路由阶段。",
+      "kind": "app",
+      "input": { "version": "1", "name": "入驻", "shell": { "title": "入驻", "navigation": [{ "label": "基本信息", "route": "/onboarding/basic", "icon": "form" }] }, "pages": [{ "id": "onboarding-basic", "type": "form", "title": "基本信息", "fields": [{ "key": "name", "label": "名称", "dataType": "string" }] }, { "id": "onboarding-confirm", "type": "detail", "title": "确认信息", "fields": [{ "key": "name", "label": "名称", "dataType": "string" }] }], "routes": [{ "path": "/onboarding/basic", "pageId": "onboarding-basic" }, { "path": "/onboarding/confirm", "pageId": "onboarding-confirm" }] },
+      "expected": { "ok": true, "files": 5, "readiness": "scaffold", "integrations": 2 },
+      "acceptance": ["每步有稳定 URL", "步骤间数据由宿主 Adapter 保存"]
+    },
+    {
+      "id": "dev-invalid-enum",
+      "set": "development",
+      "category": "contract-conflict",
+      "requirement": "枚举字段未提供选项时必须拒绝。",
+      "kind": "page",
+      "input": { "id": "bad-enum", "type": "form", "title": "错误枚举", "fields": [{ "key": "status", "label": "状态", "dataType": "string", "format": "enum" }] },
+      "expected": { "ok": false, "codes": ["MISSING_FIELD_OPTIONS"] },
+      "acceptance": ["不猜测枚举值"]
+    },
+    {
+      "id": "dev-invalid-icon",
+      "set": "development",
+      "category": "illegal-api",
+      "requirement": "未注册的功能图标必须拒绝。",
+      "kind": "page",
+      "input": { "id": "bad-icon", "type": "crud", "title": "错误图标", "rowKey": "id", "fields": [{ "key": "name", "label": "名称", "dataType": "string" }], "actions": [{ "key": "magic", "label": "魔法", "icon": "magic-emoji" }] },
+      "expected": { "ok": false, "codes": ["UNKNOWN_ICON"] },
+      "acceptance": ["不回退到 Emoji 或字符图标"]
+    },
+    {
+      "id": "dev-invalid-route",
+      "set": "development",
+      "category": "contract-conflict",
+      "requirement": "路由引用不存在页面时必须拒绝。",
+      "kind": "app",
+      "input": { "version": "1", "name": "错误路由", "shell": { "title": "错误路由", "navigation": [] }, "pages": [{ "id": "home", "type": "dashboard", "title": "首页", "metrics": [{ "key": "count", "label": "数量" }] }], "routes": [{ "path": "/missing", "pageId": "missing" }] },
+      "expected": { "ok": false, "codes": ["UNKNOWN_ROUTE_PAGE"] },
+      "acceptance": ["诊断指向 routes[0].pageId"]
+    },
+    {
+      "id": "dev-untrusted-expression",
+      "set": "development",
+      "category": "security",
+      "requirement": "不可信模板中的函数调用必须阻断。",
+      "kind": "template",
+      "input": { "id": "unsafe", "name": "不安全", "type": "page", "version": "1.0.0", "root": { "id": "root", "type": "text", "props": { "content": { "__expression": true, "expr": "fetch('/api')" } } } },
+      "expected": { "ok": false, "codes": ["UNSAFE_EXPRESSION"] },
+      "acceptance": ["阻断动态执行"]
+    },
+    {
+      "id": "holdout-form-readonly",
+      "set": "holdout",
+      "category": "form",
+      "requirement": "生成包含只读租户号的设置表单。",
+      "kind": "page",
+      "input": { "id": "tenant-settings", "type": "form", "title": "租户设置", "fields": [{ "key": "tenantId", "label": "租户号", "dataType": "string", "input": { "readonly": true } }, { "key": "name", "label": "名称", "dataType": "string", "required": true }] },
+      "expected": { "ok": true, "types": ["form", "input"] },
+      "acceptance": ["只读是显式契约"]
+    },
+    {
+      "id": "holdout-crud-narrow",
+      "set": "holdout",
+      "category": "responsive",
+      "requirement": "为窄屏仓库列表生成稳定表格状态和分页。",
+      "kind": "page",
+      "input": { "id": "warehouses", "type": "crud", "title": "仓库", "rowKey": "code", "fields": [{ "key": "code", "label": "编码", "dataType": "string" }, { "key": "address", "label": "地址", "dataType": "string", "format": "textarea" }] },
+      "expected": { "ok": true, "types": ["table", "pagination", "empty"] },
+      "acceptance": ["360px 视口无页面级水平溢出", "表格内部允许滚动"]
+    },
+    {
+      "id": "holdout-dashboard-single",
+      "set": "holdout",
+      "category": "dashboard",
+      "requirement": "生成单指标运行状态页。",
+      "kind": "page",
+      "input": { "id": "health", "type": "dashboard", "title": "运行状态", "metrics": [{ "key": "uptime", "label": "可用率", "value": 99.9, "suffix": "%" }] },
+      "expected": { "ok": true, "types": ["statistic"] },
+      "acceptance": ["单指标不产生空容器"]
+    },
+    {
+      "id": "holdout-detail-long",
+      "set": "holdout",
+      "category": "detail",
+      "requirement": "生成长文本审计记录详情。",
+      "kind": "page",
+      "input": { "id": "audit-detail", "type": "detail", "title": "审计记录", "fields": [{ "key": "actor", "label": "操作人", "dataType": "string" }, { "key": "content", "label": "内容", "dataType": "string", "format": "textarea" }] },
+      "expected": { "ok": true, "types": ["descriptions-item"] },
+      "acceptance": ["长文本可换行", "读屏顺序与视觉顺序一致"]
+    },
+    {
+      "id": "holdout-invalid-duplicate-field",
+      "set": "holdout",
+      "category": "contract-conflict",
+      "requirement": "重复字段 key 必须拒绝。",
+      "kind": "page",
+      "input": { "id": "duplicate-field", "type": "form", "title": "重复字段", "fields": [{ "key": "name", "label": "名称", "dataType": "string" }, { "key": "name", "label": "别名", "dataType": "string" }] },
+      "expected": { "ok": false, "codes": ["DUPLICATE_FIELD_KEY"] },
+      "acceptance": ["诊断指向第二个字段"]
+    },
+    {
+      "id": "holdout-invalid-page-id",
+      "set": "holdout",
+      "category": "contract-conflict",
+      "requirement": "无法稳定映射到文件名的页面 ID 必须拒绝。",
+      "kind": "page",
+      "input": { "id": "用户页", "type": "detail", "title": "用户", "fields": [{ "key": "name", "label": "姓名", "dataType": "string" }] },
+      "expected": { "ok": false, "codes": ["APP_SPEC_PATTERN_MISMATCH"] },
+      "acceptance": ["避免多个非 ASCII ID 落到同一文件"]
+    },
+    {
+      "id": "holdout-invalid-navigation",
+      "set": "holdout",
+      "category": "contract-conflict",
+      "requirement": "导航指向未声明路由时必须拒绝。",
+      "kind": "app",
+      "input": { "version": "1", "name": "导航错误", "shell": { "title": "导航错误", "navigation": [{ "label": "首页", "route": "/home", "icon": "home" }] }, "pages": [{ "id": "overview", "type": "dashboard", "title": "概览", "metrics": [{ "key": "count", "label": "数量" }] }], "routes": [{ "path": "/overview", "pageId": "overview" }] },
+      "expected": { "ok": false, "codes": ["UNKNOWN_NAVIGATION_ROUTE"] },
+      "acceptance": ["导航与路由闭包一致"]
+    },
+    {
+      "id": "holdout-unsafe-handler",
+      "set": "holdout",
+      "category": "security",
+      "requirement": "不可信模板自定义处理器必须阻断。",
+      "kind": "template",
+      "input": { "id": "unsafe-handler", "name": "不安全事件", "type": "page", "version": "1.0.0", "root": { "id": "root", "type": "button", "events": { "click": { "type": "click", "action": "custom", "handler": "window.alert(1)" } } } },
+      "expected": { "ok": false, "codes": ["UNSAFE_CUSTOM_HANDLER"] },
+      "acceptance": ["不可信事件仅允许白名单动作"]
+    },
+    {
+      "id": "holdout-unsafe-api",
+      "set": "holdout",
+      "category": "security",
+      "requirement": "不可信模板的外域数据源必须阻断。",
+      "kind": "template",
+      "input": { "id": "unsafe-api", "name": "不安全数据源", "type": "page", "version": "1.0.0", "dataSources": [{ "id": "remote", "name": "remote", "type": "api", "api": { "url": "https://evil.example/data", "method": "GET" } }], "root": { "id": "root", "type": "text", "props": { "content": "blocked" } } },
+      "expected": { "ok": false, "codes": ["UNSAFE_API_DATA_SOURCE"] },
+      "acceptance": ["只允许相对地址或宿主显式白名单"]
+    },
+    {
+      "id": "holdout-prototype-path",
+      "set": "holdout",
+      "category": "security",
+      "requirement": "不可信模板不能读取原型链或写入保留字段。",
+      "kind": "template",
+      "input": { "id": "prototype-path", "name": "原型链", "type": "page", "version": "1.0.0", "root": { "id": "root", "type": "button", "props": { "content": { "__expression": true, "expr": "formData.__proto__.polluted" } }, "events": { "click": { "type": "click", "action": "setValue", "params": { "field": "constructor", "value": true } } } } },
+      "expected": { "ok": false, "codes": ["UNSAFE_EXPRESSION", "UNSAFE_DATA_KEY"] },
+      "acceptance": ["读取和写入路径均拒绝原型链保留段"]
+    },
+    {
+      "id": "holdout-invalid-event-api-contract",
+      "set": "holdout",
+      "category": "security",
+      "requirement": "模板事件类型、动作和 API 方法必须来自白名单。",
+      "kind": "template",
+      "input": { "id": "invalid-contract", "name": "非法契约", "type": "page", "version": "1.0.0", "dataSources": [{ "id": "records", "name": "数据", "type": "api", "api": { "url": "/api/records", "method": "TRACE" } }], "root": { "id": "root", "type": "button", "events": { "click": { "type": "keypress", "action": "execute" } } } },
+      "expected": { "ok": false, "codes": ["UNKNOWN_EVENT_TYPE", "UNKNOWN_EVENT_ACTION", "UNKNOWN_API_METHOD"] },
+      "acceptance": ["结构化诊断分别指向事件类型、动作和请求方法"]
+    }
+  ]
+}

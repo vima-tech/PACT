@@ -1,0 +1,24 @@
+{
+  "name": "@vima-tech/pact-platform",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "PACT skills and optional Vima engineering creation tools",
+  "scripts": {
+    "test": "node --test platform/test/*.test.mjs",
+    "governance:check": "node platform/scripts/governance-check.mjs",
+    "platform:inspect": "node platform/scripts/capability-router.mjs",
+    "migration:plan": "node platform/scripts/migration.mjs plan",
+    "migration:apply": "node platform/scripts/migration.mjs apply",
+    "migration:verify": "node platform/scripts/migration.mjs verify",
+    "bootstrap": "node platform/scripts/bootstrap.mjs",
+    "verify:products": "node platform/scripts/verify-products.mjs",
+    "release:plan": "node platform/scripts/release-plan.mjs",
+    "release:pack": "node platform/scripts/release-pack.mjs",
+    "release:verify": "node platform/scripts/verify-archives.mjs",
+    "verify": "node platform/scripts/verify-all.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

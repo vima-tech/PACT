@@ -1,0 +1,52 @@
+{
+  "version": "1",
+  "_pact": "@pact R002,R006,R008,R010",
+  "capabilities": [
+    {
+      "id": "pact-core",
+      "kind": "core",
+      "supports": ["action-graph", "pact-specification"],
+      "limitations": ["none-evidenced"],
+      "readiness": "ready",
+      "evidence": [{"path":"pact/SKILL.md","sha256":"e178a43009e4f39f4f4ad336e167209c38f37b6a348753d49f1926a876e4daae"}]
+    },
+    {
+      "id": "ui-admin-adapter",
+      "kind": "adapter",
+      "supports": ["ui-admin-adaptation"],
+      "limitations": ["no-business-data-adapter", "standalone-ui-only"],
+      "readiness": "ready",
+      "evidence": [{"path":"products/vima-ui-admin/src/agent/builders.ts","sha256":"10afc2eec90f0a56a949290926babe639810810be2b22487bfb3259df3d429e9"}]
+    },
+    {
+      "id": "vima-starter",
+      "kind": "product",
+      "supports": ["spring-boot-host", "starter-cli"],
+      "limitations": ["backend-business-permission-enforcement-missing", "backend-test-baseline-missing", "production-secret-migration-hardening-missing"],
+      "readiness": "partial",
+      "evidence": [
+        {"path":"templates/vima-starter/backend/src/main/java/com/vima/starter/config/SecurityConfig.java","sha256":"b3b00f4620e40ee8b370b61ee28f33aa2df2058e1700d8c50062b604e45f8f03"},
+        {"path":"templates/vima-starter/package.json","sha256":"93a3d27fe38a56e9afa06ca9996655eeb7f34d9d0aad89657abca1aa2ed18fbb"}
+      ]
+    },
+    {
+      "id": "vima-starter-adapter",
+      "kind": "adapter",
+      "supports": ["starter-host-adaptation"],
+      "limitations": ["backend-business-permission-enforcement-missing", "backend-test-baseline-missing", "full-stack-spec-adapter-not-implemented", "production-secret-migration-hardening-missing"],
+      "readiness": "blocked",
+      "evidence": [{"path":"platform/adapters/vima-starter-adapter.md","sha256":"a53bacfe5c7006be7fe71313985658de94bb723beff3a06af56c50dd920eea65"}]
+    },
+    {
+      "id": "vima-ui-admin",
+      "kind": "product",
+      "supports": ["ui-artifact-plan", "vue3-admin-ui"],
+      "limitations": ["business-contracts-not-included"],
+      "readiness": "ready",
+      "evidence": [
+        {"path":"products/vima-ui-admin/dist/ai-manifest.json","sha256":"cbaa7a8c53cb79e7cc0527bfe9674489f814fa3e3f6ba6f8c383cec3d3c39fd2"},
+        {"path":"products/vima-ui-admin/package.json","sha256":"fe34c7aaea3dc43ccba742ef04c71c183268f91eba830965bed641c5e790462d"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "version": "1",
+  "_pact": "@pact R017,R019,R021,R024,R025,R026,R027",
+  "units": [
+    {
+      "id": "pact-skills",
+      "paths": ["pact/**", "pact-*/**"],
+      "versionSource": "package.json",
+      "verify": [
+        {"id":"pact-self-test","argv":["bash","pact/scripts/pact-lint.sh","--self-test"]},
+        {"id":"pact-material-check","argv":["bash","pact/scripts/pact-check.sh",".pact/pact-platform-unification"]}
+      ],
+      "pack": [{"id":"pact-pack","argv":["node","platform/scripts/pack-pact.mjs"]}],
+      "verifyDependents": []
+    },
+    {
+      "id": "vima-ui-admin",
+      "paths": ["products/vima-ui-admin/**"],
+      "versionSource": "products/vima-ui-admin/package.json",
+      "verify": [
+        {"id":"ui-check-ai","argv":["npm","--prefix","products/vima-ui-admin","run","check:ai"]},
+        {"id":"ui-typecheck","argv":["npm","--prefix","products/vima-ui-admin","run","typecheck"]},
+        {"id":"ui-test","argv":["npm","--prefix","products/vima-ui-admin","test"]},
+        {"id":"ui-verify-publish","argv":["npm","--prefix","products/vima-ui-admin","run","verify:publish"]}
+      ],
+      "pack": [{"id":"ui-pack","argv":["npm","pack","./products/vima-ui-admin"]}],
+      "verifyDependents": ["vima-starter"]
+    },
+    {
+      "id": "vima-starter",
+      "paths": ["templates/vima-starter/**"],
+      "versionSource": "templates/vima-starter/cli/package.json",
+      "verify": [
+        {"id":"starter-template","argv":["npm","--prefix","templates/vima-starter","run","check:template"]},
+        {"id":"starter-frontend","argv":["npm","--prefix","templates/vima-starter/frontend","run","build:check"]},
+        {"id":"starter-backend","argv":["node","platform/scripts/run-maven.mjs","-f","templates/vima-starter/backend/pom.xml","package"]},
+        {"id":"starter-cli-pack","argv":["npm","pack","./templates/vima-starter/cli","--dry-run"]}
+      ],
+      "pack": [{"id":"starter-pack","argv":["npm","pack","./templates/vima-starter/cli"]}],
+      "verifyDependents": []
+    }
+  ]
+}

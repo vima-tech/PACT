@@ -1,0 +1,18 @@
+{
+  "version": "1",
+  "capturedAt": "2026-08-11",
+  "repositoryFacts": {
+    "publicComponents": 63,
+    "documentedComponents": 62,
+    "nonexistentDocumentedApis": 11,
+    "defaultEntryGzipBytes": 62699
+  },
+  "externalAgentDelivery": {
+    "status": "not-measured",
+    "medianDeliveryMilliseconds": null,
+    "medianTokens": null,
+    "firstBuildPassRate": null,
+    "twoRoundPassRate": null,
+    "reason": "历史上未保存可复现的模型、提示、Token 和耗时记录；不使用伪造数据填充基线。"
+  }
+}

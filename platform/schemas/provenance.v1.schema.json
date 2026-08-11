@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"provenance.v1","title":"PACT Platform provenance","description":"Tracks planned, linked, and canonical-only finalized imports; semantic phase rules are enforced by schema-validator.mjs.","type":"object","required":["version","imports"],"_pact":"@pact R007,R012,R014,R018"}

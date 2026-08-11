@@ -1,0 +1,39 @@
+{
+  "version": "1",
+  "_pact": "@pact R008,R010,R021",
+  "records": [
+    {
+      "consumer": "ui-admin-adapter",
+      "provider": "vima-ui-admin",
+      "consumerVersion": "1.0.0",
+      "providerVersion": "0.1.0",
+      "providerContentSha256": "c59509ce7750565b1ebe092ef12838bdfa606f1738c6d48f46ba40f16083908d",
+      "contractVersion": "app-spec.v1",
+      "releaseStatus": "unpublished-changes",
+      "status": "compatible",
+      "evidence": [{"path":"products/vima-ui-admin/dist/agent/schema/app-spec.v1.json","sha256":"469f93c4dd00de7f1e9ff01296a7f8b54fb8a65d24cb4977208cc4c9b0a7b9a2"}]
+    },
+    {
+      "consumer": "vima-starter",
+      "provider": "vima-ui-admin",
+      "consumerVersion": "1.0.0",
+      "providerVersion": "0.1.0",
+      "providerContentSha256": "c59509ce7750565b1ebe092ef12838bdfa606f1738c6d48f46ba40f16083908d",
+      "contractVersion": "app-spec.v1",
+      "releaseStatus": "unpublished-changes",
+      "status": "verify-required",
+      "evidence": [{"path":"templates/vima-starter/frontend/package-lock.json","sha256":"0b4757294708d32f9dc5ef7eb3fb1adcfb8824158f365a63b7f2509a15ca3dd3"}]
+    },
+    {
+      "consumer": "vima-starter-adapter",
+      "provider": "vima-starter",
+      "consumerVersion": "0.1.0-draft",
+      "providerVersion": "1.0.0",
+      "providerContentSha256": "a5307d8bf891bce071ecf0a1f8f12796fe3696e85b77f5fec832459d5331679b",
+      "contractVersion": "full-stack-spec.v1-draft",
+      "releaseStatus": "blocked",
+      "status": "incompatible",
+      "evidence": [{"path":"platform/adapters/vima-starter-adapter.md","sha256":"a53bacfe5c7006be7fe71313985658de94bb723beff3a06af56c50dd920eea65"}]
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"release-units.v1","title":"PACT Platform release units","type":"object","required":["version","units"],"_pact":"@pact R007,R019,R023,R027"}
+

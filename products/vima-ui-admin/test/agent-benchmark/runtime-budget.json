@@ -1,0 +1,7 @@
+{
+  "version": "1",
+  "baselineGzipBytes": 61180,
+  "maximumGrowthRatio": 0.12,
+  "entry": "dist/index.js",
+  "note": "基线为 2026-08-11 AI-First 改造前 Vite 默认入口 gzip 61.18 kB；预算包含默认入口的本地静态 import 闭包。"
+}
