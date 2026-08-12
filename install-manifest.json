@@ -1,0 +1,147 @@
+{
+  "agentTargets": [
+    "claude-code",
+    "codex",
+    "cursor",
+    "universal"
+  ],
+  "resources": [
+    {
+      "path": "docs",
+      "sha256": "718da31de02183b49febe1fdb6869f2e4400d193d0533af48325f664286b0611"
+    },
+    {
+      "path": "platform/adapters",
+      "sha256": "e1a1375eb297f306564fa069dd98d6025f4e66c6705c5e43ff6b187044d39001"
+    },
+    {
+      "path": "platform/registry",
+      "sha256": "2dfe1e87ea948a9e8f560627459b65fe85926ff99ec8cd56bde6eab3ba871930"
+    },
+    {
+      "path": "platform/schemas",
+      "sha256": "fd3b10f983eabe91c91abb36281eccf0cd32c7e0f3c032b21285a8ea40818ecb"
+    }
+  ],
+  "runtime": {
+    "entry": "bin/pact.mjs",
+    "files": [
+      {
+        "path": "bin/pact.mjs",
+        "sha256": "01321c9f98b0d7e37d1ee4dcd79be5a1b8478bda9d339d97e247d16648279d06"
+      },
+      {
+        "path": "package.json",
+        "sha256": "08c3669eef3f8677b6e636c6ed9b6e4d6d3d16212683b038a4aa6bf2bcea4ae7"
+      },
+      {
+        "path": "platform/lib/agent-skills.mjs",
+        "sha256": "10f1996a35f30253ad232527bbeb741ee154fb7de8ae3cf509efd957ea3a5501"
+      },
+      {
+        "path": "platform/lib/capability-router.mjs",
+        "sha256": "e2c951e37e647f8f2927d22b264076cd88216544efecf8f43c0022ef0b8c092f"
+      },
+      {
+        "path": "platform/lib/core.mjs",
+        "sha256": "bb1ba7c61f656cda7d43acdb831b764426902eca098845f6e122cb36407c4b98"
+      },
+      {
+        "path": "platform/lib/delivery-readiness.mjs",
+        "sha256": "f595f7c8be9236c9603236327626734c7d21e2c58336eb04971e4ce8be690ed8"
+      },
+      {
+        "path": "platform/lib/governance.mjs",
+        "sha256": "6b73bb715fc70c7b0dc8ef63ad31883394b54a5a4b3bf70e7484d6064d2fe66c"
+      },
+      {
+        "path": "platform/lib/install-manifest.mjs",
+        "sha256": "ec94da5d8b5b7e1038570f308470891f2335793b4c414d2eb685cb47dee86a7c"
+      },
+      {
+        "path": "platform/lib/release-plan.mjs",
+        "sha256": "16a7203f716405649c5bd6eee690d88c9ad426edd6948021de9e4a83ebf555a1"
+      },
+      {
+        "path": "platform/lib/run-commands.mjs",
+        "sha256": "d0175cbf2d10509e458d57aa07f57177804c9baf3868973171837952ebe934d0"
+      },
+      {
+        "path": "platform/lib/schema-validator.mjs",
+        "sha256": "7bd1e22a59816a69fc163e6146b6a1cdb63b8470e1750f4c4d7a12848b7e5d65"
+      },
+      {
+        "path": "platform/lib/tree-hash.mjs",
+        "sha256": "8a575faa68099149a967cb3098c8cd6d19ad91d5c2922eaab85809da8b6a782c"
+      },
+      {
+        "path": "platform/scripts/capability-router.mjs",
+        "sha256": "9414d3345a50bba92bf95b2e212921059d136e722b4f0fd3b6d2bca598bbb6ae"
+      },
+      {
+        "path": "platform/scripts/governance-check.mjs",
+        "sha256": "d8ac89a3ad6e3b412cb9eb3925b88195dcafb3b72d19c1c6df1d2e6ba03ed560"
+      },
+      {
+        "path": "platform/scripts/postinstall.mjs",
+        "sha256": "904b15fd42ebf30a14ac82beb6194577c3bc2bfab154a62c017206f0676c9a3a"
+      },
+      {
+        "path": "platform/scripts/preinstall.mjs",
+        "sha256": "2a0b3d87fb8f978f1349b767b52b29575202ae8eef79f86b0a74e608b97060b6"
+      },
+      {
+        "path": "platform/scripts/preuninstall.mjs",
+        "sha256": "52d6d21f7c2fb1ba493ed31083d252b8f0b9a57b9ab0d2fa76090811bce74c4d"
+      }
+    ]
+  },
+  "skills": [
+    {
+      "name": "pact",
+      "path": "pact",
+      "sha256": "8e991663716d2e770ebb2c463b64830416b3561396d8f1385a9aa4c004110576"
+    },
+    {
+      "name": "pact-change",
+      "path": "pact-change",
+      "sha256": "889d8d898089e784286a658e8e70e25015786980cffe8e815c773ff17b1899f9"
+    },
+    {
+      "name": "pact-check",
+      "path": "pact-check",
+      "sha256": "bbb48f6eaea97b85af72f7a3adabe4a98cc3f24d9e3a5249df338829b574efe0"
+    },
+    {
+      "name": "pact-estimate",
+      "path": "pact-estimate",
+      "sha256": "31964468385b8ac6cac9709e9181f30b2c695600a5f5689b8647f2a9280f0208"
+    },
+    {
+      "name": "pact-install",
+      "path": "pact-install",
+      "sha256": "d311de87173358d05c35d2a489a2b8df3337b8c65885b6887cd5a9c3e3e54ca4"
+    },
+    {
+      "name": "pact-list",
+      "path": "pact-list",
+      "sha256": "dc558f70123a3cd2e73c124d6e77d89a57fc051553dad1499b221a3c3aa7ca45"
+    },
+    {
+      "name": "pact-new",
+      "path": "pact-new",
+      "sha256": "d07638d07c34b2447bdc77e47ecd33467dc54e03d9b58e55f1901e0ebe7a9439"
+    },
+    {
+      "name": "pact-review",
+      "path": "pact-review",
+      "sha256": "2e3f0660cde267e43e568f19a260f83551258fa8f393707d9ad98d1542cc790b"
+    },
+    {
+      "name": "pact-run",
+      "path": "pact-run",
+      "sha256": "92c5ae94758dfb221a8c1777a33ee8a5d45d0b40a9fbc1e53342118881e233c5"
+    }
+  ],
+  "version": "1.0.0"
+}

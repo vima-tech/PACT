@@ -1,6 +1,8 @@
 # PACT Platform
 
-<!-- @pact R001,R002,R003,R004,R005,R007,R008,R010,R017,R019,R020,R021,R022,R023,R027 -->
+<!-- @pact R001,R002,R003,R004,R005,R007,R008,R010,R017,R019,R020,R021,R022,R023,R027,R028,R041 -->
+
+PACT Platform 以“AI Agent + PACT 快速交付规范、准确、可用、稳定的业务操作系统”为最高判断标准。Agent 是实施者，PACT Platform 是控制与证据层；任何低层“已写代码”都不得冒充可启动、业务闭环、可部署或稳定。
 
 `platform/` 是 PACT Core 之外的工程能力治理层。统一的是能力发现、证据、兼容性、迁移和
 发布编排；PACT skills、UI Admin 与 Starter 仍是三个独立发布单元。
@@ -13,6 +15,17 @@
 - `lib/`：纯路由、治理、树哈希、release plan 和串行命令执行。
 - `scripts/`：稳定 CLI；结构化结果写 stdout，失败给出 code/path。
 - `test/`：schema 负例、路由真值表、迁移冲突、发布传播与安全门。
+
+## 完整安装与 Agent 接入
+
+```bash
+npm i -g @vima-tech/pact
+pact doctor
+```
+
+公开包内置同版本 CLI、Platform runtime 和九个 Skills；postinstall 只对已检测 Agent 做可恢复的本地同步，不下载 Skills、不覆盖冲突目标。轻量 Skills-only 入口仍为 `npx skills add vima-tech/pact -g`；详见 `docs/installation.md`。
+
+交付完成度的机器真源是 `registry/delivery-profiles.v1.json` 顶层 `completionLevels`，由 `lib/delivery-readiness.mjs` 按证据逐级聚合。
 
 ## 能力选择
 

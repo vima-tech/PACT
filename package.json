@@ -1,10 +1,41 @@
 {
-  "name": "@vima-tech/pact-platform",
+  "name": "@vima-tech/pact",
   "version": "1.0.0",
-  "private": true,
   "type": "module",
-  "description": "PACT skills and optional Vima engineering creation tools",
+  "description": "[ARCHIVED] Superseded by https://github.com/vima-tech/vima-cli — PACT control platform for AI Agent delivery of production-ready business systems",
+  "license": "MIT",
+  "bin": {
+    "pact": "bin/pact.mjs",
+    "vima-pact": "bin/pact.mjs"
+  },
+  "files": [
+    "bin/**",
+    "docs/**",
+    "pact/**",
+    "pact-change/**",
+    "pact-check/**",
+    "pact-estimate/**",
+    "pact-install/**",
+    "pact-list/**",
+    "pact-new/**",
+    "pact-review/**",
+    "pact-run/**",
+    "platform/adapters/**",
+    "platform/lib/**",
+    "platform/registry/**",
+    "platform/schemas/**",
+    "platform/scripts/capability-router.mjs",
+    "platform/scripts/governance-check.mjs",
+    "platform/scripts/preinstall.mjs",
+    "platform/scripts/postinstall.mjs",
+    "platform/scripts/preuninstall.mjs",
+    "install-manifest.json",
+    "CLAUDE.md"
+  ],
   "scripts": {
+    "preinstall": "node platform/scripts/preinstall.mjs",
+    "postinstall": "node platform/scripts/postinstall.mjs",
+    "preuninstall": "node platform/scripts/preuninstall.mjs",
     "test": "node --test platform/test/*.test.mjs",
     "governance:check": "node platform/scripts/governance-check.mjs",
     "platform:inspect": "node platform/scripts/capability-router.mjs",
@@ -19,6 +50,14 @@
     "verify": "node platform/scripts/verify-all.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "npm": ">=10"
+  },
+  "os": [
+    "linux",
+    "darwin"
+  ],
+  "devDependencies": {
+    "skills": "1.5.22"
   }
 }

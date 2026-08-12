@@ -1,8 +1,27 @@
 # CHANGELOG
 
+> ⚠️ 本项目已于 2026-08-12 归档，不再发布新版本。接替项目: https://github.com/vima-tech/vima-cli
+>
 > 创建日期: 2026-07-26
 >
-> 升级：`npx skills update pact`（或重新 `npx skills add vima-tech/pact -g`）
+> 主推完整升级：`npm i -g @vima-tech/pact@latest && pact doctor`。只安装 Skills 时使用 `npx skills update pact`（或重新 `npx skills add vima-tech/pact -g`）。
+
+## 2026-08-12 · 项目归档，接替项目为 vima-cli
+
+- 本仓库停止维护：不再接受 issue 与 PR，不再发布新版本，保留只读作为历史存档。
+- 后续工作由接替项目继续：https://github.com/vima-tech/vima-cli
+- 已安装 `@vima-tech/pact` 的用户可继续使用 1.0.0，但不会再收到更新与修复。
+- 归档声明落在 README、`docs/installation.md`、`package.json` description 与 `pact --help`。
+
+## 1.0.0 · 2026-08-11
+
+<!-- @pact R028,R029,R031,R036,R037,R038,R039,R041,R042 -->
+
+- PACT 定位升级为 AI Agent 业务系统交付控制平台，以规范、准确、可用、稳定为最高判断标准。
+- 主安装入口变为 `npm i -g @vima-tech/pact`，提供 `pact`/`vima-pact` 并自动同步九个内置 Skills。
+- 保留 `npx skills add vima-tech/pact -g` 轻量全量 Skill 安装，新增自然语言按官方文档自动安装方式。
+- 新增 `/pact-install`、doctor/sync/verify/adopt/unadopt/remove/uninstall 及冲突保护生命周期。
+- 新增八级业务交付完成度模型，不再让“已写代码”冒充可用稳定系统。
 
 ## 2026-08-08 · 吸收「可执行契约交付包」的六条做法：入口文件 / 分级冻结 / 检查器自检 / 待确认台账 / 已知坑 / 降级策略
 

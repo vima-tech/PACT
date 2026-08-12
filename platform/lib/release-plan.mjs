@@ -48,6 +48,9 @@ export function planRelease(changedPaths, units, base) {
     reasons[unit] ??= [];
     if (!reasons[unit].includes(reason)) reasons[unit].push(reason);
   };
+  const isShared = (path) => path === '.gitignore'
+    || ['package.json', 'package-lock.json', 'README.md', 'CLAUDE.md'].includes(path)
+    || /^(?:platform\/(?:registry|schemas|adapters)(?:\/|$)|platform\/lib\/(?:capability-router|governance)\.mjs$|platform\/scripts\/(?:governance-check|capability-router)\.mjs$)/.test(path);
 
   for (const path of paths) {
     if (path === 'artifacts' || path.startsWith('artifacts/')) continue;
@@ -57,6 +60,7 @@ export function planRelease(changedPaths, units, base) {
       const owner = owners[0];
       direct.add(owner.id);
       addReason(owner.id, `direct:${path}`);
+      if (isShared(path)) for (const unit of units) addReason(unit.id, `shared:${path}`);
       continue;
     }
     if (path === '.pact' || path.startsWith('.pact/')) addReason('pact-skills', `material:${path}`);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PACT · PACT Platform 三阶段统一迁移 · 规格书</title>
+<title>PACT · PACT Platform 统一治理、完整发行与 Agent 接入 · 规格书</title>
 <style>
 :root{
   --bg:#faf9f7; --bg-soft:#f2f0ec; --panel:#ffffff;
@@ -351,28 +351,28 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 </head>
 <body>
 <div class="top"><div class="top-in">
-  <div class="tt"><a href="#cover">PACT · PACT Platform 三阶段统一迁移</a></div>
+  <div class="tt"><a href="#cover">PACT · PACT Platform 统一治理、完整发行与 Agent 接入</a></div>
   <span class="badge frozen">已冻结 · 2026-08-11</span>
   <span class="sp"></span>
   <button class="iconbtn" id="theme" title="明暗主题">☀</button>
 </div><div id="bar"></div></div>
 <div class="wrap">
 <nav class="side" aria-label="目录"><div class="st">目录</div>
-<a href="#cover">封面</a><div class="st">业务流水线</div><a class="ch" href="#pipeline" data-jump="$ npm run platform:inspect">能力检查</a><a class="ch" href="#pipeline" data-jump="$ npm run governance:check">治理验证</a><a class="ch" href="#pipeline" data-jump="$ npm run migration:verify">导入检查</a><a class="ch" href="#pipeline" data-jump="$ npm run verify:products">产品构建</a><a class="ch" href="#pipeline" data-jump="$ npm run release:plan">变更计划</a><a class="ch" href="#pipeline" data-jump="$ npm run release:pack">发布预演</a><div class="st">支撑材料</div><a class="part" href="#part-P">第一部分 · 产品需求<span class="pk">PRD</span></a><a class="ch" href="#ch-P1">1.1 一句话定义与交付形态</a><a class="ch" href="#ch-P2">1.2 背景与问题</a><a class="ch" href="#ch-P3">1.3 用户与角色</a><a class="ch" href="#ch-P4">1.4 核心场景</a><a class="ch" href="#ch-P5">1.5 需求清单（R-ID）</a><a class="ch" href="#ch-P6">1.6 非目标（明确不做）</a><a class="ch" href="#ch-P7">1.7 约束</a><a class="ch" href="#ch-P8">1.8 成功定义</a><a class="part" href="#part-A">第二部分 · 系统设计<span class="pk">SDD</span></a><a class="ch" href="#ch-A1">2.1 系统边界与上下文</a><a class="ch" href="#ch-A2">2.2 结构与模块职责</a><a class="ch" href="#ch-A3">2.3 关键链路（端到端）</a><a class="ch" href="#ch-A4">2.4 设计原则（本项目的硬规矩）</a><a class="ch" href="#ch-A5">2.5 决策记录（D-ID）</a><a class="ch" href="#ch-A6">2.6 风险与缓解</a><a class="part" href="#part-C">第三部分 · 数据与接口规格<span class="pk">SPEC</span></a><a class="ch" href="#ch-C1">3.1 数据模型</a><a class="ch" href="#ch-C2">3.2 枚举与状态机</a><a class="ch" href="#ch-C3">3.3 不变量与数据铁律</a><a class="ch" href="#ch-C4">3.4 对外接口契约</a><a class="ch" href="#ch-C5">3.5 内部模块接口</a><a class="ch" href="#ch-C6">3.6 错误码与错误语义</a><a class="ch" href="#ch-C7">3.7 配置与环境变量</a><a class="ch" href="#ch-C8">3.8 权限与安全边界</a><a class="ch" href="#ch-C9">3.9 观测与日志契约</a><a class="ch" href="#ch-C10">3.10 交互与呈现契约</a><a class="ch" href="#ch-C11">3.11 AI / Prompt 契约</a><a class="part" href="#part-T">第四部分 · 验收与交付<span class="pk">ACCEPTANCE</span></a><a class="ch" href="#ch-T1">4.1 验收清单</a><a class="ch" href="#ch-T2">4.2 指标与阈值</a><a class="ch" href="#ch-T3">4.3 停工线（出现即停，不得继续施工）</a><a class="ch" href="#ch-T4">4.4 交付前置（Definition of Done）</a><a class="ch" href="#ch-T5">4.5 施工范围与里程碑</a><a class="part" href="#appendix">附录 · 需求索引</a></nav>
+<a href="#cover">封面</a><div class="st">业务流水线</div><a class="ch" href="#pipeline" data-jump="$ npm run platform:inspect">能力检查</a><a class="ch" href="#pipeline" data-jump="$ npm run governance:check">治理验证</a><a class="ch" href="#pipeline" data-jump="$ npm run migration:verify">导入检查</a><a class="ch" href="#pipeline" data-jump="$ npm run verify:products">产品构建</a><a class="ch" href="#pipeline" data-jump="$ npm run release:plan">变更计划</a><a class="ch" href="#pipeline" data-jump="$ npm run release:pack">发布预演</a><a class="ch" href="#pipeline" data-jump="$ npm i -g @vima-tech/pact">完整安装</a><a class="ch" href="#pipeline" data-jump="非交互 Agent 检测与同步">非交互 Agent 检测与同步</a><a class="ch" href="#pipeline" data-jump="Agent 同步">Agent 同步</a><a class="ch" href="#pipeline" data-jump="记录可修复诊断">记录可修复诊断</a><a class="ch" href="#pipeline" data-jump="重新验证">重新验证</a><a class="ch" href="#pipeline" data-jump="轻量与自然语言安装">轻量与自然语言安装</a><a class="ch" href="#pipeline" data-jump="业务需求">业务需求</a><a class="ch" href="#pipeline" data-jump="冻结契约与执行图谱">冻结契约与执行图谱</a><a class="ch" href="#pipeline" data-jump="真实启动和业务操作闭环">真实启动和业务操作闭环</a><a class="ch" href="#pipeline" data-jump="任何规格缺口、实现偏离、真实运行或业务闭环失败">任何规格缺口、实现偏离、真实运行或业务闭环失败</a><a class="ch" href="#pipeline" data-jump="修复后重验">修复后重验</a><a class="ch" href="#pipeline" data-jump="北极星判断标准">北极星判断标准</a><div class="st">支撑材料</div><a class="part" href="#part-P">第一部分 · 产品需求<span class="pk">PRD</span></a><a class="ch" href="#ch-P1">1.1 一句话定义与交付形态</a><a class="ch" href="#ch-P2">1.2 背景与问题</a><a class="ch" href="#ch-P3">1.3 用户与角色</a><a class="ch" href="#ch-P4">1.4 核心场景</a><a class="ch" href="#ch-P5">1.5 需求清单（R-ID）</a><a class="ch" href="#ch-P6">1.6 非目标（明确不做）</a><a class="ch" href="#ch-P7">1.7 约束</a><a class="ch" href="#ch-P8">1.8 成功定义</a><a class="part" href="#part-A">第二部分 · 系统设计<span class="pk">SDD</span></a><a class="ch" href="#ch-A1">2.1 系统边界与上下文</a><a class="ch" href="#ch-A2">2.2 结构与模块职责</a><a class="ch" href="#ch-A3">2.3 关键链路（端到端）</a><a class="ch" href="#ch-A4">2.4 设计原则（本项目的硬规矩）</a><a class="ch" href="#ch-A5">2.5 决策记录（D-ID）</a><a class="ch" href="#ch-A6">2.6 风险与缓解</a><a class="part" href="#part-C">第三部分 · 数据与接口规格<span class="pk">SPEC</span></a><a class="ch" href="#ch-C1">3.1 数据模型</a><a class="ch" href="#ch-C2">3.2 枚举与状态机</a><a class="ch" href="#ch-C3">3.3 不变量与数据铁律</a><a class="ch" href="#ch-C4">3.4 对外接口契约</a><a class="ch" href="#ch-C5">3.5 内部模块接口</a><a class="ch" href="#ch-C6">3.6 错误码与错误语义</a><a class="ch" href="#ch-C7">3.7 配置与环境变量</a><a class="ch" href="#ch-C8">3.8 权限与安全边界</a><a class="ch" href="#ch-C9">3.9 观测与日志契约</a><a class="ch" href="#ch-C10">3.10 交互与呈现契约</a><a class="ch" href="#ch-C11">3.11 AI / Prompt 契约</a><a class="part" href="#part-T">第四部分 · 验收与交付<span class="pk">ACCEPTANCE</span></a><a class="ch" href="#ch-T1">4.1 验收清单</a><a class="ch" href="#ch-T2">4.2 指标与阈值</a><a class="ch" href="#ch-T3">4.3 停工线（出现即停，不得继续施工）</a><a class="ch" href="#ch-T4">4.4 交付前置（Definition of Done）</a><a class="ch" href="#ch-T5">4.5 施工范围与里程碑</a><a class="part" href="#appendix">附录 · 需求索引</a></nav>
 <main class="content">
 <header class="hero" id="cover">
   <div class="kicker">产品需求与系统设计规格书</div>
-  <h1>PACT · PACT Platform 三阶段统一迁移</h1>
+  <h1>PACT · PACT Platform 统一治理、完整发行与 Agent 接入</h1>
   <p class="sub">本文档整合传统交付物中 PRD（产品需求）、SDD（系统设计）与 SPEC（技术规格）的全部内容，
   以统一编号交叉引用，作为本项目唯一的对外规格交付物。</p>
-  <div class="stats"><div class="stat"><div class="n">27</div><div class="l">需求 R-ID</div></div><div class="stat"><div class="n">9</div><div class="l">决策（含已否决）</div></div><div class="stat"><div class="n">9</div><div class="l">不变量</div></div><div class="stat"><div class="n">5</div><div class="l">里程碑</div></div></div>
-  <div class="meta-line"><span class="badge frozen">已冻结 · 2026-08-11</span><span class="badge">创建日期 · 2026-08-11</span><span class="badge">更新日期 · 2026-08-11</span><span class="badge">完备度档位 · full</span><span class="badge">负责人 · renmengkai</span></div>
+  <div class="stats"><div class="stat"><div class="n">42</div><div class="l">需求 R-ID</div></div><div class="stat"><div class="n">14</div><div class="l">决策（含已否决）</div></div><div class="stat"><div class="n">14</div><div class="l">不变量</div></div><div class="stat"><div class="n">6</div><div class="l">里程碑</div></div></div>
+  <div class="meta-line"><span class="badge frozen">已冻结 · 2026-08-11</span><span class="badge">创建日期 · 2026-08-11</span><span class="badge">更新日期 · 2026-08-11（完整发行与 Agent 接入 CR）</span><span class="badge">完备度档位 · full</span><span class="badge">负责人 · renmengkai</span></div>
   <p class="note">本文档由规格真源 <code>PACT.md</code> 自动生成，与真源逐字对应；
   请勿直接修改本文件——修改真源后重新生成即可。规格冻结后的任何变更均记录于变更记录（changelog）。</p>
 </header>
 <nav class="toc-doc" id="toc"><h2>目录</h2><div class="toc-grid"><div class="toc-card"><div class="tp"><span class="pn">PIPELINE</span>
     <a href="#pipeline">业务流水线 · 先看这里</a></div>
-    <ol><li><span class="cn">01</span><a href="#pipeline" data-jump="$ npm run platform:inspect">能力检查</a></li><li><span class="cn">02</span><a href="#pipeline" data-jump="$ npm run governance:check">治理验证</a></li><li><span class="cn">03</span><a href="#pipeline" data-jump="$ npm run migration:verify">导入检查</a></li><li><span class="cn">04</span><a href="#pipeline" data-jump="$ npm run verify:products">产品构建</a></li><li><span class="cn">05</span><a href="#pipeline" data-jump="$ npm run release:plan">变更计划</a></li><li><span class="cn">06</span><a href="#pipeline" data-jump="$ npm run release:pack">发布预演</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">PRD</span><a href="#part-P">第一部分 · 产品需求</a></div><ol><li><span class="cn">1.1</span><a href="#ch-P1">一句话定义与交付形态</a></li><li><span class="cn">1.2</span><a href="#ch-P2">背景与问题</a></li><li><span class="cn">1.3</span><a href="#ch-P3">用户与角色</a></li><li><span class="cn">1.4</span><a href="#ch-P4">核心场景</a></li><li><span class="cn">1.5</span><a href="#ch-P5">需求清单（R-ID）</a></li><li><span class="cn">1.6</span><a href="#ch-P6">非目标（明确不做）</a></li><li><span class="cn">1.7</span><a href="#ch-P7">约束</a></li><li><span class="cn">1.8</span><a href="#ch-P8">成功定义</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">SDD</span><a href="#part-A">第二部分 · 系统设计</a></div><ol><li><span class="cn">2.1</span><a href="#ch-A1">系统边界与上下文</a></li><li><span class="cn">2.2</span><a href="#ch-A2">结构与模块职责</a></li><li><span class="cn">2.3</span><a href="#ch-A3">关键链路（端到端）</a></li><li><span class="cn">2.4</span><a href="#ch-A4">设计原则（本项目的硬规矩）</a></li><li><span class="cn">2.5</span><a href="#ch-A5">决策记录（D-ID）</a></li><li><span class="cn">2.6</span><a href="#ch-A6">风险与缓解</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">SPEC</span><a href="#part-C">第三部分 · 数据与接口规格</a></div><ol><li><span class="cn">3.1</span><a href="#ch-C1">数据模型</a></li><li><span class="cn">3.2</span><a href="#ch-C2">枚举与状态机</a></li><li><span class="cn">3.3</span><a href="#ch-C3">不变量与数据铁律</a></li><li><span class="cn">3.4</span><a href="#ch-C4">对外接口契约</a></li><li><span class="cn">3.5</span><a href="#ch-C5">内部模块接口</a></li><li><span class="cn">3.6</span><a href="#ch-C6">错误码与错误语义</a></li><li><span class="cn">3.7</span><a href="#ch-C7">配置与环境变量</a></li><li><span class="cn">3.8</span><a href="#ch-C8">权限与安全边界</a></li><li><span class="cn">3.9</span><a href="#ch-C9">观测与日志契约</a></li><li><span class="cn">3.10</span><a href="#ch-C10">交互与呈现契约</a></li><li><span class="cn">3.11</span><a href="#ch-C11">AI / Prompt 契约</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">ACCEPTANCE</span><a href="#part-T">第四部分 · 验收与交付</a></div><ol><li><span class="cn">4.1</span><a href="#ch-T1">验收清单</a></li><li><span class="cn">4.2</span><a href="#ch-T2">指标与阈值</a></li><li><span class="cn">4.3</span><a href="#ch-T3">停工线（出现即停，不得继续施工）</a></li><li><span class="cn">4.4</span><a href="#ch-T4">交付前置（Definition of Done）</a></li><li><span class="cn">4.5</span><a href="#ch-T5">施工范围与里程碑</a></li></ol></div>
+    <ol><li><span class="cn">01</span><a href="#pipeline" data-jump="$ npm run platform:inspect">能力检查</a></li><li><span class="cn">02</span><a href="#pipeline" data-jump="$ npm run governance:check">治理验证</a></li><li><span class="cn">03</span><a href="#pipeline" data-jump="$ npm run migration:verify">导入检查</a></li><li><span class="cn">04</span><a href="#pipeline" data-jump="$ npm run verify:products">产品构建</a></li><li><span class="cn">05</span><a href="#pipeline" data-jump="$ npm run release:plan">变更计划</a></li><li><span class="cn">06</span><a href="#pipeline" data-jump="$ npm run release:pack">发布预演</a></li><li><span class="cn">07</span><a href="#pipeline" data-jump="$ npm i -g @vima-tech/pact">完整安装</a></li><li><span class="cn">08</span><a href="#pipeline" data-jump="非交互 Agent 检测与同步">非交互 Agent 检测与同步</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">PRD</span><a href="#part-P">第一部分 · 产品需求</a></div><ol><li><span class="cn">1.1</span><a href="#ch-P1">一句话定义与交付形态</a></li><li><span class="cn">1.2</span><a href="#ch-P2">背景与问题</a></li><li><span class="cn">1.3</span><a href="#ch-P3">用户与角色</a></li><li><span class="cn">1.4</span><a href="#ch-P4">核心场景</a></li><li><span class="cn">1.5</span><a href="#ch-P5">需求清单（R-ID）</a></li><li><span class="cn">1.6</span><a href="#ch-P6">非目标（明确不做）</a></li><li><span class="cn">1.7</span><a href="#ch-P7">约束</a></li><li><span class="cn">1.8</span><a href="#ch-P8">成功定义</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">SDD</span><a href="#part-A">第二部分 · 系统设计</a></div><ol><li><span class="cn">2.1</span><a href="#ch-A1">系统边界与上下文</a></li><li><span class="cn">2.2</span><a href="#ch-A2">结构与模块职责</a></li><li><span class="cn">2.3</span><a href="#ch-A3">关键链路（端到端）</a></li><li><span class="cn">2.4</span><a href="#ch-A4">设计原则（本项目的硬规矩）</a></li><li><span class="cn">2.5</span><a href="#ch-A5">决策记录（D-ID）</a></li><li><span class="cn">2.6</span><a href="#ch-A6">风险与缓解</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">SPEC</span><a href="#part-C">第三部分 · 数据与接口规格</a></div><ol><li><span class="cn">3.1</span><a href="#ch-C1">数据模型</a></li><li><span class="cn">3.2</span><a href="#ch-C2">枚举与状态机</a></li><li><span class="cn">3.3</span><a href="#ch-C3">不变量与数据铁律</a></li><li><span class="cn">3.4</span><a href="#ch-C4">对外接口契约</a></li><li><span class="cn">3.5</span><a href="#ch-C5">内部模块接口</a></li><li><span class="cn">3.6</span><a href="#ch-C6">错误码与错误语义</a></li><li><span class="cn">3.7</span><a href="#ch-C7">配置与环境变量</a></li><li><span class="cn">3.8</span><a href="#ch-C8">权限与安全边界</a></li><li><span class="cn">3.9</span><a href="#ch-C9">观测与日志契约</a></li><li><span class="cn">3.10</span><a href="#ch-C10">交互与呈现契约</a></li><li><span class="cn">3.11</span><a href="#ch-C11">AI / Prompt 契约</a></li></ol></div><div class="toc-card"><div class="tp"><span class="pn">ACCEPTANCE</span><a href="#part-T">第四部分 · 验收与交付</a></div><ol><li><span class="cn">4.1</span><a href="#ch-T1">验收清单</a></li><li><span class="cn">4.2</span><a href="#ch-T2">指标与阈值</a></li><li><span class="cn">4.3</span><a href="#ch-T3">停工线（出现即停，不得继续施工）</a></li><li><span class="cn">4.4</span><a href="#ch-T4">交付前置（Definition of Done）</a></li><li><span class="cn">4.5</span><a href="#ch-T5">施工范围与里程碑</a></li></ol></div>
   <div class="toc-card"><div class="tp"><span class="pn">APPENDIX</span><a href="#appendix">附录 · 需求索引（R-ID）</a></div></div></div></nav>
 <section class="pipe" id="pipeline">
   <div class="ph"><span class="pk">PIPELINE</span><h2>业务流水线</h2></div>
@@ -380,24 +380,26 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
   点它，右边就是这个节点上的全部需求——用人话写，分成四组。
   每条句子可以直接裁定：读着不对就点「有异议」写一句，最后导出给 AI 走变更。</p>
   <div class="vbar">
-    <span id="vtext">共 27 条 · 未裁定 27</span>
+    <span id="vtext">共 35 条 · 未裁定 35</span>
     <span class="track"><span class="tok" id="vok"></span><span class="tno" id="vno"></span></span>
     <button type="button" id="vexport">导出裁定结果</button>
     <button type="button" id="vreset">重置</button>
   </div>
-  <div class="rig"><nav class="flow" id="flow"><div class="fscene">S1 · 判断需求并选择工程能力</div><button class="fnode" data-k="$ npm run platform:inspect" type="button"><span class="kd">页面</span><span class="nm">能力检查</span><span class="id">$ npm run platform:inspect</span><span class="ct">6</span></button><div class="fedge"><span class="ar">↓</span><span>读取结构化报告</span></div><button class="fnode" data-k="$ npm run governance:check" type="button"><span class="kd">页面</span><span class="nm">治理验证</span><span class="id">$ npm run governance:check</span><span class="ct">4</span></button><div class="fend">✓ 得到 Delivery Profile 与 adapter 选择</div><div class="fedge alt"><span class="ar">↳</span><span>治理验证：schema、兼容性或信息不足 → 能力检查</span></div><div class="fscene">S2 · 将两个产品迁入统一仓库</div><button class="fnode" data-k="$ npm run migration:verify" type="button"><span class="kd">页面</span><span class="nm">导入检查</span><span class="id">$ npm run migration:verify</span><span class="ct">4</span></button><div class="fedge"><span class="ar">↓</span><span>哈希一致</span></div><button class="fnode" data-k="$ npm run verify:products" type="button"><span class="kd">页面</span><span class="nm">产品构建</span><span class="id">$ npm run verify:products</span><span class="ct">4</span></button><div class="fend">✓ PACT 仓库成为唯一工程入口</div><div class="fedge alt"><span class="ar">↳</span><span>产品构建：任一哈希或构建失败，保留原目录 → 导入检查</span></div><div class="fscene">S3 · 规划、验证并打包独立发布单元</div><button class="fnode" data-k="$ npm run release:plan" type="button"><span class="kd">页面</span><span class="nm">变更计划</span><span class="id">$ npm run release:plan</span><span class="ct">5</span></button><div class="fedge"><span class="ar">↓</span><span>按受影响单元串行验证</span></div><button class="fnode" data-k="$ npm run release:pack" type="button"><span class="kd">页面</span><span class="nm">发布预演</span><span class="id">$ npm run release:pack</span><span class="ct">4</span></button><div class="fend">✓ 得到本地 tarball 与发布命令</div><div class="fedge alt"><span class="ar">↳</span><span>发布预演：验证或 pack 失败，不生成发布批准 → 变更计划</span></div><div class="fedge alt"><span class="ar">↳</span><span>变更计划：无变更 → 输出空计划并结束</span></div></nav><div id="nstack"><div class="nlist" data-k="$ npm run platform:inspect"><div class="nh"><span class="nt">能力检查</span><span class="nr">页面 · $ npm run platform:inspect</span><div class="ni">框架维护者或 Agent 在这里输入需求类别并读取选择理由。</div><div class="nsample"><b>样本</b> 来源于用户本轮要求：只有分析到“业务系统开发”时才使用 Vima Starter；Vima UI Admin 也不是必选项</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">PACT Core 在不导入任何 Vima 源码的情况下读取能力注册表。</div><div class="mt"><a class="rr" href="#req-R001">R001</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i1" data-v=""><div class="tx">注册表分别描述 PACT、UI Admin、Starter 和两个 adapter 的能力、限制、版本与 readiness。</div><div class="mt"><a class="rr" href="#req-R002">R002</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i2" data-v=""><div class="tx">Router 对通用规格工作选择 <code>generic</code>，对纯管理端界面选择 <code>admin-ui</code>，仅对完整业务系统选择 <code>business-system</code>。</div><div class="mt"><a class="rr" href="#req-R003">R003</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i3" data-v=""><div class="tx"><code>admin-ui</code> 与 <code>business-system</code> profile 都把 Vima 能力视为可选依赖。</div><div class="mt"><a class="rr" href="#req-R004">R004</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">未知需求类别、schema 非法或能力未 ready 时返回结构化诊断且不生成工程。</div><div class="mt"><a class="rr" href="#req-R005">R005</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">谁看得到什么</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">所有角色都能看到能力与限制；只有维护者决定是否把 readiness 从 blocked 提升。</div><div class="mt"><a class="rr" href="#req-R006">R006</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run governance:check"><div class="nh"><span class="nt">治理验证</span><span class="nr">页面 · $ npm run governance:check</span><div class="ni">CI 和维护者在这里验证声明是否有证据、版本是否兼容。</div><div class="nsample"><b>样本</b> 来源于用户本轮要求：只有分析到“业务系统开发”时才使用 Vima Starter；Vima UI Admin 也不是必选项</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s0n1i0" data-v=""><div class="tx">Schema 校验 capabilities、delivery profiles、adapter descriptors、compatibility、provenance 和 release units 六类治理 JSON。</div><div class="mt"><a class="rr" href="#req-R007">R007</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n1i1" data-v=""><div class="tx">兼容性使用包版本、内容哈希、公开契约版本和发布状态共同判断，不只比较 semver。</div><div class="mt"><a class="rr" href="#req-R008">R008</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n1i2" data-v=""><div class="tx">基准样例覆盖 generic、admin-ui、business-system 以及信息不足四类路由。</div><div class="mt"><a class="rr" href="#req-R009">R009</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">背后自动发生了什么</span></div><div class="gb"><div class="it" data-i="s0n1i0" data-v=""><div class="tx">Starter 权限、生产安全、测试与全栈生成尚未达标的事实被记录为限制，不能被输出成 ready 能力。</div><div class="mt"><a class="rr" href="#req-R010">R010</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run migration:verify"><div class="nh"><span class="nt">导入检查</span><span class="nr">页面 · $ npm run migration:verify</span><div class="ni">维护者核对导入来源、排除项和完整性。</div><div class="nsample"><b>样本</b> 来源目录 /home/renmk/projects/vima-ui-admin 与 /home/renmk/projects/vima-starter 当前均无独立 .git</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s1n2i0" data-v=""><div class="tx">UI Admin 迁入 <code>products/vima-ui-admin</code>，Starter 迁入 <code>templates/vima-starter</code>。</div><div class="mt"><a class="rr" href="#req-R011">R011</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n2i1" data-v=""><div class="tx">provenance 记录原绝对路径、导入时间、历史不可用事实、排除目录和规范化内容哈希。</div><div class="mt"><a class="rr" href="#req-R012">R012</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n2i2" data-v=""><div class="tx">导入快照只忽略契约列出的 8 个目录段，排除集合不可由调用方扩大；后续 bootstrap/build 产物不属于导入快照。</div><div class="mt"><a class="rr" href="#req-R013">R013</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s1n2i0" data-v=""><div class="tx">目标已有非预期内容、来源缺失或导入后哈希不同则失败，不覆盖、不删除来源。</div><div class="mt"><a class="rr" href="#req-R014">R014</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run verify:products"><div class="nh"><span class="nt">产品构建</span><span class="nr">页面 · $ npm run verify:products</span><div class="ni">维护者在统一目录中运行各产品原有门禁。</div><div class="nsample"><b>样本</b> 来源目录 /home/renmk/projects/vima-ui-admin 与 /home/renmk/projects/vima-starter 当前均无独立 .git</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s1n3i0" data-v=""><div class="tx">UI Admin 保持 <code>@vima-tech/ui-admin</code> 的公开入口和独立 npm 包。</div><div class="mt"><a class="rr" href="#req-R015">R015</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n3i1" data-v=""><div class="tx">Starter 保持 <code>create-vima-starter</code> CLI、frontend/backend 真源和 <code>cli/template</code> 同步规则。</div><div class="mt"><a class="rr" href="#req-R016">R016</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n3i2" data-v=""><div class="tx">根级串行编排调用产品自己的 lockfile 和验证命令，不引入重型 monorepo 构建系统。</div><div class="mt"><a class="rr" href="#req-R017">R017</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">背后自动发生了什么</span></div><div class="gb"><div class="it" data-i="s1n3i0" data-v=""><div class="tx">旧绝对路径先以软链完成过渡验收；在统一路径门禁通过后，精确退役两个软链接并进入不可回滚的 <code>finalized</code> 状态，备份仍保留。</div><div class="mt"><a class="rr" href="#req-R018">R018</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run release:plan"><div class="nh"><span class="nt">变更计划</span><span class="nr">页面 · $ npm run release:plan</span><div class="ni">发布维护者在这里查看哪些独立单元需要验证、打包或升版。</div><div class="nsample"><b>样本</b> 修改 UI Agent 公开契约时，UI unit 必须发布新版本，兼容性验证需覆盖 Starter，但 Starter 是否发版由其文件是否变化决定</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s2n4i0" data-v=""><div class="tx">release unit 注册表分别定义 PACT skills、UI Admin 和 Starter CLI 的路径、版本源、验证与 pack 命令。</div><div class="mt"><a class="rr" href="#req-R019">R019</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i1" data-v=""><div class="tx">changed-path 规则把 Git 变更稳定映射到直接受影响单元。</div><div class="mt"><a class="rr" href="#req-R020">R020</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i2" data-v=""><div class="tx">依赖传播把 UI 公开契约变化加入 Starter 兼容性验证，但不自动宣称 Starter 需要发布。</div><div class="mt"><a class="rr" href="#req-R021">R021</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i3" data-v=""><div class="tx">计划以稳定 JSON 和人读摘要输出，重复运行结果一致。</div><div class="mt"><a class="rr" href="#req-R022">R022</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s2n4i0" data-v=""><div class="tx">工作区基线不可判定、release unit schema 非法或同一文件归属冲突时失败。</div><div class="mt"><a class="rr" href="#req-R023">R023</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run release:pack"><div class="nh"><span class="nt">发布预演</span><span class="nr">页面 · $ npm run release:pack</span><div class="ni">发布维护者在本地完成可发布性验证，不接触远程 registry。</div><div class="nsample"><b>样本</b> 修改 UI Agent 公开契约时，UI unit 必须发布新版本，兼容性验证需覆盖 Starter，但 Starter 是否发版由其文件是否变化决定</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s2n5i0" data-v=""><div class="tx">UI 执行 check:ai、typecheck、test、verify:publish 并通过 runtime-size 预算。</div><div class="mt"><a class="rr" href="#req-R024">R024</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n5i1" data-v=""><div class="tx">Starter 执行 template check、前端 build check、Maven package 和 CLI 本地 pack。</div><div class="mt"><a class="rr" href="#req-R025">R025</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n5i2" data-v=""><div class="tx">PACT 执行脚本自测、物料 lint、graph、trace、book check 与 skill pack 检查。</div><div class="mt"><a class="rr" href="#req-R026">R026</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s2n5i0" data-v=""><div class="tx">默认命令只允许生成本地 tarball；任何真实 publish、push 或凭据读取都必须由人另行显式执行。</div><div class="mt"><a class="rr" href="#req-R027">R027</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div></div></div>
+  <div class="rig"><nav class="flow" id="flow"><div class="fscene">S1 · 判断需求并选择工程能力</div><button class="fnode" data-k="$ npm run platform:inspect" type="button"><span class="kd">页面</span><span class="nm">能力检查</span><span class="id">$ npm run platform:inspect</span><span class="ct">6</span></button><div class="fedge"><span class="ar">↓</span><span>读取结构化报告</span></div><button class="fnode" data-k="$ npm run governance:check" type="button"><span class="kd">页面</span><span class="nm">治理验证</span><span class="id">$ npm run governance:check</span><span class="ct">4</span></button><div class="fend">✓ 得到 Delivery Profile 与 adapter 选择</div><div class="fedge alt"><span class="ar">↳</span><span>治理验证：schema、兼容性或信息不足 → 能力检查</span></div><div class="fscene">S2 · 将两个产品迁入统一仓库</div><button class="fnode" data-k="$ npm run migration:verify" type="button"><span class="kd">页面</span><span class="nm">导入检查</span><span class="id">$ npm run migration:verify</span><span class="ct">4</span></button><div class="fedge"><span class="ar">↓</span><span>哈希一致</span></div><button class="fnode" data-k="$ npm run verify:products" type="button"><span class="kd">页面</span><span class="nm">产品构建</span><span class="id">$ npm run verify:products</span><span class="ct">4</span></button><div class="fend">✓ PACT 仓库成为唯一工程入口</div><div class="fedge alt"><span class="ar">↳</span><span>产品构建：任一哈希或构建失败，保留原目录 → 导入检查</span></div><div class="fscene">S3 · 规划、验证并打包独立发布单元</div><button class="fnode" data-k="$ npm run release:plan" type="button"><span class="kd">页面</span><span class="nm">变更计划</span><span class="id">$ npm run release:plan</span><span class="ct">5</span></button><div class="fedge"><span class="ar">↓</span><span>按受影响单元串行验证</span></div><button class="fnode" data-k="$ npm run release:pack" type="button"><span class="kd">页面</span><span class="nm">发布预演</span><span class="id">$ npm run release:pack</span><span class="ct">4</span></button><div class="fend">✓ 得到本地 tarball 与发布命令</div><div class="fedge alt"><span class="ar">↳</span><span>发布预演：验证或 pack 失败，不生成发布批准 → 变更计划</span></div><div class="fedge alt"><span class="ar">↳</span><span>变更计划：无变更 → 输出空计划并结束</span></div><div class="fscene">S4 · 安装完整 PACT 并连接 Agent</div><button class="fnode" data-k="$ npm i -g @vima-tech/pact" type="button"><span class="kd">页面</span><span class="nm">完整安装</span><span class="id">$ npm i -g @vima-tech/pact</span><span class="ct">8</span></button><div class="fedge"><span class="ar">↓</span><span>安装 CLI/Runtime/内置 Skills</span></div><button class="fnode warnnode" data-k="非交互 Agent 检测与同步" type="button"><span class="kd">页面</span><span class="nm">非交互 Agent 检测与同步</span><span class="ct">0</span></button><div class="fend">✓ CLI 和已检测 Agent 均可使用同版本 PACT</div><div class="fedge alt"><span class="ar">↳</span><span>Agent 同步：无 Agent、脚本被禁用、权限或本地修改冲突 → 记录可修复诊断</span></div><div class="fedge alt"><span class="ar">↳</span><span>记录可修复诊断：$ pact agent sync → 重新验证</span></div><div class="fscene">S5 · 以 PACT 驱动 Agent 交付业务操作系统</div><button class="fnode warnnode" data-k="业务需求" type="button"><span class="kd">页面</span><span class="nm">业务需求</span><span class="ct">0</span></button><div class="fedge"><span class="ar">↓</span><span>PACT 访谈/领域与流水线规格</span></div><button class="fnode warnnode" data-k="冻结契约与执行图谱" type="button"><span class="kd">页面</span><span class="nm">冻结契约与执行图谱</span><span class="ct">0</span></button><div class="fedge"><span class="ar">↓</span><span>Claude Code/Codex 等施工</span></div><button class="fnode warnnode" data-k="真实启动和业务操作闭环" type="button"><span class="kd">页面</span><span class="nm">真实启动和业务操作闭环</span><span class="ct">0</span></button><div class="fend">✓ 可用、稳定、可持续演进的业务操作系统</div><div class="fedge alt"><span class="ar">↳</span><span>任何规格缺口、实现偏离、真实运行或业务闭环失败：回到对应 R-ID/契约/图谱 → 修复后重验</span></div></nav><div id="nstack"><div class="nlist" data-k="$ npm run platform:inspect"><div class="nh"><span class="nt">能力检查</span><span class="nr">页面 · $ npm run platform:inspect</span><div class="ni">框架维护者或 Agent 在这里输入需求类别并读取选择理由。</div><div class="nsample"><b>样本</b> 来源于用户本轮要求：只有分析到“业务系统开发”时才使用 Vima Starter；Vima UI Admin 也不是必选项</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">PACT Core 在不导入任何 Vima 源码的情况下读取能力注册表。</div><div class="mt"><a class="rr" href="#req-R001">R001</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i1" data-v=""><div class="tx">注册表分别描述 PACT、UI Admin、Starter 和两个 adapter 的能力、限制、版本与 readiness。</div><div class="mt"><a class="rr" href="#req-R002">R002</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i2" data-v=""><div class="tx">Router 对通用规格工作选择 <code>generic</code>，对纯管理端界面选择 <code>admin-ui</code>，仅对完整业务系统选择 <code>business-system</code>。</div><div class="mt"><a class="rr" href="#req-R003">R003</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n0i3" data-v=""><div class="tx"><code>admin-ui</code> 与 <code>business-system</code> profile 都把 Vima 能力视为可选依赖。</div><div class="mt"><a class="rr" href="#req-R004">R004</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">未知需求类别、schema 非法或能力未 ready 时返回结构化诊断且不生成工程。</div><div class="mt"><a class="rr" href="#req-R005">R005</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">谁看得到什么</span></div><div class="gb"><div class="it" data-i="s0n0i0" data-v=""><div class="tx">所有角色都能看到能力与限制；只有维护者决定是否把 readiness 从 blocked 提升。</div><div class="mt"><a class="rr" href="#req-R006">R006</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run governance:check"><div class="nh"><span class="nt">治理验证</span><span class="nr">页面 · $ npm run governance:check</span><div class="ni">CI 和维护者在这里验证声明是否有证据、版本是否兼容。</div><div class="nsample"><b>样本</b> 来源于用户本轮要求：只有分析到“业务系统开发”时才使用 Vima Starter；Vima UI Admin 也不是必选项</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s0n1i0" data-v=""><div class="tx">Schema 校验 capabilities、delivery profiles、adapter descriptors、compatibility、provenance 和 release units 六类治理 JSON。</div><div class="mt"><a class="rr" href="#req-R007">R007</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n1i1" data-v=""><div class="tx">兼容性使用包版本、内容哈希、公开契约版本和发布状态共同判断，不只比较 semver。</div><div class="mt"><a class="rr" href="#req-R008">R008</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s0n1i2" data-v=""><div class="tx">基准样例覆盖 generic、admin-ui、business-system 以及信息不足四类路由。</div><div class="mt"><a class="rr" href="#req-R009">R009</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">背后自动发生了什么</span></div><div class="gb"><div class="it" data-i="s0n1i0" data-v=""><div class="tx">Starter 权限、生产安全、测试与全栈生成尚未达标的事实被记录为限制，不能被输出成 ready 能力。</div><div class="mt"><a class="rr" href="#req-R010">R010</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run migration:verify"><div class="nh"><span class="nt">导入检查</span><span class="nr">页面 · $ npm run migration:verify</span><div class="ni">维护者核对导入来源、排除项和完整性。</div><div class="nsample"><b>样本</b> 来源目录 /home/renmk/projects/vima-ui-admin 与 /home/renmk/projects/vima-starter 当前均无独立 .git</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s1n2i0" data-v=""><div class="tx">UI Admin 迁入 <code>products/vima-ui-admin</code>，Starter 迁入 <code>templates/vima-starter</code>。</div><div class="mt"><a class="rr" href="#req-R011">R011</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n2i1" data-v=""><div class="tx">provenance 记录原绝对路径、导入时间、历史不可用事实、排除目录和规范化内容哈希。</div><div class="mt"><a class="rr" href="#req-R012">R012</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n2i2" data-v=""><div class="tx">导入快照只忽略契约列出的 8 个目录段，排除集合不可由调用方扩大；后续 bootstrap/build 产物不属于导入快照。</div><div class="mt"><a class="rr" href="#req-R013">R013</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s1n2i0" data-v=""><div class="tx">目标已有非预期内容、来源缺失或导入后哈希不同则失败，不覆盖、不删除来源。</div><div class="mt"><a class="rr" href="#req-R014">R014</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run verify:products"><div class="nh"><span class="nt">产品构建</span><span class="nr">页面 · $ npm run verify:products</span><div class="ni">维护者在统一目录中运行各产品原有门禁。</div><div class="nsample"><b>样本</b> 来源目录 /home/renmk/projects/vima-ui-admin 与 /home/renmk/projects/vima-starter 当前均无独立 .git</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s1n3i0" data-v=""><div class="tx">UI Admin 保持 <code>@vima-tech/ui-admin</code> 的公开入口和独立 npm 包。</div><div class="mt"><a class="rr" href="#req-R015">R015</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n3i1" data-v=""><div class="tx">Starter 保持 <code>create-vima-starter</code> CLI、frontend/backend 真源和 <code>cli/template</code> 同步规则。</div><div class="mt"><a class="rr" href="#req-R016">R016</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s1n3i2" data-v=""><div class="tx">根级串行编排调用产品自己的 lockfile 和验证命令，不引入重型 monorepo 构建系统。</div><div class="mt"><a class="rr" href="#req-R017">R017</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">背后自动发生了什么</span></div><div class="gb"><div class="it" data-i="s1n3i0" data-v=""><div class="tx">旧绝对路径先以软链完成过渡验收；在统一路径门禁通过后，精确退役两个软链接并进入不可回滚的 <code>finalized</code> 状态，备份仍保留。</div><div class="mt"><a class="rr" href="#req-R018">R018</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run release:plan"><div class="nh"><span class="nt">变更计划</span><span class="nr">页面 · $ npm run release:plan</span><div class="ni">发布维护者在这里查看哪些独立单元需要验证、打包或升版。</div><div class="nsample"><b>样本</b> 修改 UI Agent 公开契约时，UI unit 必须发布新版本，兼容性验证需覆盖 Starter，但 Starter 是否发版由其文件是否变化决定</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s2n4i0" data-v=""><div class="tx">release unit 注册表分别定义 PACT skills、UI Admin 和 Starter CLI 的路径、版本源、验证与 pack 命令。</div><div class="mt"><a class="rr" href="#req-R019">R019</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i1" data-v=""><div class="tx">changed-path 规则把 Git 变更稳定映射到直接受影响单元。</div><div class="mt"><a class="rr" href="#req-R020">R020</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i2" data-v=""><div class="tx">依赖传播把 UI 公开契约变化加入 Starter 兼容性验证，但不自动宣称 Starter 需要发布。</div><div class="mt"><a class="rr" href="#req-R021">R021</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n4i3" data-v=""><div class="tx">计划以稳定 JSON 和人读摘要输出，重复运行结果一致。</div><div class="mt"><a class="rr" href="#req-R022">R022</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s2n4i0" data-v=""><div class="tx">工作区基线不可判定、release unit schema 非法或同一文件归属冲突时失败。</div><div class="mt"><a class="rr" href="#req-R023">R023</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm run release:pack"><div class="nh"><span class="nt">发布预演</span><span class="nr">页面 · $ npm run release:pack</span><div class="ni">发布维护者在本地完成可发布性验证，不接触远程 registry。</div><div class="nsample"><b>样本</b> 修改 UI Agent 公开契约时，UI unit 必须发布新版本，兼容性验证需覆盖 Starter，但 Starter 是否发版由其文件是否变化决定</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s2n5i0" data-v=""><div class="tx">UI 执行 check:ai、typecheck、test、verify:publish 并通过 runtime-size 预算。</div><div class="mt"><a class="rr" href="#req-R024">R024</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n5i1" data-v=""><div class="tx">Starter 执行 template check、前端 build check、Maven package 和 CLI 本地 pack。</div><div class="mt"><a class="rr" href="#req-R025">R025</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s2n5i2" data-v=""><div class="tx">PACT 执行脚本自测、物料 lint、graph、trace、book check 与 skill pack 检查。</div><div class="mt"><a class="rr" href="#req-R026">R026</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s2n5i0" data-v=""><div class="tx">默认命令只允许生成本地 tarball；任何真实 publish、push 或凭据读取都必须由人另行显式执行。</div><div class="mt"><a class="rr" href="#req-R027">R027</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="$ npm i -g @vima-tech/pact"><div class="nh"><span class="nt">完整安装</span><span class="nr">页面 · $ npm i -g @vima-tech/pact</span><div class="ni">PACT 使用者的主推荐入口，安装 PACT 自身完整能力并尽力连接已存在的 Agent。</div><div class="nsample"><b>样本</b> 用户已装 Codex 时，全局安装后 pact 可执行且全部 PACT Skills 出现在 Codex 全局 Skills 目录；未装 Agent 时 npm 安装仍成功</div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">能做什么</span></div><div class="gb"><div class="it" data-i="s3n6i0" data-v=""><div class="tx">npm 包公开身份为 <code>@vima-tech/pact</code>，提供 <code>pact</code> 与冲突回退命令 <code>vima-pact</code>。</div><div class="mt"><a class="rr" href="#req-R029">R029</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s3n6i1" data-v=""><div class="tx">包内携带 PACT Core、Runtime、Registry、Delivery Profiles、Installer 和全量 Skills。</div><div class="mt"><a class="rr" href="#req-R030">R030</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s3n6i2" data-v=""><div class="tx">安装后从包内同版本副本向已检测 Agent 注册 Skills，不在生命周期脚本中套娃执行网络版 <code>npx skills add</code>。</div><div class="mt"><a class="rr" href="#req-R031">R031</a><a class="rr" href="#req-R032">R032</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s3n6i3" data-v=""><div class="tx"><code>pact agent list/sync/install/verify</code> 与 <code>pact doctor</code> 可重复检测、补装、校验和修复。</div><div class="mt"><a class="rr" href="#req-R033">R033</a><a class="rr" href="#req-R035">R035</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">什么情况会被拦住</span></div><div class="gb"><div class="it" data-i="s3n6i0" data-v=""><div class="tx">目标 Skill 有本地修改、来源不明或路径越界时不覆盖，返回稳定冲突诊断。</div><div class="mt"><a class="rr" href="#req-R034">R034</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s3n6i1" data-v=""><div class="tx">没有 Agent、<code>--ignore-scripts</code> 或可恢复同步失败不破坏 CLI 安装，状态保持 pending/needs-sync。</div><div class="mt"><a class="rr" href="#req-R035">R035</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div><div class="grp"><div class="gh"><span class="gi">▸</span><span class="gt">背后自动发生了什么</span></div><div class="gb"><div class="it" data-i="s3n6i0" data-v=""><div class="tx">manifest 锁定 CLI、Runtime、Skills 的版本与 hash；升级复用同一同步协议。</div><div class="mt"><a class="rr" href="#req-R039">R039</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div><div class="it" data-i="s3n6i1" data-v=""><div class="tx">PACT 只清理由自己精确记录且未被用户修改的文件或软链接。</div><div class="mt"><a class="rr" href="#req-R040">R040</a><span class="sp"></span><button class="vb ok" type="button" data-a="ok">认了</button><button class="vb no" type="button" data-a="no">有异议</button></div><textarea class="nb" placeholder="不对在哪？写一句，导出时带走"></textarea></div></div></div></div><div class="nlist" data-k="非交互 Agent 检测与同步"><div class="nh"><span class="nt">非交互 Agent 检测与同步</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="Agent 同步"><div class="nh"><span class="nt">Agent 同步</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="记录可修复诊断"><div class="nh"><span class="nt">记录可修复诊断</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="重新验证"><div class="nh"><span class="nt">重新验证</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="轻量与自然语言安装"><div class="nh"><span class="nt">轻量与自然语言安装</span><span class="nr">页面</span><div class="ni">只要 Skills 的用户保留生态原生入口；不知道命令的用户可以让 Agent 按官方文档安装。</div><div class="nsample"><b>样本</b> 用户已装 Codex 时，全局安装后 pact 可执行且全部 PACT Skills 出现在 Codex 全局 Skills 目录；未装 Agent 时 npm 安装仍成功</div></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="业务需求"><div class="nh"><span class="nt">业务需求</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="冻结契约与执行图谱"><div class="nh"><span class="nt">冻结契约与执行图谱</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="真实启动和业务操作闭环"><div class="nh"><span class="nt">真实启动和业务操作闭环</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="任何规格缺口、实现偏离、真实运行或业务闭环失败"><div class="nh"><span class="nt">任何规格缺口、实现偏离、真实运行或业务闭环失败</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="修复后重验"><div class="nh"><span class="nt">修复后重验</span><span class="nr">页面</span></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div><div class="nlist" data-k="北极星判断标准"><div class="nh"><span class="nt">北极星判断标准</span><span class="nr">页面</span><div class="ni">这是 PACT 的长期方向，不表示当前 Starter 已经达到完整业务生成 readiness。</div><div class="nsample"><b>样本</b> 不能把只有页面、演示数据、无 handler 按钮、未接真实 API、只通过单测或无法启动的工程称为完成</div></div><div class="nempty">这个节点上没有挂任何需求。如果它确实存在于产品里，要么补需求，要么它是野生页面——<b>待人裁定</b>。</div></div></div></div>
   <pre id="vout"></pre>
 </section>
 <section class="scope">
   <div class="st">范围边界 · 明确不做的事（摘自 P6）</div>
   <div class="sb"><ul>
-<li><strong>不做</strong>把三个发布物合成一个 npm 包——会破坏 PACT 独立性和使用者升级边界。</li>
+<li><strong>不做</strong>把 PACT、UI Admin 与 Starter 三个发布物合成一个 npm 包——<code>@vima-tech/pact</code> 只发布 PACT Core/Runtime/Skills，不携带两个可选产品源码。</li>
 <li><strong>不做</strong>真实 <code>npm publish</code>、Git push、PR 或远端发布——没有凭据与外部变更授权；本轮止于可审计 plan、verify 和本地归档。</li>
 <li><strong>不做</strong>把 UI Admin 或 Starter 设为 PACT 必选依赖——用户明确要求按需求选择。</li>
 <li><strong>不做</strong>完整 FullStackSpec/StarterAdapter 业务代码生成——本轮完成承载它们的治理与 adapter 边界；readiness 继续标 blocked/partial。</li>
 <li><strong>不做</strong>在迁移中一次性修复 Starter 的 RBAC、生产 secrets、migration、三份导航真源与全部测试——这些需要独立 PACT 物料，当前只禁止虚报能力。</li>
 <li><strong>不做</strong>引入 Nx、Turborepo 或常驻 MCP 服务——当前规模用确定性 Node/Shell 工具足够；多个远程客户端出现后再评估薄 MCP。</li>
 <li><strong>不做</strong>伪造两个来源项目不存在的 Git 历史——使用 provenance 与内容哈希代偿。</li>
+<li><strong>不做</strong>在 npm 生命周期中联网下载 Skills、运行 <code>npx skills add</code>、执行 <code>curl | sh</code> 或静默安装 JDK/数据库/浏览器/Docker/常驻服务——外部能力必须由显式 <code>pact install</code> 计划启用。</li>
+<li><strong>不做</strong>在本轮宣称已能稳定生成所有业务操作系统——本轮交付可信安装与最高判断标准；FullStackSpec、真实业务黄金切片和 Starter readiness 仍需后续独立物料。</li>
 </ul>
 </div>
 </section>
@@ -411,11 +413,13 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <summary><span class="pn2">PRD</span>第一部分 · 产品需求<span class="pdesc">8 节</span></summary>
 <div class="packb"><section class="chp" id="ch-P1">
 <h3 class="ct"><span class="num">1.1</span>一句话定义与交付形态<span class="anch">P1</span></h3>
-<div class="bd"><p>把 PACT skills、<code>@vima-tech/ui-admin</code> 和 <code>create-vima-starter</code> 迁入同一个 PACT Platform Git 仓库统一治理、验证和发布编排，同时保持三者逻辑解耦与独立发布身份。交付形态是本地 Git monorepo 内的 skills、npm 组件库、全栈脚手架、JSON 治理契约及 Node/Shell CLI；由框架维护者在 Linux/macOS 开发机或 CI 部署，不新增常驻服务。</p>
+<div class="bd"><p>PACT 是面向 Claude Code、Codex 等 AI Coding Agent 的业务系统交付控制平台：把业务需求转化为可执行规格，约束 Agent 准确实现，并用真实运行与业务闭环证据交付可用、稳定、可持续演进的业务操作系统。当前交付把 PACT skills、<code>@vima-tech/ui-admin</code> 和 <code>create-vima-starter</code> 放在同一个 Git 仓库统一治理，同时新增可全局安装的 <code>@vima-tech/pact</code> 完整发行包；PACT、UI 与 Starter 保持逻辑解耦和独立发布身份。</p>
+<p>本文中的“业务操作系统”指承载企业实际业务对象、角色权限、状态流转和日常操作闭环的软件系统，不是操作系统内核。Claude Code、Codex 等 Agent 负责推理和编码，PACT 负责“写什么、哪些规则不能猜、做到什么才算真正完成”；PACT 不绑定单一模型或 Agent 客户端。</p>
 </div></section>
 <section class="chp" id="ch-P2">
 <h3 class="ct"><span class="num">1.2</span>背景与问题<span class="anch">P2</span></h3>
-<div class="bd"><p>PACT 已能约束 Product、Architecture、Contracts、Tests 与施工闭环，但不知道有哪些工程创建能力；UI 框架只负责前端组件和受信 Builder；Starter 才持有 Vue + Spring Boot 业务系统宿主。三者分散导致版本兼容、选择条件、验证与发布没有单一真源，AI 容易在没有业务契约时生成看似完整的空壳。现在需要把“工程创建工具”统一管理，但若简单合成一个包，会让 PACT Core 硬依赖 Vima、破坏独立发布，并把 Starter 尚未具备的权限和测试能力虚报为可靠。本迁移因此同时完成治理层、物理 workspace 和发布编排三阶段。</p>
+<div class="bd"><p>PACT 已能约束 Product、Architecture、Contracts、Tests 与施工闭环，但还存在两个产品化缺口。第一，系统缺少统一的完整安装入口：<code>npx skills add vima-tech/pact -g</code> 只能安装 Agent Skills，不能可靠注册全局 CLI、Runtime 和后续 Adapter 管理能力。第二，生成代码、单测通过或 action graph 100% 都不足以证明业务系统可用；系统必须长期以“生成规范、准确实现、业务闭环真实、运行稳定”为最高判断标准。</p>
+<p>UI 框架只负责前端组件和受信 Builder，Starter 持有 Vue + Spring Boot 业务系统宿主；它们与 PACT 分散时，版本兼容、选择条件、验证和发布没有单一真源，AI 容易在没有业务契约时生成看似完整的空壳。统一治理不能退化为把 UI、Starter 强塞进 PACT Core，也不能让 npm 安装阶段静默安装 JDK、数据库或执行不可信网络脚本。本次 CR 在既有三阶段迁移之上增加完整 PACT npm 发行、同版本 Skills 自动注册、可修复安装状态和统一安装文档，为后续端到端业务系统生成建立稳定入口。</p>
 </div></section>
 <section class="chp" id="ch-P3">
 <h3 class="ct"><span class="num">1.3</span>用户与角色<span class="anch">P3</span></h3>
@@ -456,6 +460,20 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <td>获得可构建、可追溯的工程</td>
 <td>自己的生成项目</td>
 <td>在生成项目内开发；不依赖 PACT 运行时</td>
+</tr>
+<tr>
+<td class="nw">业务负责人</td>
+<td>提出并裁定真实业务需求的人</td>
+<td>让需求成为可执行规格并得到可用系统</td>
+<td>PACT、业务流水线、验收和交付证据</td>
+<td>裁定业务规则、批准计划和验收结果</td>
+</tr>
+<tr>
+<td>PACT 使用者</td>
+<td>在本机安装 PACT 并连接一个或多个 Agent 的开发者</td>
+<td>一条主命令获得 CLI、Runtime 与 Agent Skills</td>
+<td>自己的用户级安装目录和已检测 Agent</td>
+<td>安装、同步、修复和升级自己拥有的 PACT 文件</td>
 </tr>
 </tbody></table></div>
 <p>权限基调：仓库工具只操作当前仓库或显式输出目录；不持有 registry 凭据；真实发布不是自动流程。</p>
@@ -584,6 +602,62 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <li>默认命令只允许生成本地 tarball；任何真实 publish、push 或凭据读取都必须由人另行显式执行。 <code>R027</code></li>
 </ul>
 </li>
+</ul>
+<h3>S4 · 安装完整 PACT 并连接 Agent</h3>
+<ul>
+<li><strong>流程</strong>：<code>$ npm i -g @vima-tech/pact</code> --安装 CLI/Runtime/内置 Skills--&gt; 非交互 Agent 检测与同步 --<code>$ pact doctor</code>--&gt; ✓ CLI 和已检测 Agent 均可使用同版本 PACT</li>
+<li><strong>回头路</strong>：Agent 同步 --无 Agent、脚本被禁用、权限或本地修改冲突--&gt; 记录可修复诊断 --<code>$ pact agent sync</code>--&gt; 重新验证</li>
+<li><strong>样本</strong>：用户已装 Codex 时，全局安装后 <code>pact</code> 可执行且全部 PACT Skills 出现在 Codex 全局 Skills 目录；未装 Agent 时 npm 安装仍成功</li>
+<li><strong>完成态</strong>：完整 npm 包可本地 pack/install；CLI、Runtime、Skills 与 manifest 同版本；同步幂等且不覆盖用户修改</li>
+</ul>
+<h4>完整安装 <code>$ npm i -g @vima-tech/pact</code></h4>
+<blockquote>
+<p>PACT 使用者的主推荐入口，安装 PACT 自身完整能力并尽力连接已存在的 Agent。</p>
+</blockquote>
+<ul>
+<li>能做什么<ul>
+<li>npm 包公开身份为 <code>@vima-tech/pact</code>，提供 <code>pact</code> 与冲突回退命令 <code>vima-pact</code>。 <code>R029</code></li>
+<li>包内携带 PACT Core、Runtime、Registry、Delivery Profiles、Installer 和全量 Skills。 <code>R030</code></li>
+<li>安装后从包内同版本副本向已检测 Agent 注册 Skills，不在生命周期脚本中套娃执行网络版 <code>npx skills add</code>。 <code>R031</code> <code>R032</code></li>
+<li><code>pact agent list/sync/install/verify</code> 与 <code>pact doctor</code> 可重复检测、补装、校验和修复。 <code>R033</code> <code>R035</code></li>
+</ul>
+</li>
+<li>什么情况会被拦住<ul>
+<li>目标 Skill 有本地修改、来源不明或路径越界时不覆盖，返回稳定冲突诊断。 <code>R034</code></li>
+<li>没有 Agent、<code>--ignore-scripts</code> 或可恢复同步失败不破坏 CLI 安装，状态保持 pending/needs-sync。 <code>R035</code></li>
+</ul>
+</li>
+<li>背后自动发生了什么<ul>
+<li>manifest 锁定 CLI、Runtime、Skills 的版本与 hash；升级复用同一同步协议。 <code>R039</code></li>
+<li>PACT 只清理由自己精确记录且未被用户修改的文件或软链接。 <code>R040</code></li>
+</ul>
+</li>
+</ul>
+<h4>轻量与自然语言安装</h4>
+<blockquote>
+<p>只要 Skills 的用户保留生态原生入口；不知道命令的用户可以让 Agent 按官方文档安装。</p>
+</blockquote>
+<ul>
+<li><code>npx skills add vima-tech/pact -g</code> 默认全量安装 Skills，不提供模块选择，也不承诺全局 CLI/Runtime。 <code>R036</code></li>
+<li>用户说“安装完整 PACT”时，Agent 只信任官方版本化文档，执行 npm 主安装、<code>pact doctor</code>，必要时运行 <code>pact agent sync</code>；网络文档不直接成为自由命令真源。 <code>R037</code></li>
+<li><code>/pact-install</code> 与 <code>pact install</code> 用于环境检测、Skills 修复、Adapter/外部能力按需启用和升级，不在 npm 安装期间静默安装 JDK、数据库、浏览器或常驻服务。 <code>R038</code></li>
+</ul>
+<h3>S5 · 以 PACT 驱动 Agent 交付业务操作系统</h3>
+<ul>
+<li><strong>流程</strong>：业务需求 --PACT 访谈/领域与流水线规格--&gt; 冻结契约与执行图谱 --Claude Code/Codex 等施工--&gt; 真实启动和业务操作闭环 --证据审查--&gt; ✓ 可用、稳定、可持续演进的业务操作系统</li>
+<li><strong>回头路</strong>：任何规格缺口、实现偏离、真实运行或业务闭环失败 --回到对应 R-ID/契约/图谱--&gt; 修复后重验</li>
+<li><strong>样本</strong>：不能把只有页面、演示数据、无 handler 按钮、未接真实 API、只通过单测或无法启动的工程称为完成</li>
+<li><strong>完成态</strong>：后续所有功能选择都优先提高“生成规范、准确实现、真实可用、运行稳定”四项目标，低层完成态不得冒充高层交付态</li>
+</ul>
+<h4>北极星判断标准</h4>
+<blockquote>
+<p>这是 PACT 的长期方向，不表示当前 Starter 已经达到完整业务生成 readiness。</p>
+</blockquote>
+<ul>
+<li>PACT 保持 Agent 中立，Claude Code、Codex 等只是可替换执行宿主。 <code>R028</code></li>
+<li>根指令、README、平台设计和安装文档必须一致陈述终极目标，并用它裁决架构与功能优先级。 <code>R028</code></li>
+<li>交付状态必须区分已实现、可构建、可启动、已集成、业务闭环通过、已验收、可部署和稳定运行。 <code>R041</code></li>
+<li>完整发行必须有自动测试覆盖 pack 内容、CLI、Agent 同步、冲突、pending/repair 与无外部发布行为。 <code>R042</code></li>
 </ul>
 </div></section>
 <section class="chp" id="ch-P5">
@@ -871,15 +945,165 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <td class="nw">访谈</td>
 <td class="nw">—</td>
 </tr>
+<tr>
+<td class="nw"><a href="#req-R028">R028</a></td>
+<td class="nw">产品</td>
+<td>终极目标与最高判断标准进入五个权威入口</td>
+<td>根 <code>CLAUDE.md</code>、根 README、平台 README、指定设计文档与本 PACT 对目标、Agent/Pact 分工和“业务操作系统”定义一致；安装文档另验安装语义</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R001">R001</a></td>
+<td class="nw">用户</td>
+<td><strong>PACT 是控制平台，不替代 Claude Code/Codex</strong></td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R029">R029</a></td>
+<td class="nw">发布</td>
+<td>提供公开完整包 <code>@vima-tech/pact</code> 与两个 CLI 名</td>
+<td>直接断言 <code>package.json.name</code>、<code>private!==true</code>、双 bin；<code>npm pack --dry-run --json</code> 成功且两命令 help/version smoke 通过</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R019">R019</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R030">R030</a></td>
+<td class="nw">交付</td>
+<td>完整包携带 Core、Runtime、治理资源、Installer 和全量 Skills</td>
+<td>tarball 清单包含 9 个 Skill 目录、CLI、platform 核心与 install manifest，且不包含 UI/Starter 源码和 <code>.pact</code> 私有物料</td>
+<td class="nw">P0</td>
+<td><a href="#req-R001">R001</a>,<a href="#req-R029">R029</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R031">R031</a></td>
+<td class="nw">安装</td>
+<td>npm 安装后自动向已检测 Agent 注册全量 Skills</td>
+<td><code>PACT_ALLOW_HOME_OVERRIDE=1</code> + <code>PACT_USER_HOME=&lt;temp&gt;</code> 模拟 Codex/Claude，非交互同步后每个目标恰有 manifest 所列 Skills 且验证通过，系统 HOME 不变</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R030">R030</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R032">R032</a></td>
+<td class="nw">供应链</td>
+<td>自动注册只使用包内同版本 Skills</td>
+<td>安装器源码与测试证明不 spawn <code>npx skills add</code>、不下载 Skill；manifest 的 version/hash 可复算</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R030">R030</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R033">R033</a></td>
+<td class="nw">功能</td>
+<td>CLI 提供 Agent 检测、同步、定向安装与验证</td>
+<td><code>pact agent list/sync/install/verify</code> fixture 输出稳定 JSON/人读状态，重复 sync 无额外变化</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R031">R031</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R034">R034</a></td>
+<td class="nw">安全</td>
+<td>Skill 同步路径受控且不覆盖本地修改/未知来源</td>
+<td>路径逃逸、普通文件占位、本地 hash 改动 fixtures 全部拒绝并保留目标字节不变</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R033">R033</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R035">R035</a></td>
+<td class="nw">修复</td>
+<td><code>pact doctor</code> 准确报告 CLI、manifest 和 Agent Skills 状态</td>
+<td>无 Agent、pending、needs-sync、conflict、ready fixtures 全部判定正确；可恢复问题不破坏 CLI 安装</td>
+<td class="nw">P0</td>
+<td><a href="#req-R033">R033</a>,<a href="#req-R034">R034</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R036">R036</a></td>
+<td class="nw">兼容</td>
+<td>保留 <code>npx skills add vima-tech/pact -g</code> 轻量全量 Skill 入口</td>
+<td>README 明确无需模块选择、只装 Skills；以 devDependency 固定的 <code>skills@1.5.22</code> 真实 CLI 对本地仓库执行 <code>add . --list</code> 并发现九个唯一 Skill</td>
+<td class="nw">P1</td>
+<td class="nw"><a href="#req-R030">R030</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R037">R037</a></td>
+<td class="nw">文档</td>
+<td>自然语言安装只路由到官方确定性安装流程</td>
+<td>官方安装文档给出“安装完整 PACT”的 Agent 步骤：npm 主安装→doctor→必要时 sync，不含 `curl</td>
+<td>sh` 或任意搜索结果执行</td>
+<td class="nw">P1</td>
+<td><a href="#req-R029">R029</a>,<a href="#req-R035">R035</a></td>
+<td class="nw">用户</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R038">R038</a></td>
+<td class="nw">边界</td>
+<td><code>/pact-install</code>/<code>pact install</code> 负责修复与可选环境/Adapter，不静默装重型依赖</td>
+<td>Skill 与 CLI help 明确职责；默认执行只 inspect/同步，不安装 JDK、数据库、浏览器、Docker、常驻服务</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R035">R035</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R039">R039</a></td>
+<td class="nw">版本</td>
+<td>CLI、Runtime、Skills 与 manifest 同版并支持升级后再同步</td>
+<td>package version 与 manifest version 相等；版本/hash 漂移由 doctor 检出，sync 只采用当前包内容</td>
+<td class="nw">P0</td>
+<td><a href="#req-R030">R030</a>,<a href="#req-R035">R035</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R040">R040</a></td>
+<td class="nw">生命周期</td>
+<td>安装状态记录 PACT 精确拥有/观察的目标并支持 adopt/unadopt/remove/uninstall 安全清理</td>
+<td>state 记录 agent/source/target/method/ownership/hash；remove/preuninstall 只删除仍匹配 managed，observed 只解除记录，修改项保留并出冲突报告</td>
+<td class="nw">P1</td>
+<td><a href="#req-R034">R034</a>,<a href="#req-R039">R039</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R041">R041</a></td>
+<td class="nw">真实性</td>
+<td>交付状态不得把低层完成冒充可用稳定业务系统</td>
+<td>权威文档固定八级状态；Profile schema 与聚合器验证 evidence 记录形状和逐级阻断；本轮不声称已实现真实 Delivery Verifier 或 Starter ready</td>
+<td class="nw">P0</td>
+<td class="nw"><a href="#req-R028">R028</a></td>
+<td class="nw">用户</td>
+<td><strong>本轮写入标准与聚合，不虚报证据执行器</strong></td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R042">R042</a></td>
+<td class="nw">质量</td>
+<td>完整发行与 Agent 接入有独立自动测试和本地安装验收</td>
+<td>npm test 覆盖 pack/CLI/detect/sync/conflict/pending/repair/version；release pack 仍仅本地产物且全量 verify 通过</td>
+<td class="nw">P0</td>
+<td><a href="#req-R029">R029</a>–<a href="#req-R041">R041</a></td>
+<td class="nw">用户</td>
+<td class="nw">—</td>
+</tr>
 </tbody></table></div>
 <h3>横切项检查</h3>
 <ul>
 <li><input checked="" disabled="" type="checkbox"> 权限/角色：仓库工具按 P3/C8 仅允许当前仓库与显式输出路径；无业务 RBAC。</li>
-<li><input checked="" disabled="" type="checkbox"> 输入校验：<a href="#req-R005">R005</a>、<a href="#req-R007">R007</a>、<a href="#req-R014">R014</a>、<a href="#req-R023">R023</a>。</li>
-<li><input checked="" disabled="" type="checkbox"> 错误处理/回滚/幂等：<a href="#req-R014">R014</a>、<a href="#req-R022">R022</a>；迁移采用复制验证后切换。</li>
+<li><input checked="" disabled="" type="checkbox"> 输入校验：<a href="#req-R005">R005</a>、<a href="#req-R007">R007</a>、<a href="#req-R014">R014</a>、<a href="#req-R023">R023</a>、<a href="#req-R033">R033</a>–<a href="#req-R035">R035</a>。</li>
+<li><input checked="" disabled="" type="checkbox"> 错误处理/回滚/幂等：<a href="#req-R014">R014</a>、<a href="#req-R022">R022</a>、<a href="#req-R033">R033</a>–<a href="#req-R040">R040</a>；迁移采用复制验证后切换，Skill 同步使用受控路径、hash 与状态记录。</li>
 <li><input checked="" disabled="" type="checkbox"> 破坏性操作二次确认：真实发布仍不可达；旧入口退役只在来源、目标、备份哈希和软链目标全部确认后，精确 unlink 两个软链接。</li>
 <li><input checked="" disabled="" type="checkbox"> 分页/排序/性能：本地小规模 registry，无分页；T2 约束验证时长与确定性。</li>
-<li><input checked="" disabled="" type="checkbox"> 审计/追溯：<a href="#req-R008">R008</a>、<a href="#req-R012">R012</a>、<a href="#req-R022">R022</a>。</li>
+<li><input checked="" disabled="" type="checkbox"> 审计/追溯：<a href="#req-R008">R008</a>、<a href="#req-R012">R012</a>、<a href="#req-R022">R022</a>、<a href="#req-R032">R032</a>、<a href="#req-R039">R039</a>、<a href="#req-R040">R040</a>。</li>
 <li><input checked="" disabled="" type="checkbox"> 敏感信息：不读取、不记录 registry token；见 <a href="#req-R027">R027</a>。</li>
 <li><input checked="" disabled="" type="checkbox"> 国际化/时区/单位：治理 JSON 使用 UTF-8，时间使用 RFC 3339 UTC，哈希字节单位；CLI 人读文案为中文。</li>
 </ul>
@@ -907,19 +1131,29 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <td>8 项来源冲突</td>
 <td><a href="#ch-A5">D001</a>–<a href="#ch-A5">D008</a></td>
 </tr>
+<tr>
+<td>用户关于终极目标、PACT/Agent 分工和业务操作系统交付的讨论</td>
+<td><a href="#req-R028">R028</a>,<a href="#req-R041">R041</a>，P1/P2/P4/P8，A4，C11</td>
+</tr>
+<tr>
+<td>用户关于三种安装方式、完整 npm 包、Skills 自动同步和 <code>/pact-install</code> 新职责的讨论</td>
+<td><a href="#req-R029">R029</a>–<a href="#req-R040">R040</a>,<a href="#req-R042">R042</a>，P4，A2/A3/A5，C1–C9，T1–T5</td>
+</tr>
 </tbody></table></div>
-<p>以上输入已全部归类为 <a href="#req-R001">R001</a>–<a href="#req-R027">R027</a>、非目标、约束或风险；这是 S8 来源反扫的审计结论，不是运行时代码需要重新推导的条件。</p>
+<p>以上输入已全部归类为 <a href="#req-R001">R001</a>–<a href="#req-R042">R042</a>、非目标、约束或风险；这是 S8 来源反扫的审计结论，不是运行时代码需要重新推导的条件。</p>
 </div></section>
 <section class="chp" id="ch-P6">
 <h3 class="ct"><span class="num">1.6</span>非目标（明确不做）<span class="anch">P6</span></h3>
 <div class="bd"><ul>
-<li><strong>不做</strong>把三个发布物合成一个 npm 包——会破坏 PACT 独立性和使用者升级边界。</li>
+<li><strong>不做</strong>把 PACT、UI Admin 与 Starter 三个发布物合成一个 npm 包——<code>@vima-tech/pact</code> 只发布 PACT Core/Runtime/Skills，不携带两个可选产品源码。</li>
 <li><strong>不做</strong>真实 <code>npm publish</code>、Git push、PR 或远端发布——没有凭据与外部变更授权；本轮止于可审计 plan、verify 和本地归档。</li>
 <li><strong>不做</strong>把 UI Admin 或 Starter 设为 PACT 必选依赖——用户明确要求按需求选择。</li>
 <li><strong>不做</strong>完整 FullStackSpec/StarterAdapter 业务代码生成——本轮完成承载它们的治理与 adapter 边界；readiness 继续标 blocked/partial。</li>
 <li><strong>不做</strong>在迁移中一次性修复 Starter 的 RBAC、生产 secrets、migration、三份导航真源与全部测试——这些需要独立 PACT 物料，当前只禁止虚报能力。</li>
 <li><strong>不做</strong>引入 Nx、Turborepo 或常驻 MCP 服务——当前规模用确定性 Node/Shell 工具足够；多个远程客户端出现后再评估薄 MCP。</li>
 <li><strong>不做</strong>伪造两个来源项目不存在的 Git 历史——使用 provenance 与内容哈希代偿。</li>
+<li><strong>不做</strong>在 npm 生命周期中联网下载 Skills、运行 <code>npx skills add</code>、执行 <code>curl | sh</code> 或静默安装 JDK/数据库/浏览器/Docker/常驻服务——外部能力必须由显式 <code>pact install</code> 计划启用。</li>
+<li><strong>不做</strong>在本轮宣称已能稳定生成所有业务操作系统——本轮交付可信安装与最高判断标准；FullStackSpec、真实业务黄金切片和 Starter readiness 仍需后续独立物料。</li>
 </ul>
 </div></section>
 <section class="chp" id="ch-P7">
@@ -1011,6 +1245,36 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <td class="nw">硬</td>
 <td>导入不携带 node_modules；维护者先运行受信 lockfile 的 <code>npm run bootstrap</code>，inspect/plan/MCP 永不隐式安装</td>
 </tr>
+<tr>
+<td>Agent 中立</td>
+<td class="nw">架构</td>
+<td class="nw">硬</td>
+<td>Claude Code、Codex、Cursor 等是可替换宿主；PACT 真源、图谱和完成标准不进入某一客户端私有实现</td>
+</tr>
+<tr>
+<td>npm 完整包不含 Vima 产品源码</td>
+<td class="nw">发布</td>
+<td class="nw">硬</td>
+<td><code>@vima-tech/pact</code> 可独立安装；UI/Starter 继续按 registry 和 Adapter 按需选择</td>
+</tr>
+<tr>
+<td>安装不覆盖用户修改</td>
+<td class="nw">数据安全</td>
+<td class="nw">硬</td>
+<td>目标 hash 或来源不匹配时诊断并停住；不得为了“自动”静默覆盖</td>
+</tr>
+<tr>
+<td>可恢复问题不破坏 CLI</td>
+<td class="nw">可用性</td>
+<td class="nw">硬</td>
+<td>无 Agent、禁用 scripts 或 Skills pending 时完整包仍可执行 doctor/sync 修复</td>
+</tr>
+<tr>
+<td>当前用户级写入</td>
+<td class="nw">权限</td>
+<td class="nw">硬</td>
+<td>不要求 sudo；只写 npm 管理目录、已检测 Agent 的当前用户 Skills 目录与 PACT 状态目录</td>
+</tr>
 </tbody></table></div>
 </div></section>
 <section class="chp" id="ch-P8">
@@ -1021,6 +1285,9 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <li>3 个独立 release unit 可由 changed plan 稳定识别；同输入连续两次 JSON 字节完全一致。</li>
 <li>UI、Starter、PACT 三套既有硬门和根级全量验证全部 exit 0；UI runtime-size 阈值未放宽。</li>
 <li>本地 pack 产物可列出且无真实 publish/push；<code>pact-review.sh</code> 完成度 100%。</li>
+<li><code>npm i -g @vima-tech/pact</code> 对使用者形成完整主入口：CLI、Runtime、manifest 与全量 Skills 同版本，已检测 Agent 自动同步且可由 doctor/sync 修复。</li>
+<li><code>npx skills add vima-tech/pact -g</code> 继续作为只装全量 Skills 的轻量入口；自然语言安装只组合官方 npm、doctor 与 sync 流程。</li>
+<li>后续所有能力取舍以“生成规范、准确实现、真实可用、运行稳定”为最高标准；已实现、可构建、可启动、已集成、业务闭环通过、已验收、可部署、稳定运行八级状态不得互相冒充。</li>
 </ul>
 </div></section></div></details>
 <details class="pack" id="part-A">
@@ -1028,8 +1295,8 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <div class="packb"><section class="chp" id="ch-A1">
 <h3 class="ct"><span class="num">2.1</span>系统边界与上下文<span class="anch">A1</span></h3>
 <div class="bd"><ul>
-<li><strong>本系统负责</strong>：PACT 规格/施工 Core；Vima 能力声明与选择；两个产品源码的统一承载；跨产品验证；变更到发布单元的确定性计划；本地 pack。</li>
-<li><strong>本系统不负责</strong>：自然语言模型服务、registry/Git 托管、生成业务系统的运行时、企业业务权限实现、真实发布审批。</li>
+<li><strong>本系统负责</strong>：PACT 规格/施工 Core；完整 npm CLI/Runtime/Skills 发行；Agent Skills 检测、同步、诊断和修复；Vima 能力声明与选择；两个产品源码的统一承载；跨产品验证；变更到发布单元的确定性计划；本地 pack。</li>
+<li><strong>本系统不负责</strong>：自然语言模型服务、registry/Git 托管、替代 Claude Code/Codex 的通用推理与编码能力、替用户裁定企业业务规则、真实发布审批。本轮也不虚报尚未实现的全栈业务系统生成 readiness。</li>
 </ul>
 <div class="tw"><table>
 <thead>
@@ -1064,12 +1331,25 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <td class="nw">当前用户权限</td>
 <td>越界或冲突则拒绝，不部分写入</td>
 </tr>
+<tr>
+<td>Claude Code/Codex 等 Agent</td>
+<td>执行访谈、规划、编码与审查</td>
+<td>用户自行配置模型与工具凭据；PACT 不读取</td>
+<td>对应 Agent 不存在时 CLI 仍可用，Skills 状态记 pending</td>
+</tr>
+<tr>
+<td>npm 全局目录与用户 Agent 目录</td>
+<td>安装 CLI、读取包内 Skills、注册入口</td>
+<td>当前用户权限，不要求 sudo</td>
+<td>权限或本地修改冲突时不覆盖，doctor 给出修复诊断</td>
+</tr>
 </tbody></table></div>
 </div></section>
 <section class="chp" id="ch-A2">
 <h3 class="ct"><span class="num">2.2</span>结构与模块职责<span class="anch">A2</span></h3>
 <div class="bd"><pre><code class="language-text">pact/
   pact*/                         # PACT Core skills，保持现有发布布局
+  bin/pact.mjs                   # pact/vima-pact 统一 CLI
   platform/
     schemas/                     # governance JSON Schema
     registry/                    # capabilities, profiles, compatibility, release-units
@@ -1077,6 +1357,7 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
     benchmarks/                  # router 与 release-plan fixtures
     scripts/                     # inspect/check/plan/verify/pack/migration 工具
     test/                        # 平台契约测试
+  install-manifest.json          # npm 包版本、内置 Skills 与 hash 真源
   products/vima-ui-admin/        # 独立 npm 产品
   templates/vima-starter/        # 独立脚手架产品及发布模板
   .pact/pact-platform-unification/
@@ -1133,6 +1414,26 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <td><code>templates/vima-starter</code></td>
 <td>全栈宿主、CLI 与模板</td>
 <td><a href="#req-R016">R016</a>,<a href="#req-R025">R025</a></td>
+</tr>
+<tr>
+<td><code>bin/pact.mjs</code></td>
+<td><code>pact</code>/<code>vima-pact</code> CLI 与命令路由</td>
+<td><a href="#req-R029">R029</a>,<a href="#req-R033">R033</a>,<a href="#req-R035">R035</a>,<a href="#req-R038">R038</a></td>
+</tr>
+<tr>
+<td><code>platform/lib/agent-skills.mjs</code></td>
+<td>Agent 检测、同步、验证、冲突保护和状态记录</td>
+<td><a href="#req-R031">R031</a>–<a href="#req-R035">R035</a>,<a href="#req-R039">R039</a>,<a href="#req-R040">R040</a></td>
+</tr>
+<tr>
+<td><code>platform/scripts/postinstall.mjs</code></td>
+<td>npm 安装后的非交互 best-effort Skills 同步</td>
+<td><a href="#req-R031">R031</a>,<a href="#req-R032">R032</a>,<a href="#req-R035">R035</a></td>
+</tr>
+<tr>
+<td><code>install-manifest.json</code></td>
+<td>完整包能力、Skills 列表、版本/hash 契约</td>
+<td><a href="#req-R030">R030</a>,<a href="#req-R032">R032</a>,<a href="#req-R039">R039</a></td>
 </tr>
 </tbody></table></div>
 </div></section>
@@ -1199,6 +1500,32 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <li>JSON 对 key 和数组排序；不包含当前时间等非确定字段。</li>
 <li>pack 输出仅进忽略目录 <code>artifacts/release/</code>，根脚本不存在 publish/push。</li>
 </ul>
+<h3>链路 4 · 完整安装与 Agent 同步</h3>
+<pre><code class="language-text">npm i -g @vima-tech/pact → 包内 CLI/Runtime/manifest/Skills
+                                      ↓ postinstall（非交互、无二次下载）
+                              detect installed agents
+                                      ↓
+                         hash/ownership/path preflight
+                           ↙ ready              ↘ conflict/pending
+                  link/copy + state             保留原字节
+                           ↓                         ↓
+                     pact doctor ←──── pact agent sync/verify
+</code></pre>
+<ul>
+<li>manifest 与当前 <code>package.json</code> 同版本，Skill hash 从包内真源复算；同步不读取网络上的“最新版”。</li>
+<li>postinstall 只做可恢复的 best-effort 同步；包损坏才使安装失败，无 Agent、权限或内容冲突留诊断但不破坏 CLI。</li>
+<li>同步按 Agent 独立事务：先完整预检该 Agent 的九个目标，再对该 Agent 全写或零写；目标必须在已知当前用户 Agent Skills 根内，重复运行结果幂等。</li>
+</ul>
+<h3>链路 5 · Agent 驱动业务系统交付</h3>
+<pre><code class="language-text">业务需求 → PACT 领域/流水线/契约 → action graph → Claude Code/Codex 施工
+       → DB/API/权限/UI/测试垂直切片 → 真实启动 → 真实业务状态变化
+       → Delivery Profile + 可重放证据 → 验收/部署/稳定运行
+</code></pre>
+<ul>
+<li>PACT 是 Agent 之上的交付控制层，不实现或绑定某个模型。</li>
+<li>action graph 回答“计划的工作是否完成”，Delivery Profile 独立回答“这种交付物是否漏掉整类必需工作”。</li>
+<li>只有真实操作产生可观测业务状态变化，且对应运行与稳定性门通过，才允许进入高层完成态。</li>
+</ul>
 </div></section>
 <section class="chp" id="ch-A4">
 <h3 class="ct"><span class="num">2.4</span>设计原则（本项目的硬规矩）<span class="anch">A4</span></h3>
@@ -1211,6 +1538,10 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <li><strong>确定性</strong>：同一输入与同一工作树产生字节一致 JSON；错误使用稳定 code/path。</li>
 <li><strong>安全默认值</strong>：不读取 publish token，不执行外部模板脚本，不允许路径逃逸，不默认安装依赖。</li>
 <li><strong>不虚报能力</strong>：现有 Starter 只能标记实际证据支持的能力；缺权限/测试/生产门即 partial/blocked。</li>
+<li><strong>北极星高于功能数量</strong>：新增能力必须能提高生成规范、准确实现、真实可用或运行稳定中的至少一项；否则不因“平台更完整”而加入。</li>
+<li><strong>Agent 可替换、真源不漂移</strong>：Claude Code、Codex 等只消费同一 PACT/图谱/证据，客户端专属 Skill 不承载唯一业务规则。</li>
+<li><strong>简单入口、显式风险</strong>：主安装保持一条 npm 命令；机械复杂度由 Installer 吸收，重型依赖、覆盖、删除和外部状态变化必须显式。</li>
+<li><strong>完成分级</strong>：已实现、可构建、可启动、已集成、业务闭环通过、已验收、可部署、稳定运行逐级举证，任何低级不得显示为高一级。</li>
 </ol>
 </div></section>
 <section class="chp" id="ch-A5">
@@ -1287,6 +1618,46 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <li><strong>已否决</strong>：A——保留长期歧义且违背唯一入口目标；C——逆转已经验收的统一迁移。</li>
 <li><strong>影响</strong>：<a href="#req-R012">R012</a>,<a href="#req-R014">R014</a>,<a href="#req-R018">R018</a>,<a href="#req-R026">R026</a></li>
 </ul>
+<h4><a href="#ch-A5">D010</a> · PACT 是完整 Agent 还是交付控制平台</h4>
+<ul>
+<li><strong>选项</strong>：A. 自建并替代 Claude Code/Codex / B. 作为可替换 Agent 之上的交付控制平台 / C. 只保留文档模板</li>
+<li><strong>结论</strong>：采 B；PACT 管需求、规格、图谱、能力、写入边界、证据和完成标准，推理与编码由外部 Agent 执行。</li>
+<li><strong>理由</strong>：用户终极目标是组合成熟 AI Agent 与 PACT 快速交付可靠业务系统；重复建设通用 Agent 会稀释业务规格和交付门的优势。</li>
+<li><strong>已否决</strong>：A——模型、工具和客户端演进快且会形成锁定；C——无法保证准确实现、真实可用和稳定交付。</li>
+<li><strong>影响</strong>：<a href="#req-R028">R028</a>,<a href="#req-R041">R041</a></li>
+</ul>
+<h4><a href="#ch-A5">D011</a> · 完整安装主入口</h4>
+<ul>
+<li><strong>选项</strong>：A. 继续只推荐 <code>npx skills add</code> / B. <code>npm i -g @vima-tech/pact</code> 为主、Skills CLI 为轻量备选 / C. 只让 Agent 搜索网络文档自由安装</li>
+<li><strong>结论</strong>：采 B；自然语言安装也路由到同一 npm/doctor/sync 流程。</li>
+<li><strong>理由</strong>：完整系统需要 CLI、Runtime、manifest 和修复工具，Skills CLI 只适合安装说明能力；npm scoped package 能提供标准全局 CLI 和可测试 tarball。</li>
+<li><strong>已否决</strong>：A——无法可靠注册完整运行能力；C——不可复现且有文档漂移和供应链风险。</li>
+<li><strong>影响</strong>：<a href="#req-R029">R029</a>,<a href="#req-R036">R036</a>,<a href="#req-R037">R037</a></li>
+</ul>
+<h4><a href="#ch-A5">D012</a> · npm 安装时如何获得 Skills</h4>
+<ul>
+<li><strong>选项</strong>：A. postinstall 联网执行 <code>npx skills add</code> / B. npm 包携带同版本 Skills 并自行注册 / C. 要求用户手工再跑第二条命令</li>
+<li><strong>结论</strong>：采 B；包内 manifest 锁版本/hash，postinstall 只消费本包内容。</li>
+<li><strong>理由</strong>：一份发布物才能保证 CLI、Runtime、Skills 同版并支持离线、测试和审计。</li>
+<li><strong>已否决</strong>：A——二次下载、版本错位且上游交互不可控；C——违背完整安装的一条主命令目标。</li>
+<li><strong>影响</strong>：<a href="#req-R030">R030</a>–<a href="#req-R032">R032</a>,<a href="#req-R039">R039</a></li>
+</ul>
+<h4><a href="#ch-A5">D013</a> · 自动同步失败是否使 npm 安装失败</h4>
+<ul>
+<li><strong>选项</strong>：A. 任一 Agent 问题都使安装失败 / B. 可恢复问题记 pending/conflict，CLI 安装成功并由 doctor/sync 修复 / C. 静默忽略全部错误</li>
+<li><strong>结论</strong>：采 B；包内容损坏、manifest 非法属于致命失败，未检测到 Agent、权限或本地修改属于显式可恢复状态。</li>
+<li><strong>理由</strong>：用户必须始终保有修复工具，同时不能用“安装成功”掩盖 Skills 未就绪。</li>
+<li><strong>已否决</strong>：A——没有 Agent 的正常机器也无法安装；C——制造假成功。</li>
+<li><strong>影响</strong>：<a href="#req-R033">R033</a>–<a href="#req-R035">R035</a>,<a href="#req-R040">R040</a></li>
+</ul>
+<h4><a href="#ch-A5">D014</a> · <code>/pact-install</code> 的职责</h4>
+<ul>
+<li><strong>选项</strong>：A. 继续负责安装基础 CLI / B. 在 CLI 已由 npm 安装后负责诊断、修复和按需 Adapter/环境 / C. npm 阶段直接安装所有外部工具</li>
+<li><strong>结论</strong>：采 B；默认 inspect/sync，任何重型外部能力都先给计划并显式批准。</li>
+<li><strong>理由</strong>：基础发行与环境扩展的权限、失败模式和平台差异不同，分层后主入口简单且风险可见。</li>
+<li><strong>已否决</strong>：A——产生先有 Skill 还是先有 CLI 的循环；C——越权、笨重且不可移植。</li>
+<li><strong>影响</strong>：<a href="#req-R035">R035</a>,<a href="#req-R038">R038</a></li>
+</ul>
 </div></section>
 <section class="chp" id="ch-A6">
 <h3 class="ct"><span class="num">2.6</span>风险与缓解<span class="anch">A6</span></h3>
@@ -1341,7 +1712,235 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <summary><span class="pn2">SPEC</span>第三部分 · 数据与接口规格<span class="pdesc">11 节</span></summary>
 <div class="packb"><section class="chp" id="ch-C1">
 <h3 class="ct"><span class="num">3.1</span>数据模型<span class="anch">C1</span></h3>
-<div class="bd"><h3>六类治理文档</h3>
+<div class="bd"><h3><code>install-manifest.json</code></h3>
+<pre><code class="language-json">{
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;skills&quot;: [{&quot;name&quot;:&quot;pact&quot;,&quot;path&quot;:&quot;pact&quot;,&quot;sha256&quot;:&quot;&lt;64hex&gt;&quot;}],
+  &quot;runtime&quot;: {
+    &quot;entry&quot;:&quot;bin/pact.mjs&quot;,
+    &quot;files&quot;:[{&quot;path&quot;:&quot;bin/pact.mjs&quot;,&quot;sha256&quot;:&quot;&lt;64hex&gt;&quot;}]
+  },
+  &quot;resources&quot;:[{&quot;path&quot;:&quot;platform/registry&quot;,&quot;sha256&quot;:&quot;&lt;64hex&gt;&quot;}],
+  &quot;agentTargets&quot;: [&quot;codex&quot;,&quot;claude-code&quot;,&quot;cursor&quot;,&quot;universal&quot;]
+}
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>不变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>version</code></td>
+<td>semver string</td>
+<td>必须与发布包 <code>package.json.version</code> 字节相等</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>非空 array</td>
+<td>name/path 唯一、稳定排序，必须覆盖仓库全部公开 PACT Skills</td>
+</tr>
+<tr>
+<td><code>skills[].sha256</code></td>
+<td>64 位小写 hex</td>
+<td>按 C3 Skill 树哈希复算一致</td>
+</tr>
+<tr>
+<td><code>runtime.entry</code></td>
+<td>repo-relative path</td>
+<td>必须解析在包根内且是发布清单中的 <code>bin</code> 文件</td>
+</tr>
+<tr>
+<td><code>runtime.files</code></td>
+<td>非空 file/hash array</td>
+<td>固定覆盖允许闭集内全部 <code>.mjs</code> 运行时代码及 <code>package.json</code>，包括 bin、platform/lib、pre/postinstall/preuninstall 和公开 platform scripts，每项文件 SHA-256 可复算</td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td>path/tree-hash array</td>
+<td>固定覆盖 <code>platform/registry</code>、<code>platform/schemas</code>、<code>platform/adapters</code>、<code>docs</code>，按 C3 树哈希复算</td>
+</tr>
+<tr>
+<td><code>agentTargets</code></td>
+<td class="nw">enum[]</td>
+<td>只允许安装器实现的已知目标；排序稳定</td>
+</tr>
+</tbody></table></div>
+<p>npm <code>files</code> 允许闭集固定为：<code>bin/**</code>、<code>docs/**</code>、九个 Skill 目录、<code>platform/adapters/**</code>、<code>platform/lib/**</code>、<code>platform/registry/**</code>、<code>platform/schemas/**</code>、<code>platform/scripts/capability-router.mjs</code>、<code>platform/scripts/governance-check.mjs</code>、<code>platform/scripts/preinstall.mjs</code>、<code>platform/scripts/postinstall.mjs</code>、<code>platform/scripts/preuninstall.mjs</code>、<code>install-manifest.json</code>、<code>CLAUDE.md</code>。npm 自动包含的 <code>package.json</code>、<code>README.md</code>、<code>LICENSE</code> 也允许。禁止 <code>platform/test/**</code>、其他 migration/release/build 脚本、<code>products/**</code>、<code>templates/**</code>、<code>.pact/**</code>、<code>artifacts/**</code>、<code>.playwright-mcp/**</code>、图片和用户文件。</p>
+<p>manifest <code>runtime.files</code> 必须枚举并 hash 允许闭集中全部 <code>.mjs</code> 可执行文件及其传递 import 闭包，同时包含 <code>package.json</code>；构建器从 ESM import 图和固定脚本入口计算闭包，遇到动态/越界 import 拒绝 pack。<code>resources</code> 覆盖其余允许目录树。manifest 不自哈希，但 pack 前/CLI 启动时先校验 package name/version/bin/scripts/files/os/engines 与 C1 固定契约，再校验 runtime/resources/skills hash；因此新增 helper 不能绕过完整性门。</p>
+<p>九个公开 Skill 的稳定清单按 name 升序固定为：</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>name</th>
+<th>包内目录</th>
+<th>Agent 入口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pact</code></td>
+<td><code>pact/</code></td>
+<td><code>/pact</code></td>
+</tr>
+<tr>
+<td><code>pact-change</code></td>
+<td><code>pact-change/</code></td>
+<td><code>/pact-change</code></td>
+</tr>
+<tr>
+<td><code>pact-check</code></td>
+<td><code>pact-check/</code></td>
+<td><code>/pact-check</code></td>
+</tr>
+<tr>
+<td><code>pact-estimate</code></td>
+<td><code>pact-estimate/</code></td>
+<td><code>/pact-estimate</code></td>
+</tr>
+<tr>
+<td><code>pact-install</code></td>
+<td><code>pact-install/</code></td>
+<td><code>/pact-install</code></td>
+</tr>
+<tr>
+<td><code>pact-list</code></td>
+<td><code>pact-list/</code></td>
+<td><code>/pact-list</code></td>
+</tr>
+<tr>
+<td><code>pact-new</code></td>
+<td><code>pact-new/</code></td>
+<td><code>/pact-new</code></td>
+</tr>
+<tr>
+<td><code>pact-review</code></td>
+<td><code>pact-review/</code></td>
+<td><code>/pact-review</code></td>
+</tr>
+<tr>
+<td><code>pact-run</code></td>
+<td><code>pact-run/</code></td>
+<td><code>/pact-run</code></td>
+</tr>
+</tbody></table></div>
+<p>发布包只支持 Node.js <code>&gt;=20</code>、npm <code>&gt;=10</code>、Linux 与 macOS，运行时 npm dependencies 必须为 0。<code>package.json.engines</code> 固定 node/npm 下限，<code>os</code> 固定 <code>linux,darwin</code>。平台与 Node 门在 preinstall 及每次 CLI 启动时都由 <code>process.platform/process.version</code> 直接检查；低版本/未知平台 exit 4、零用户目录写入。npm 版本只在 npm lifecycle 的 <code>preinstall</code> 门检查：必须从 <code>npm_config_user_agent</code> 解出 npm semver，缺失/非法/低于 10 均 exit 4；普通 <code>pact --help</code>/<code>--version</code>/doctor/Agent 子命令不要求该 lifecycle 环境变量、不 spawn <code>npm --version</code>，手工解包后 CLI 因而只执行平台与 Node 门。官方 npm 全局安装的前置条件是当前用户对 <code>npm config get prefix</code> 可写；不满足时 npm 自身失败，官方文档引导用户使用 Node version manager 或配置用户级 prefix，禁止建议 <code>sudo npm i -g</code>。获取 tgz 本身可由 npm registry 使用网络；tgz 一旦获得，解包、postinstall、doctor 和 Agent sync 不再发起网络请求。</p>
+<p>Agent 检测与全局 Skills 根在 Linux/macOS 固定如下；<code>~</code> 由 <code>os.homedir()</code> 获得，测试只通过函数参数注入临时 userHome，不声明或改写系统 <code>HOME</code>：</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Agent ID</th>
+<th>已检测条件</th>
+<th>Skills 根</th>
+<th>显式 install 行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>claude-code</code></td>
+<td><code>~/.claude</code> 是目录</td>
+<td><code>~/.claude/skills</code></td>
+<td>可创建 <code>.claude/skills</code>，不修改其他 Claude 配置</td>
+</tr>
+<tr>
+<td><code>codex</code></td>
+<td><code>~/.codex</code> 是目录</td>
+<td><code>~/.codex/skills</code></td>
+<td>可创建 <code>.codex/skills</code>，不修改其他 Codex 配置</td>
+</tr>
+<tr>
+<td><code>cursor</code></td>
+<td><code>~/.cursor</code> 是目录</td>
+<td><code>~/.cursor/skills</code></td>
+<td>可创建 <code>.cursor/skills</code>，不修改其他 Cursor 配置</td>
+</tr>
+<tr>
+<td><code>universal</code></td>
+<td><code>~/.config/agents</code> 是目录</td>
+<td><code>~/.config/agents/skills</code></td>
+<td>仅显式 <code>agent install universal</code> 可创建 base/skills</td>
+</tr>
+</tbody></table></div>
+<p>自动 postinstall/sync 只处理“已检测”项，不因为 npm 安装创建任何 Agent base。多个 Agent 的事务按 Agent 独立：单个 Agent 先预检其九个目标再全写或零写；一个 Agent conflict 不阻止其他 Agent 收敛，但总报告必须保留 conflict 且 doctor 非零。</p>
+<h3>Agent Skill 安装状态</h3>
+<pre><code class="language-ts">type AgentId = &#39;codex&#39; | &#39;claude-code&#39; | &#39;cursor&#39; | &#39;universal&#39;;
+type SkillStatus = &#39;ready&#39; | &#39;missing&#39; | &#39;needs-sync&#39; | &#39;conflict&#39; | &#39;pending&#39;;
+type CliStatus = Exclude&lt;SkillStatus, &#39;missing&#39;&gt; | &#39;manifest-broken&#39; | &#39;error&#39;;
+type InstallMethod = &#39;symlink&#39; | &#39;copy&#39;;
+type SkillRecord = {
+  agent: AgentId;
+  name: string;
+  source: string;
+  target: string;
+  method: InstallMethod;
+  ownership: &#39;managed&#39; | &#39;observed&#39;;
+  sourceSha256: string;
+  targetSha256: string;
+};
+type InstallState = { version: 1; agent: AgentId; packageVersion: string; records: SkillRecord[] };
+type UninstallConflict = { agent: AgentId; name: string; target: string; reason: &#39;target-type-changed&#39; | &#39;target-content-changed&#39; | &#39;source-changed&#39; | &#39;path-unsafe&#39;; recordedAt: string; stateRecord: SkillRecord };
+type UninstallConflicts = { version: 1; packageVersion: string; conflicts: UninstallConflict[] };
+</code></pre>
+<ul>
+<li>状态只记录 PACT 创建或验证接管的目标，不扫描并认领其他来源文件。</li>
+<li><code>target</code> 落盘为规范化绝对路径，但输出默认只展示 <code>~</code> 相对人读形式；状态文件原子写入。</li>
+<li>symlink 记录包内 canonical source、source/target hash；copy 同样记录两端 hash。目标内容变化后状态降为 conflict。</li>
+<li>目标已存在、内容与当前包 source 完全相同但无 PACT state 时，<code>sync</code> 可零写入登记为 <code>ownership=observed</code> 并视为 ready；observed 永不由 remove 删除。</li>
+<li>PACT 创建的 symlink/copy 记为 <code>managed</code>；remove 只删除 managed 且 source/target/type/hash 仍与 state 一致的精确目标。</li>
+<li><code>pact uninstall --apply</code> 是跨 Agent 的单个全局事务（不复用 sync journal）：按 Agent ID 升序预检，exact managed 删除目标并删 state record，observed 只删 state record，conflict 不改目标且将原 state record 迁移到 state 根 <code>uninstall-conflicts.v1.json</code>。该文件按 <code>(agent,name,target)</code> 唯一；相同 key 且 <code>reason/stateRecord</code> canonical bytes 未变时保留原 <code>recordedAt</code> 并零写入，只有内容真正变化时才替换记录和时间，再按 Agent ID/Skill name/target 稳定排序。迁移后 Agent state 不再保留该 conflict record；若无剩余 record 则保留合法空 <code>records:[]</code> state。这使重装时目标被重新分类为未受管 conflict，不会继承旧 managed 权限。只有无 conflict 的 apply 返回 ready/exit 0；任一 conflict 返回 conflict/<code>E_SKILL_CONFLICT</code>/exit 5，而 global <code>preuninstall</code> 仍显式将该结果转为 script exit 0 以允许 npm 移除包。</li>
+<li>Linux state 根固定为 <code>~/.local/state/vima-tech/pact/</code>，macOS 固定为 <code>~/Library/Application Support/vima-tech/pact/</code>；每 Agent 同步使用独立 <code>agents/&lt;agent&gt;.state.v1.json</code>、<code>sync-&lt;agent&gt;.lock</code>、<code>sync-&lt;agent&gt;-journal.v1.json</code>，而跨 Agent 卸载另用 state 根的 <code>uninstall.lock</code>、<code>uninstall-journal.v1.json</code>与 <code>uninstall-conflicts.v1.json</code>。默认忽略 <code>PACT_USER_HOME</code>；只有 <code>PACT_ALLOW_HOME_OVERRIDE=1</code> 且 override 是已存在、当前 uid 拥有的绝对目录时才用它覆盖 <code>~</code>，用于容器/隔离测试且不修改系统 <code>HOME</code>。所有 Agent/state 目标仍必须落在该 override 下的闭集。</li>
+<li>symlink 安全校验分两端：安装 leaf 的父目录 realpath 必须等于或位于已知 Skills 根；leaf 的 linkText 必须精确指向 manifest 当前 Skill source，source realpath 必须位于当前 package root。不得要求解引用后的 source realpath 位于 Skills 根。</li>
+<li>symlink 的 <code>targetSha256</code> 是解引用后 Skill 树哈希，linkText/source 路径另字段精确记录。package 升级优先按 state.packageVersion 判 needs-sync：若 leaf type/linkText 与旧 state 一致则不是用户 conflict；sync 用新 source 替换/复核链接并更新新树 hash。dangling 但 linkText 仍等于旧 state source 也归 needs-sync；linkText 或 leaf type 被改才归 conflict。</li>
+<li>Agent base、Skills 根和 state 根若已存在必须是当前 uid 拥有的真实目录，不接受 symlink；其 realpath 必须等于或位于 effective user home。新建目录权限固定 <code>0700</code>，state/lock/journal 临时和最终文件固定 <code>0600</code>，发现 symlink、非目录、越界或 owner 不同返回 <code>E_SKILL_PATH</code> 且零写入。</li>
+</ul>
+<h3>交付完成分级</h3>
+<p>机器真源固定为 <code>platform/registry/delivery-profiles.v1.json</code> 顶层 <code>completionLevels</code>，设计解释固定为 <code>.pact/pact-platform-unification/docs/pact-controlled-generation-design.md</code>。每项 JSON 结构为 <code>{id,rank,requiredEvidence}</code>；<code>id</code> 使用下表闭集，<code>rank</code> 为 1–8 连续整数，<code>requiredEvidence</code> 是下表列出的稳定 evidence ID 数组。级别按下列顺序不可跳级：</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>level</th>
+<th>进入条件（除本级外还须前级全部通过）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>implemented</code></td>
+<td><code>trace-complete</code>,<code>implementation-tests-pass</code>：R-ID 对应代码存在，trace 无野生/未覆盖，实现测试有证据</td>
+</tr>
+<tr>
+<td><code>buildable</code></td>
+<td><code>locked-build-pass</code>：锁定环境的编译、类型检查和单测命令 exit 0</td>
+</tr>
+<tr>
+<td><code>startable</code></td>
+<td><code>real-start-pass</code>,<code>health-check-pass</code>：真实进程启动，健康检查通过，启动命令/环境/快照可重放</td>
+</tr>
+<tr>
+<td><code>integrated</code></td>
+<td><code>real-database-pass</code>,<code>real-request-pass</code>：真实数据库、后端、API 与前端装配；至少一次真实请求通过，非 mock/demo 数据</td>
+</tr>
+<tr>
+<td><code>business-closed-loop</code></td>
+<td><code>business-state-change-pass</code>,<code>business-query-or-audit-pass</code>：用户关键操作通过真实 API 产生可观测后端状态变化，并能查询或审计验证</td>
+</tr>
+<tr>
+<td><code>accepted</code></td>
+<td><code>pact-t1-pass</code>,<code>delivery-profile-pass</code>,<code>business-owner-accepted</code>,<code>no-hard-blocker</code>：规格门和业务验收全过</td>
+</tr>
+<tr>
+<td><code>deployable</code></td>
+<td><code>production-config-pass</code>,<code>migration-pass</code>,<code>security-pass</code>,<code>release-pass</code>,<code>rollback-plan-pass</code>：产物可部署但尚不声称长期稳定</td>
+</tr>
+<tr>
+<td><code>stable</code></td>
+<td><code>restart-recovery-pass</code>,<code>observability-pass</code>,<code>stability-threshold-pass</code>：重启/恢复、日志指标和规格稳定阈值通过</td>
+</tr>
+</tbody></table></div>
+<pre><code class="language-ts">type CompletionEvidence = { id: EvidenceId; passed: boolean; command: string; exitCode: number; snapshotSha256: string; artifact: string };
+type CompletionLevelStatus = &#39;achieved&#39; | &#39;blocked&#39;;
+type CompletionReport = { achieved: LevelId | null; blockedAt: LevelId | null; levels: { id: LevelId; status: CompletionLevelStatus }[] };
+</code></pre>
+<p><code>platform/lib/delivery-readiness.mjs</code> 导出 <code>evaluateCompletion(evidence: CompletionEvidence[]): CompletionReport</code>；非法 evidence 统一抛出 <code>PlatformError(&#39;E_SCHEMA&#39;, &lt;stable-path&gt;, &lt;message&gt;, 2)</code>，包括重复/未知 ID、空 command/artifact、非整数 exitCode 或非法 64hex snapshot。只有 <code>passed=true &amp;&amp; exitCode=0</code> 才算通过。聚合器按 rank 逐级计算：已通过当级全部 requiredEvidence 且前级皆 achieved 则当级 <code>achieved</code>，否则当级及后级全部 <code>blocked</code>；<code>achieved</code> 为最高 achieved 级（一级未达成则 null），<code>blockedAt</code> 为首个 blocked 级，八级全 pass 时 <code>achieved=&#39;stable&#39;</code>、<code>blockedAt=null</code>。本 CR 验收 evidence vocabulary、记录形状与逐级聚合，不声称已重放任意生成业务系统；实际命令执行、产物验证和重放由后续 Delivery Verifier 物料实现，当前 Starter readiness 保持 partial/blocked。</p>
+<h3>六类治理文档</h3>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -1707,8 +2306,8 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <tbody><tr>
 <td><code>pact-skills</code></td>
 <td>根 <code>package.json#version</code></td>
-<td><code>pact-self-test</code>,<code>pact-material-check</code></td>
-<td>deterministic tar.gz</td>
+<td><code>pact-self-test</code>,<code>pact-material-check</code>,<code>pact-distribution-test</code></td>
+<td><code>npm pack</code> 完整 <code>@vima-tech/pact</code> tgz（内部 unit ID 为兼容保留）</td>
 </tr>
 <tr>
 <td><code>vima-ui-admin</code></td>
@@ -1911,7 +2510,73 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 </div></section>
 <section class="chp" id="ch-C2">
 <h3 class="ct"><span class="num">3.2</span>枚举与状态机<span class="anch">C2</span></h3>
-<div class="bd"><h3><code>Readiness</code></h3>
+<div class="bd"><h3>Agent Skill 同步状态机</h3>
+<pre><code class="language-text">missing ──sync──&gt; ready
+pending ──sync──&gt; ready
+needs-sync ──sync──&gt; ready
+ready ──package upgrade──&gt; needs-sync
+ready/needs-sync ──target changed──&gt; conflict
+conflict ──explicit resolution──&gt; ready
+</code></pre>
+<ul>
+<li><code>sync</code> 前先完成该 Agent 全部目标的 path/ownership/hash 预检；事务范围严格按 Agent 独立，同一 Agent 任一 conflict 时该 Agent 零写入，其他 Agent 可继续并在总报告保留失败。</li>
+<li>未检测到 Agent 返回 pending，不创建伪造的 Agent 配置根；显式 <code>agent install &lt;id&gt;</code> 才允许创建已知目标的 Skills 根。</li>
+<li>默认优先 symlink 到当前包内 Skill 真源；平台不支持或显式 <code>--copy</code> 时复制。重复 sync 必须是 no-op。</li>
+<li>remove 只处理 state 中仍指向记录 source 的软链或 hash 未变化的副本；否则转 conflict 并保留。</li>
+<li><code>conflict → ready</code> 允许三条公开路径：目标内容已人工恢复为当前 source 的 exact hash 后重新 <code>sync</code>；对 exact hash 的既有内容运行 <code>pact agent adopt &lt;id&gt; --skill &lt;name&gt;</code> 记为 observed；或用户自行删除冲突 leaf 后由 inspect 将其降为 missing/needs-sync，再运行 sync。不同内容没有强制覆盖命令。</li>
+<li>package version 与 state 不同且 managed 目标仍与 state 记录的旧 type/source/target hash 一致时分类 <code>needs-sync</code>，即使软链当前解引用后已看到新包内容也不算 conflict；目标偏离 state 才是 conflict。检测到的 Agent 中任一 Skill missing 聚合为 <code>needs-sync</code>，未检测 Agent 才是 <code>pending</code>，CliReport 不使用 <code>missing</code> 聚合值。</li>
+<li>总体聚合忽略未检测 Agent：存在至少一个 detected 时只聚合 detected reports；它们全 ready 则总体 ready。只有 detected 数量为 0 时总体 pending。</li>
+</ul>
+<h3>每 Agent 同步事务与崩溃恢复</h3>
+<ol>
+<li>以 <code>open(lock,&#39;wx&#39;)</code> 获取该 Agent 独占锁；已存在锁不猜 stale，返回 <code>E_SKILL_CONFLICT</code>，只有显式 <code>pact agent sync --agent &lt;id&gt; --recover</code> 可接管。</li>
+<li>预检九个 source/target/state；任一 conflict 释放本次新锁并零写入目标。</li>
+<li>在该 Agent Skills 根内创建 <code>.pact-stage-&lt;transaction&gt;</code> 和 <code>.pact-backup-&lt;transaction&gt;</code>；先把九个新 symlink/copy 全部构造并复算 hash。</li>
+<li>原子写 journal，记录 transaction、旧 state hash、九个 target、原 type/source/hash、stage/backup 路径和 <code>status=prepared</code>。</li>
+<li>对需要更新的 managed 目标先 rename 到 backup，再把 stage 项 rename 到 target；每步原子更新 journal。observed 和 no-op 目标不移动。</li>
+<li>九项全部复核后原子写新 install state，这是 commit point；随后删除 backup/stage/journal 并释放锁。</li>
+<li>普通异常在 commit point 前按 journal 删除本次新 target、rename backup 复原并保持旧 state；遇到未知类型/hash 停住不覆盖。</li>
+<li><code>--recover</code> 按 state hash 判 commit point：state 仍旧则执行前向安全回滚，state 已新则只复核新 targets 并清理 stage/backup；state/hash 不属于 journal 任一端则返回 conflict 人工审阅。</li>
+</ol>
+<p>state/journal 使用 <code>stableJson</code>（对象 key 升序、数组按 Skill name、UTF-8、末尾单 <code>\n</code>），state hash 是该 canonical bytes 的 SHA-256。journal 固定结构：</p>
+<pre><code class="language-ts">type SyncJournal = {
+  version: 1;
+  agent: AgentId;
+  transaction: string;
+  packageVersion: string;
+  status: &#39;prepared&#39; | &#39;applying&#39; | &#39;committed&#39;;
+  oldStateSha256: string | null;
+  newStateSha256: string;
+  entries: Array&lt;{
+    name: string; target: string; stage: string; backup: string;
+    old: null | { kind: &#39;symlink&#39; | &#39;directory&#39;; linkText: string | null; sha256: string };
+    next: { kind: &#39;symlink&#39; | &#39;directory&#39;; linkText: string | null; sha256: string };
+    applied: boolean;
+  }&gt;;
+};
+</code></pre>
+<p><code>transaction</code> 用 <code>crypto.randomUUID()</code> 只命名本地临时项，不进入确定性 CLI snapshot。每次写 state/journal：同目录 <code>0600</code> 临时文件 → <code>fsync(file)</code> → rename → <code>fsync(parent directory)</code>；stage/backup rename 后也 <code>fsync(skills root)</code>。JSON parse 失败、未知 version/字段、state hash 不符为 <code>E_INSTALL_STATE</code>；journal 非法或磁盘态无法按两端复核为 <code>E_INSTALL_RECOVERY</code>，均零覆盖并要求人工审阅。</p>
+<h3>全局卸载事务与崩溃恢复</h3>
+<ol>
+<li><code>uninstall --apply</code> 先以 <code>open(uninstall.lock,&#39;wx&#39;)</code> 获取全局锁，再按 Agent ID 升序获取所有已有 state 的 <code>sync-&lt;agent&gt;.lock</code>；任一锁已存在则释放本次已得锁并返回 <code>E_SKILL_CONFLICT</code>，不等待、不写入。普通 sync 仍只获取单 Agent 锁，因为卸载不持锁等待，不形成死锁。</li>
+<li>按 Agent ID/Skill name 完成全量预检，计算每个 old/new state canonical bytes、合并后 conflicts canonical bytes 和待删除 exact managed targets；发现不安全路径时将其作为 conflict 保留，不执行部分未记录动作。</li>
+<li>若所有 state 已为目标 bytes、无待删除 target 且 conflicts bytes 未变，直接释放锁并返回零 changes，不刷新 <code>recordedAt</code>。否则先原子写 <code>uninstall-journal.v1.json</code>，再做任何删除/状态写入。</li>
+<li>正常顺序固定为：删除并 fsync 每个 exact managed target → 原子写 conflicts 目标 bytes → 按 Agent ID 原子写各 new state → 复核所有 new hash 与 target 不存在 → 将 journal <code>status=committed</code> → 删 journal → 释放 Agent 锁和全局锁。全部 new state 和 conflicts 达到 journal 目标 hash 是 commit point。</li>
+<li>该事务只允许前向恢复：managed target 的删除不回滚为指向将被卸载包的软链。普通 I/O 异常且进程仍在时，工具立即按 journal 重试尚未完成的删除/写入；仍失败则保留 journal/锁并返回 <code>E_INSTALL_RECOVERY</code>。</li>
+<li>崩溃遗留的锁不自动判 stale。用户确认原进程已结束后显式运行 <code>pact uninstall --apply --recover</code>；它从 journal 内嵌的目标 canonical documents/hash 和 entries 验证磁盘处于 old/new/可前向的混合态，然后补齐第 4 步。任一 state/conflicts 不属于 journal 的 old/new hash，或 target 重现为未知类型/内容，均 <code>E_INSTALL_RECOVERY</code>、保留现场等人工审阅。</li>
+</ol>
+<pre><code class="language-ts">type UninstallJournal = {
+  version: 1;
+  transaction: string;
+  packageVersion: string;
+  status: &#39;prepared&#39; | &#39;applying&#39; | &#39;committed&#39;;
+  conflicts: { path: string; oldSha256: string | null; newSha256: string; next: UninstallConflicts };
+  agents: Array&lt;{ agent: AgentId; path: string; oldSha256: string | null; newSha256: string; next: InstallState }&gt;;
+  removals: Array&lt;{ agent: AgentId; name: string; target: string; kind: &#39;symlink&#39; | &#39;directory&#39;; linkText: string | null; sha256: string; removed: boolean }&gt;;
+};
+</code></pre>
+<p>Uninstall journal/state/conflicts 使用与 sync 相同的 <code>stableJson</code>、<code>0600</code>、file fsync、atomic rename 与 parent-directory fsync 规则；target 删除后 fsync 对应 Skills root。journal 内嵌 <code>next</code> 文档，使 npm preuninstall 中断且旧 package 被移除后，重装同/新版 PACT 仍能显式前向恢复。</p>
+<h3><code>Readiness</code></h3>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -2085,6 +2750,36 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <td>双入口复活或来源丢失</td>
 <td>finalized migration/recovery test</td>
 </tr>
+<tr>
+<td class="nw">INV-10</td>
+<td>npm <code>package.json</code>、install manifest、CLI Runtime 与内置 Skills 使用同一版本/内容哈希</td>
+<td class="nw">安装组件错位</td>
+<td>package/manifest/hash test</td>
+</tr>
+<tr>
+<td class="nw">INV-11</td>
+<td>Agent 同步只写已知当前用户 Skills 根且不覆盖本地修改/未知来源</td>
+<td class="nw">用户配置损坏</td>
+<td>path/conflict fixture</td>
+</tr>
+<tr>
+<td class="nw">INV-12</td>
+<td>postinstall 不联网获取 Skills、不 spawn <code>npx skills add</code>、不静默安装重型外部依赖</td>
+<td>供应链与越权安装</td>
+<td>static scan + isolated install test</td>
+</tr>
+<tr>
+<td class="nw">INV-13</td>
+<td>未检测到 Agent或可恢复同步失败时 CLI 仍可运行并准确报告 pending/conflict</td>
+<td>用户失去修复入口或假成功</td>
+<td>doctor fixture</td>
+</tr>
+<tr>
+<td class="nw">INV-14</td>
+<td>低层交付状态不得冒充更高层业务系统完成态</td>
+<td>空壳系统被交付</td>
+<td>Delivery Profile/文档一致性测试</td>
+</tr>
 </tbody></table></div>
 <h3>规范化树哈希算法</h3>
 <ol>
@@ -2093,6 +2788,7 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <li>按规范化路径 UTF-8 字节升序。每条记录为：1 byte 类型（<code>0x66</code> file / <code>0x6c</code> link）+ 4 byte big-endian 路径字节长度 + 路径 UTF-8 + 8 byte big-endian 内容长度 + 内容。file 内容为原始 bytes；link 内容为 link target 的 UTF-8 bytes。</li>
 <li>依次送入 SHA-256，输出小写 64 位 hex。目标的同一算法结果必须与 provenance 相等。</li>
 </ol>
+<p>Skill/资源树哈希复用同一 framing、路径规范化和 SHA-256，排除闭集只允许 <code>.git</code>、<code>node_modules</code>、<code>.DS_Store</code> 三个路径段；不接受“生成缓存”等开放描述。Skill 根必须包含合法 <code>SKILL.md</code>，不允许越界软链。manifest 的 hash 在 pack 前生成/验证，运行时对包内 source 与安装目标复算。</p>
 <p><code>migration:apply</code> 在 bootstrap/build 之前生成 <code>artifacts/migration/import-manifest.v1.json</code>，逐项记录实际复制的规范化相对路径并断言其中不含上述 8 个目录段。<a href="#req-R013">R013</a> 只验该不可变 import manifest 与 link-switch 前 staging；bootstrap 后出现的 <code>node_modules</code>、<code>dist</code>、<code>target</code> 是验证产物，由 <code>.gitignore</code> 和清理规则管理，不反向计入导入快照。</p>
 </div></section>
 <section class="chp" id="ch-C4">
@@ -2186,7 +2882,172 @@ details.pack .packb{padding:0 1.1rem 1rem;border-top:1px solid var(--line-soft)}
 <td>源/目标均保持原样</td>
 </tr>
 </tbody></table></div>
-<p>Git 变更集合固定为四者并集并去重：<code>git diff --name-status --find-renames &lt;base&gt;...HEAD</code>、<code>git diff --cached --name-status --find-renames</code>、<code>git diff --name-status --find-renames</code>、<code>git ls-files --others --exclude-standard</code>。rename 的旧/新路径都参与归属，delete 使用旧路径。归属表：<code>pact/**</code> 与 <code>pact-*/**</code> 直接发布 <code>pact-skills</code>；<code>products/vima-ui-admin/**</code> 直接发布 UI；<code>templates/vima-starter/**</code> 直接发布 Starter；<code>platform/**</code>、根 <code>package*.json</code>、<code>README.md</code>、<code>CLAUDE.md</code>、<code>.gitignore</code> 不直接发布但验证三单元；<code>.pact/**</code> 只验证 PACT；<code>artifacts/**</code> 忽略。任一路径命中两个直接规则即 <code>E_PATH_OWNERSHIP</code>。</p>
+<p>Git 变更集合固定为四者并集并去重：<code>git diff --name-status --find-renames &lt;base&gt;...HEAD</code>、<code>git diff --cached --name-status --find-renames</code>、<code>git diff --name-status --find-renames</code>、<code>git ls-files --others --exclude-standard</code>。rename 的旧/新路径都参与归属，delete 使用旧路径。</p>
+<p>直接发布归属闭集：<code>pact/**</code>、<code>pact-*/**</code>、<code>bin/**</code>、<code>platform/**</code>、<code>docs/**</code>、<code>install-manifest.json</code>、根 <code>package.json</code>、<code>package-lock.json</code>、<code>README.md</code>、<code>CLAUDE.md</code> 归 <code>pact-skills</code>（稳定内部 unit ID，实际发布完整 <code>@vima-tech/pact</code>）；<code>products/vima-ui-admin/**</code> 归 UI；<code>templates/vima-starter/**</code> 归 Starter。<code>.pact/**</code> 只验证 <code>pact-skills</code>，<code>artifacts/**</code> 忽略。根 <code>package*.json</code>、<code>README.md</code>、<code>CLAUDE.md</code>、<code>.gitignore</code> 以及 <code>platform/registry|schemas|adapters|lib/capability-router|lib/governance|scripts/governance-check|scripts/capability-router</code> 属共享验证路径：在按上述规则计算 direct 后，额外把三个 unit 全加入 verification，不改变 direct 集合。任一路径命中两个直接 unit 规则即 <code>E_PATH_OWNERSHIP</code>。</p>
+<h3><code>pact</code> CLI</h3>
+<p><strong>入口</strong>：npm <code>bin</code> 同时映射 <code>pact</code> 与 <code>vima-pact</code> 到 <code>bin/pact.mjs</code>。</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>默认副作用</th>
+<th>输出/行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pact --help</code></td>
+<td class="nw">无</td>
+<td>主入口、三种安装方式和命令摘要</td>
+</tr>
+<tr>
+<td><code>pact --version</code></td>
+<td class="nw">无</td>
+<td>stdout 精确为当前 package semver 加 <code>\n</code>，stderr 为空，exit 0；<code>vima-pact --version</code> 字节相同</td>
+</tr>
+<tr>
+<td><code>pact doctor [--json]</code></td>
+<td class="nw">无</td>
+<td>校验 package/manifest、逐 Agent 汇总 ready/pending/needs-sync/conflict，任一 conflict 非零</td>
+</tr>
+<tr>
+<td><code>pact agent list [--json]</code></td>
+<td class="nw">无</td>
+<td>列出已知 Agent、是否检测到、Skills 根和状态</td>
+</tr>
+<tr>
+<td><code>pact agent sync [--agent &lt;id&gt;] [--copy] [--recover] [--json]</code></td>
+<td>注册/更新 PACT 拥有的 Skills</td>
+<td>默认同步全部已检测 Agent；无目标返回 pending；重复执行 no-op；<code>--recover</code> 必须同时指定单个 <code>--agent</code></td>
+</tr>
+<tr>
+<td><code>pact agent install &lt;id&gt; [--copy] [--json]</code></td>
+<td>可创建该已知 Agent 的 Skills 根并同步</td>
+<td>未知 id 拒绝；仍执行 path/ownership/hash 预检</td>
+</tr>
+<tr>
+<td><code>pact agent verify [--agent &lt;id&gt;] [--json]</code></td>
+<td class="nw">无</td>
+<td>复算 source/target/hash 与 state，漂移非零</td>
+</tr>
+<tr>
+<td><code>pact agent adopt &lt;id&gt; --skill &lt;name&gt; [--json]</code></td>
+<td>只写 state</td>
+<td>仅当既有目标与当前 source hash 完全相等时记 observed；不同内容拒绝</td>
+</tr>
+<tr>
+<td><code>pact agent unadopt &lt;id&gt; --skill &lt;name&gt; [--json]</code></td>
+<td>只写 state</td>
+<td>仅删除 observed 记录，目标原字节不变；managed 拒绝</td>
+</tr>
+<tr>
+<td><code>pact agent remove &lt;id&gt; [--skill &lt;name&gt;] [--json]</code></td>
+<td>删除精确 managed 目标并更新 state</td>
+<td>observed 或任何类型/source/hash 漂移均保留并报 conflict</td>
+</tr>
+<tr>
+<td>`pact install [--inspect</td>
+<td>--repair</td>
+<td>--upgrade]`</td>
+</tr>
+<tr>
+<td>`pact uninstall [--inspect</td>
+<td>--apply] [--recover] [--json]`</td>
+<td>默认 inspect；apply 安全清理</td>
+</tr>
+</tbody></table></div>
+<p>所有 Agent/doctor 命令 JSON 固定为：</p>
+<pre><code class="language-ts">type SkillReport = { name: string; status: SkillStatus; method: InstallMethod | null; ownership: &#39;managed&#39; | &#39;observed&#39; | null; sourceSha256: string; targetSha256: string | null };
+type AgentReport = { id: AgentId; detected: boolean; root: string; status: Exclude&lt;SkillStatus,&#39;missing&#39;&gt;; changes: number; skills: SkillReport[]; diagnostics: Diagnostic[] };
+type CliReport = { ok: boolean; command: string; version: string; status: CliStatus; changes: number; agents: AgentReport[]; diagnostics: Diagnostic[] };
+</code></pre>
+<p>数组按 Agent ID、Skill name、diagnostic code/path 稳定排序。单 Agent 聚合优先级固定为 <code>conflict &gt; needs-sync &gt; pending &gt; ready</code>；<code>manifest-broken/error</code> 只属于顶层。总体按“存在 detected 则忽略 undetected，否则 pending”规则聚合。退出码固定为：0=<code>ready</code> 或正常“未检测到任何 Agent”的 <code>pending</code>；1=<code>needs-sync</code>；2=<code>E_USAGE</code>；3=<code>E_INSTALL_MANIFEST</code>；4=<code>E_AGENT_UNKNOWN</code>/<code>E_UNSUPPORTED_PLATFORM</code>；5=<code>E_SKILL_CONFLICT</code>/<code>E_SKILL_PATH</code>/<code>E_INSTALL_STATE</code>/<code>E_INSTALL_RECOVERY</code>；6=<code>E_INSTALL_IO</code>。在 Linux/macOS，<code>list</code> 只要 manifest 合法就 exit 0；未知平台所有 Agent 子命令（包括 list）均 exit 4 且零写入。<code>verify</code>/<code>doctor</code> 按聚合状态退出。人读输出与 JSON 使用同一 report，不重新推导状态。</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th align="right"><code>ok</code></th>
+<th><code>status</code></th>
+<th>agents</th>
+<th align="right">changes</th>
+<th>diagnostics</th>
+<th align="right">exit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>detected 全 ready</td>
+<td align="right">true</td>
+<td class="nw">ready</td>
+<td class="nw">全部报告</td>
+<td align="right">0</td>
+<td class="nw">[]</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td>零 detected</td>
+<td align="right">true</td>
+<td>pending</td>
+<td>四项均 detected=false</td>
+<td align="right">0</td>
+<td>E_SKILL_PENDING</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td>detected 有 missing/旧版</td>
+<td align="right">false</td>
+<td>needs-sync</td>
+<td>逐 Skill missing/needs-sync</td>
+<td align="right">0</td>
+<td class="nw">对应诊断</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td>sync 部分 Agent 成功、另一个 conflict</td>
+<td align="right">false</td>
+<td>conflict</td>
+<td>成功项 ready、失败项 conflict</td>
+<td align="right">成功写入数</td>
+<td>E_SKILL_CONFLICT</td>
+<td align="right">5（postinstall 自身转 0）</td>
+</tr>
+<tr>
+<td>permission/EROFS/ENOSPC</td>
+<td align="right">false</td>
+<td>needs-sync</td>
+<td>目标 Agent needs-sync</td>
+<td align="right">0</td>
+<td>E_INSTALL_IO</td>
+<td align="right">6（postinstall 自身转 0）</td>
+</tr>
+<tr>
+<td>manifest/package/hash 损坏</td>
+<td align="right">false</td>
+<td>manifest-broken</td>
+<td class="nw">[]</td>
+<td align="right">0</td>
+<td>E_INSTALL_MANIFEST</td>
+<td align="right">3（postinstall 也 3）</td>
+</tr>
+<tr>
+<td>state/journal/恢复不可判定</td>
+<td align="right">false</td>
+<td>conflict</td>
+<td>受影响 Agent conflict</td>
+<td align="right">0</td>
+<td>E_INSTALL_STATE/E_INSTALL_RECOVERY</td>
+<td align="right">5（postinstall 自身转 0）</td>
+</tr>
+<tr>
+<td>usage/未知子命令</td>
+<td align="right">false</td>
+<td class="nw">error</td>
+<td class="nw">[]</td>
+<td align="right">0</td>
+<td>E_USAGE</td>
+<td align="right">2</td>
+</tr>
+</tbody></table></div>
+<p>postinstall stdout 始终只写一份上述 JSON；若可恢复 <code>ok:false</code>，stderr 只写一行“运行 pact doctor / pact agent sync 修复”，不包含绝对 HOME 或凭据。CLI 人读模式可写摘要，但 <code>--json</code> 遵循同一 truth table。</p>
+<p><code>pact install</code> 等价 <code>--inspect</code>；<code>--repair</code> 只对已检测 Agent 调 <code>sync</code>；<code>--upgrade</code> 只输出建议的显式命令 <code>npm i -g @vima-tech/pact@latest</code> 和当前/目标未知状态，不联网、不执行 npm。Adapter/重型环境安装尚未实现时输出 limitation、exit 1，不冒充成功。</p>
 </div></section>
 <section class="chp" id="ch-C5">
 <h3 class="ct"><span class="num">3.5</span>内部模块接口<span class="anch">C5</span></h3>
@@ -2199,6 +3060,13 @@ planRelease(changedPaths: string[], units: ReleaseUnit[]): ReleasePlan;
 runSerial(checks: CommandSpec[]): Promise&lt;CheckReport&gt;;
 planMigration(): MigrationPlan;
 applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
+loadInstallManifest(packageRoot: string): Promise&lt;InstallManifest&gt;;
+detectAgents(userHome: string): Promise&lt;AgentTarget[]&gt;;
+inspectAgentSkills(input: AgentSyncInput): Promise&lt;AgentReport[]&gt;;
+syncAgentSkills(input: AgentSyncInput): Promise&lt;AgentReport[]&gt;;
+removeAgentSkills(input: AgentRemoveInput): Promise&lt;AgentReport[]&gt;;
+adoptAgentSkill(input: AgentAdoptInput): Promise&lt;AgentReport&gt;;
+evaluateCompletion(evidence: CompletionEvidence[]): CompletionReport;
 </code></pre>
 <div class="tw"><table>
 <thead>
@@ -2243,6 +3111,41 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <td>staging/target/backup/link-retirement/state</td>
 <td>只接受 repo 内 plan，按 C2 可重入；finalized 不可 rollback</td>
 </tr>
+<tr>
+<td><code>loadInstallManifest</code></td>
+<td class="nw">只读</td>
+<td>校验 package version、路径、Skill 列表和 source hash，不修 manifest</td>
+</tr>
+<tr>
+<td><code>detectAgents</code></td>
+<td class="nw">只读</td>
+<td>只检查版本化已知路径，不创建目录、不读取 Agent 凭据</td>
+</tr>
+<tr>
+<td><code>inspectAgentSkills</code></td>
+<td class="nw">只读</td>
+<td>state、target、source 三方核验，分类 ready/pending/needs-sync/conflict</td>
+</tr>
+<tr>
+<td><code>syncAgentSkills</code></td>
+<td>用户 Agent Skills 根、PACT state</td>
+<td>预检后原子 link/copy；不覆盖 conflict；重复调用幂等</td>
+</tr>
+<tr>
+<td><code>removeAgentSkills</code></td>
+<td>仅 state 中的精确记录</td>
+<td>source/target/hash 不一致即保留并报 conflict</td>
+</tr>
+<tr>
+<td><code>adoptAgentSkill</code></td>
+<td>只写 state</td>
+<td>只接纳与当前 source exact hash 的既有内容，ownership=observed</td>
+</tr>
+<tr>
+<td><code>evaluateCompletion</code></td>
+<td class="nw">无</td>
+<td>读取已校验 completionLevels，按 rank/requiredEvidence 逐级聚合，不接受调用方自定义级别</td>
+</tr>
 </tbody></table></div>
 <h3>精确命令入口</h3>
 <div class="tw"><table>
@@ -2286,10 +3189,28 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 </tr>
 <tr>
 <td><code>npm run release:pack</code></td>
-<td>依次生成 <code>pact-skills-&lt;version&gt;.tar.gz</code>、<code>vima-tech-ui-admin-&lt;version&gt;.tgz</code>、<code>create-vima-starter-&lt;version&gt;.tgz</code> 到 <code>artifacts/release/</code></td>
+<td>依次生成完整 <code>vima-tech-pact-&lt;version&gt;.tgz</code>、<code>vima-tech-ui-admin-&lt;version&gt;.tgz</code>、<code>create-vima-starter-&lt;version&gt;.tgz</code> 到 <code>artifacts/release/</code>；新 PACT tgz <strong>替换</strong>旧 <code>pact-skills-&lt;version&gt;.tar.gz</code>，总数仍恰为 3</td>
+</tr>
+<tr>
+<td><code>npm pack --pack-destination artifacts/release</code></td>
+<td>生成完整 <code>vima-tech-pact-&lt;version&gt;.tgz</code>；只本地打包，不 publish</td>
+</tr>
+<tr>
+<td><code>node platform/scripts/preinstall.mjs</code></td>
+<td>只读校验 Node/OS，并从 npm lifecycle 必有的 <code>npm_config_user_agent</code> 解出 npm&gt;=10；缺失/非法/低版本或不满足 C1 支持矩阵均 exit 4，零用户目录写入。普通 CLI 不执行 npm 版本门</td>
+</tr>
+<tr>
+<td><code>node platform/scripts/postinstall.mjs</code></td>
+<td>仅当 npm 明确给出 <code>npm_config_global=true</code> 时，从本包 manifest 对已检测 Agent 做非交互 best-effort sync；本地项目依赖安装固定跳过用户 Agent 写入。manifest/package/source hash 损坏输出 <code>CliReport</code> JSON 并 exit 3 使 npm 失败；无 Agent、权限、Agent conflict 等可恢复问题输出 <code>ok:false</code> 的稳定 JSON、stderr 一行修复提示但自身 exit 0，保证 CLI 可用于 doctor/sync</td>
+</tr>
+<tr>
+<td><code>node platform/scripts/preuninstall.mjs</code></td>
+<td>仅 global uninstall 时幂等执行 <code>pact uninstall --apply</code> 内核；删除 exact managed、解除 observed 记录。冲突目标保留，原 state record 按 C1/C2 全局事务迁移到 state 根 <code>uninstall-conflicts.v1.json</code>，卸载内核返回 exit 5 时脚本转为 exit 0；但 <code>E_INSTALL_IO/E_INSTALL_STATE/E_INSTALL_RECOVERY</code> 不得伪装成已清理，保留 journal/锁并输出重装后运行 <code>pact uninstall --apply --recover</code> 的诊断，script 仍 exit 0 允许 npm 移除包；<code>--ignore-scripts</code> 卸载前官方要求先手工 <code>pact uninstall --apply</code></td>
 </tr>
 </tbody></table></div>
-<p>PACT 归档用 <code>tar</code> 固定排序、mtime=<code>2026-08-11T00:00:00Z</code>、uid/gid=0；UI 与 Starter 分别执行 <code>npm pack --pack-destination &lt;absolute artifacts/release&gt;</code>，生成真实 tgz 而非 dry-run。pack 可以读取本地依赖和 npm 配置，但禁止任何 registry publish、Git push 或远端状态写操作。</p>
+<p>三个发布单元统一执行 <code>npm pack --pack-destination &lt;absolute artifacts/release&gt;</code> 生成真实 tgz；PACT 不再执行旧的自定义 <code>tar</code>，也不承诺 npm tgz 的 mtime/uid/gid 字节确定性，只要求同一工作树的允许/禁止文件集合、manifest 内容和包身份确定。pack 可以读取本地 lock 与 npm 配置，但禁止 registry publish、Git push、凭据输出或任何远端状态写操作。</p>
+<p>symlink 是默认 method；只有创建 symlink 本身返回 <code>EPERM</code>、<code>EOPNOTSUPP</code> 或 <code>ENOSYS</code> 时，且该 Agent 九个目标仍全部通过预检，才允许整 Agent 回退 copy 并在报告记录 limitation。<code>EACCES</code>、<code>ENOENT</code>、<code>EEXIST</code>、路径/类型/hash 冲突和任何未知 errno 均不得回退 copy。</p>
+<p>双 bin 只提供调用层的明确身份：成功安装后 <code>vima-pact</code> 可避免用户在命令调用时误认其他 Pact 工具；它不声称自动解决 npm prefix 中已存在的 <code>pact</code> bin。官方安装前置检查若发现冲突，要求用户先选择保留哪个包或改用轻量 Skills 安装，禁止 <code>--force</code> 覆盖未知 bin。</p>
 </div></section>
 <section class="chp" id="ch-C6">
 <h3 class="ct"><span class="num">3.6</span>错误码与错误语义<span class="anch">C6</span></h3>
@@ -2355,6 +3276,66 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <td class="nw">非法迁移状态</td>
 <td>当前迁移状态不允许此操作</td>
 <td>回到 inspect 或 rollback</td>
+</tr>
+<tr>
+<td><code>E_USAGE</code></td>
+<td>CLI 命令或参数非法</td>
+<td>PACT 命令用法错误</td>
+<td>查看 <code>pact --help</code></td>
+</tr>
+<tr>
+<td><code>E_INSTALL_MANIFEST</code></td>
+<td>包版本、路径或 hash 不一致</td>
+<td>PACT 安装包不完整或已损坏</td>
+<td>停止同步，重装匹配版本</td>
+</tr>
+<tr>
+<td><code>E_AGENT_UNKNOWN</code></td>
+<td>Agent ID 不在已知闭集</td>
+<td>不支持该 Agent 标识</td>
+<td>使用 <code>pact agent list</code></td>
+</tr>
+<tr>
+<td><code>E_SKILL_CONFLICT</code></td>
+<td>目标存在未知来源或本地修改</td>
+<td>Skill 有本地修改，未覆盖</td>
+<td>审阅差异后显式处理</td>
+</tr>
+<tr>
+<td><code>E_SKILL_PATH</code></td>
+<td>目标逃逸已知 Skills 根</td>
+<td>Skill 安装路径不安全</td>
+<td>修正用户级目标配置</td>
+</tr>
+<tr>
+<td><code>E_SKILL_PENDING</code></td>
+<td>无已检测 Agent或安装脚本未运行</td>
+<td>PACT CLI 可用，Agent 尚未连接</td>
+<td>安装 Agent 后运行 sync</td>
+</tr>
+<tr>
+<td><code>E_UNSUPPORTED_PLATFORM</code></td>
+<td>不是 Linux/macOS</td>
+<td>当前平台尚无安全路径契约</td>
+<td>不写用户目录，使用受支持环境</td>
+</tr>
+<tr>
+<td><code>E_INSTALL_STATE</code></td>
+<td>state JSON/version/hash/type 非法</td>
+<td>PACT 安装状态损坏</td>
+<td>零覆盖，备份后人工审阅或安全重建</td>
+</tr>
+<tr>
+<td><code>E_INSTALL_RECOVERY</code></td>
+<td>journal 与磁盘不属于任一合法提交端</td>
+<td>PACT 同步恢复无法自动判定</td>
+<td>保留 stage/backup/目标，人工审阅</td>
+</tr>
+<tr>
+<td><code>E_INSTALL_IO</code></td>
+<td>EACCES/EROFS/ENOSPC 等持久化失败</td>
+<td>Agent Skills 目录不可写或空间不足</td>
+<td>保留/回滚原状态，修权限/空间后重试</td>
 </tr>
 </tbody></table></div>
 </div></section>
@@ -2435,8 +3416,57 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <td class="nw">是</td>
 <td>本项目不实现真实 publish</td>
 </tr>
+<tr>
+<td>install manifest</td>
+<td>包根 <code>install-manifest.json</code></td>
+<td class="nw">JSON</td>
+<td class="nw">入包文件</td>
+<td class="nw">否</td>
+<td>CLI/Runtime/Skills 版本与 hash 真源</td>
+</tr>
+<tr>
+<td>PACT state home</td>
+<td>CLI 内部解析</td>
+<td>absolute dir</td>
+<td>Linux <code>~/.local/state/vima-tech/pact</code>；macOS <code>~/Library/Application Support/vima-tech/pact</code></td>
+<td class="nw">否</td>
+<td>每 Agent 独立 state/lock/journal，不复用或改写系统 HOME</td>
+</tr>
+<tr>
+<td>PACT user home override</td>
+<td><code>PACT_ALLOW_HOME_OVERRIDE=1</code> + <code>PACT_USER_HOME</code></td>
+<td>existing owned absolute dir</td>
+<td>默认禁用，使用 <code>os.homedir()</code></td>
+<td class="nw">否</td>
+<td>容器/隔离测试显式双开关；所有 Agent/state 目标仍按 C1 闭集解析，不修改系统 HOME</td>
+</tr>
+<tr>
+<td>Agent target roots</td>
+<td><code>platform/lib/agent-skills.mjs</code> 闭集</td>
+<td>known paths</td>
+<td>按 Agent/OS</td>
+<td class="nw">否</td>
+<td>CLI 不接受任意绝对 target</td>
+</tr>
+<tr>
+<td>sync method</td>
+<td>CLI <code>--copy</code></td>
+<td class="nw">enum</td>
+<td>symlink</td>
+<td class="nw">否</td>
+<td>symlink 不可用时可回退 copy 并记录</td>
+</tr>
+<tr>
+<td>postinstall global mode</td>
+<td>npm <code>npm_config_global</code>（只读）</td>
+<td>literal <code>true</code>/其他</td>
+<td class="nw">其他</td>
+<td class="nw">否</td>
+<td>只有 literal true 才自动写 Agent Skills；不持久化该环境值</td>
+</tr>
 </tbody></table></div>
 <p>外部产品契约防漂移：provenance 锁定两个完整规范化产品树；compatibility 另锁定 UI <code>package.json</code> exports、<code>dist/ai-manifest.json</code> 与 Agent schema 的组合 hash。产品源码变化必须更新对应 evidence/hash 并触发 governance check，不允许只改产品文件而保持声明不变。</p>
+<p>仓库态 <code>npm run governance:check</code> 复算 UI/Starter evidence，属于维护者门禁；发布后的 <code>@vima-tech/pact</code> 不携带 products/templates，因此 <code>pact doctor</code> 只校验 registry schema 与入包资源 tree hash，把可选产品 evidence 标为 <code>not-installed</code> 并保持原 partial/blocked readiness，不尝试从缺失路径复算，也不把 not-installed 冒充 ready。</p>
 </div></section>
 <section class="chp" id="ch-C8">
 <h3 class="ct"><span class="num">3.8</span>权限与安全边界<span class="anch">C8</span></h3>
@@ -2484,6 +3514,34 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <td class="nw">根工具不提供</td>
 <td class="nw">根工具不提供</td>
 <td>必须脱离本自动化另行人工执行</td>
+</tr>
+<tr>
+<td>npm 完整安装</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td>当前用户 npm prefix；不要求 sudo、不读取 registry token</td>
+</tr>
+<tr>
+<td>Agent detect/verify</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td>只读已知当前用户目录，不读取 Agent 凭据</td>
+</tr>
+<tr>
+<td>Agent sync/install</td>
+<td>用户显式安装或 postinstall best-effort</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td>只写已知 Skills 根；冲突不覆盖；state 原子记录</td>
+</tr>
+<tr>
+<td>Agent remove</td>
+<td class="nw">用户显式允许</td>
+<td class="nw">允许</td>
+<td class="nw">允许</td>
+<td>只删除 state 精确拥有且仍匹配 hash/source 的目标</td>
 </tr>
 </tbody></table></div>
 <ul>
@@ -2533,6 +3591,24 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <td>unit, command id, exit code, 最后 40 行摘要</td>
 <td>auth 配置行脱敏</td>
 </tr>
+<tr>
+<td>agent detection</td>
+<td class="nw">INFO</td>
+<td>agent id, detected, skills-root-display, status</td>
+<td>用户绝对 HOME、Agent 凭据不记录</td>
+</tr>
+<tr>
+<td>skill sync</td>
+<td>INFO/WARN</td>
+<td>agent id, skill name, method, before/after status, diagnostic code</td>
+<td>Skill 内容、任意环境变量不记录</td>
+</tr>
+<tr>
+<td class="nw">doctor</td>
+<td class="nw">INFO</td>
+<td>package version, manifest status, Agent 状态计数</td>
+<td>用户绝对 HOME、npm 配置不记录</td>
+</tr>
 </tbody></table></div>
 <p>结构化命令 stdout 只输出 JSON；人读摘要写 stderr。确定性 JSON 不含 timestamp、绝对临时目录或随机 ID。</p>
 </div></section>
@@ -2574,7 +3650,25 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <td class="nw">兜底</td>
 <td>required、permission、危险操作只接受显式需求；缺契约返回诊断，不生成空壳</td>
 </tr>
+<tr>
+<td>Agent 分工</td>
+<td>Claude Code/Codex 负责推理与编码；PACT 负责规格、约束、能力、证据和完成门，客户端专属 Skill 不得成为唯一真源</td>
+</tr>
+<tr>
+<td class="nw">自然语言安装</td>
+<td>只采用官方版本化安装文档，执行 <code>npm i -g @vima-tech/pact</code> → <code>pact doctor</code> → 必要时 <code>pact agent sync</code></td>
+</tr>
+<tr>
+<td class="nw">安装安全</td>
+<td>网络文档不得授权自由拼接 shell、`curl</td>
+</tr>
+<tr>
+<td class="nw">完成声明</td>
+<td>只有 Delivery Profile 对应层级的真实证据齐备才可声明；页面、演示数据、无 handler、假 API、仅单测或无法启动均不得称业务系统完成</td>
+</tr>
 </tbody></table></div>
+<p><a href="#req-R028">R028</a> 的五个产品方向权威入口固定为：本 <code>PACT.md</code>、根 <code>CLAUDE.md</code>、根 <code>README.md</code>、<code>platform/README.md</code>、<code>.pact/pact-platform-unification/docs/pact-controlled-generation-design.md</code>。另新建 <code>docs/installation.md</code> 作为安装操作权威文档，但不计入“五个产品方向入口”；机器完成分级真源为 <code>platform/registry/delivery-profiles.v1.json</code>。这些路径是本需求的输出位置，不是开工前需要从外部补充的输入；本文件已包含它们必须承载的全部语义与验收。</p>
+<p>自然语言安装只认可两个发布身份：npm registry 上精确 scoped package <code>@vima-tech/pact</code>，以及 GitHub 仓库 <code>https://github.com/vima-tech/pact</code>。发现入口可读 <code>main/docs/installation.md</code>；正式远端发布的独立发布清单要求先创建 <code>v&lt;package-version&gt;</code> tag，再公开 npm 包，发布后文档链接固定为该 tag。当前 CR 明确不执行 Git push/tag/npm publish，只在本地验证 URL 生成规则、文档内容和 tgz；不存在远端 tag 不影响本地 pack/安装验收，也不得让 Agent改用搜索结果或镜像页面。<a href="#req-R036">R036</a> 以 devDependency <code>skills@1.5.22</code> 的真实 CLI 对本地仓库 discovery，不访问远端。</p>
 </div></section></div></details>
 <details class="pack" id="part-T">
 <summary><span class="pn2">ACCEPTANCE</span>第四部分 · 验收与交付<span class="pdesc">5 节</span></summary>
@@ -2748,7 +3842,97 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <tr>
 <td class="nw"><a href="#req-R027">R027</a></td>
 <td>static scripts scan + archive listing</td>
-<td>无 publish/push/token 读取；恰有 3 个本地归档</td>
+<td>无 publish/push/token 读取；恰有 <code>vima-tech-pact</code>、UI、Starter 三个本地 tgz</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R028">R028</a></td>
+<td>文档一致性测试 + 人工复核</td>
+<td>CLAUDE/README/platform/design/PACT 均含统一北极星、Agent/Pact 分工和业务操作系统定义</td>
+<td class="nw">脚本+人</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R029">R029</a></td>
+<td>package identity assertion + <code>npm pack --dry-run --json</code> + bin smoke</td>
+<td>直接读取 name=<code>@vima-tech/pact</code>、private 非 true；dry-run 成功；<code>pact</code>/<code>vima-pact</code> 均能打印 help/version</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R030">R030</a></td>
+<td>tarball files assertion</td>
+<td>完整包含 manifest、CLI/platform/9 Skills；不含 products/templates/.pact/artifacts/用户文件</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R031">R031</a></td>
+<td><code>PACT_ALLOW_HOME_OVERRIDE=1 PACT_USER_HOME=&lt;temp&gt;</code> Codex+Claude sync fixture</td>
+<td>两个 Agent 均安装 manifest 全量 Skills，verify 全 ready；不修改系统 HOME</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R032">R032</a></td>
+<td>static scan + network/child blocker 下运行 postinstall + manifest hash</td>
+<td>postinstall/installer 无 npx/curl/download/外部子进程且 blocker 不触发；runtime/resources/skills hash 全相等</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R033">R033</a></td>
+<td>CLI agent matrix test</td>
+<td>list/sync/install/verify 成功、未知 agent/参数按契约失败；第二次 sync changes=0</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R034">R034</a></td>
+<td>escape/unknown/local-edit fixtures</td>
+<td>全部 E_SKILL_PATH/E_SKILL_CONFLICT，目标原始 bytes/hash 不变</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R035">R035</a></td>
+<td>doctor state fixtures</td>
+<td>ready/pending/needs-sync/conflict/manifest-broken 判定和退出码准确；repair 可收敛可恢复项</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R036">R036</a></td>
+<td><code>skills@1.5.22 add . --list</code> 本地真实 CLI 测试</td>
+<td>九个公开 <code>SKILL.md</code> 名称唯一且全部被发现，README 明确全量 Skills 入口</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R037">R037</a></td>
+<td>安装文档静态测试</td>
+<td>主/轻量/自然语言三入口齐备，无 curl-pipe 或非官方自由执行说明</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R038">R038</a></td>
+<td><code>pact install --inspect</code> smoke + help/Skill 复核</td>
+<td>默认零重型安装副作用，输出限制与下一动作</td>
+<td class="nw">脚本+人</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R039">R039</a></td>
+<td>package/manifest/drift fixtures</td>
+<td>同版同 hash PASS；版本或内容漂移 doctor 非零且不写目标</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R040">R040</a></td>
+<td>state/adopt/unadopt/remove/preuninstall fixtures</td>
+<td>exact managed 删除；observed 只解除 state；修改/未知项按 <code>(agent,name,target)</code> 迁移到 uninstall-conflicts 并从 Agent state 移除；重复卸载 bytes/recordedAt 不变；双 Agent 不丢记录；删除后/conflicts 后/state 中途崩溃均可前向 recover；直接 apply 冲突 exit 5、preuninstall 转 exit 0</td>
+<td class="nw">脚本</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R041">R041</a></td>
+<td>delivery profile schema + <code>evaluateCompletion</code> 测试 + 设计文档检查</td>
+<td>八级/rank/evidence 闭集和 record shape 合法；非法 record 抛 E_SCHEMA/exit 2；缺失/失败/前级阻断后级；level status 只有 achieved/blocked；stable 时 blockedAt=null；明确 Verifier 后置</td>
+<td class="nw">脚本+人</td>
+</tr>
+<tr>
+<td class="nw"><a href="#req-R042">R042</a></td>
+<td><code>npm test</code> + 两类 tgz 隔离安装 + <code>npm run verify</code></td>
+<td>scripts-enabled 的 <code>npm i -g --offline --prefix &lt;temp-prefix&gt; &lt;tgz&gt;</code> 设置双 home override 后自动同步；另跑 <code>--ignore-scripts</code> 后 doctor/repair；注入 pre/post-commit 崩溃、损坏 journal、多 Agent 独立恢复；根门禁全绿</td>
 <td class="nw">脚本</td>
 </tr>
 </tbody></table></div>
@@ -2803,6 +3987,41 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <td class="nw">100%</td>
 <td><code>pact-review.sh</code></td>
 </tr>
+<tr>
+<td class="nw">完整包内容</td>
+<td>manifest 声明文件 100% 在 tgz；禁止目录 0 项</td>
+<td>npm pack archive test</td>
+</tr>
+<tr>
+<td>Skills 同步覆盖</td>
+<td>已检测 Agent × manifest Skills 100% ready</td>
+<td>agent sync fixture</td>
+</tr>
+<tr>
+<td class="nw">同步幂等</td>
+<td>第二次 sync 写入变化 0</td>
+<td>agent sync fixture</td>
+</tr>
+<tr>
+<td class="nw">用户修改保护</td>
+<td>conflict fixtures 原字节/hash 100% 保留</td>
+<td>installer safety test</td>
+</tr>
+<tr>
+<td class="nw">版本一致性</td>
+<td>package/manifest/CLI/Skill source 100% 匹配</td>
+<td>package integrity test</td>
+</tr>
+<tr>
+<td>安装网络副作用</td>
+<td>postinstall Skill 下载与重型依赖安装 0 次</td>
+<td>static scan + isolated install</td>
+</tr>
+<tr>
+<td>文档北极星一致性</td>
+<td>5 类权威入口 100% 命中统一定义</td>
+<td>documentation test</td>
+</tr>
 </tbody></table></div>
 </div></section>
 <section class="chp" id="ch-T3">
@@ -2814,6 +4033,10 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <li>为通过门禁而抬高 UI runtime budget、跳过现有产品测试或把失败标记为 ready。</li>
 <li>根脚本执行真实 <code>npm publish</code>、Git push、读取 registry token 或运行不可信模板脚本。</li>
 <li>package/CLI identity 被无规格变更地合并或重命名。</li>
+<li>npm 完整包把 UI/Starter 源码打入、postinstall 联网下载 Skill/安装重型依赖、要求 sudo 或读取 Agent/npm 凭据。</li>
+<li>Agent 同步准备覆盖本地修改、未知来源、普通文件/目录；安装 leaf 的父目录 realpath 逃逸已知 Skills 根；或 symlink source 不在当前 package root/不等于 manifest source。</li>
+<li>package/manifest/Skill hash 不一致仍继续同步，或 pending/conflict 被显示为 ready。</li>
+<li>文档、CLI 或 Delivery Profile 把仅生成、仅构建、仅单测/无法启动的工程宣称为可用稳定业务操作系统。</li>
 <li>测试为迁就实现而放宽断言；任何 C3 不变量被破坏。</li>
 </ul>
 <p>命中后立即停止，记录 <code>needs input:</code> 与证据；先回滚到可验证状态，再走 <code>/pact-change</code>。</p>
@@ -2828,8 +4051,16 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <li><input disabled="" type="checkbox"> PACT scripts self-test、<code>pact-check.sh</code>、<code>pact-review.sh</code> 全部通过。</li>
 <li><input disabled="" type="checkbox"> <code>npm run release:plan -- --base HEAD^</code> 输出合法稳定计划；<code>npm run release:pack</code> 只生成本地 artifacts。</li>
 <li><input disabled="" type="checkbox"> 两个旧绝对路径已退役且 lstat 不存在；canonical target 与 provenance 记录的来源备份均可复算且 hash 一致。</li>
-<li><input disabled="" type="checkbox"> T1 的 <a href="#req-R001">R001</a>–<a href="#req-R027">R027</a> 全部有真实执行证据；<code>action-graph.json</code> 完成度 100%。</li>
+<li><input disabled="" type="checkbox"> T1 的 <a href="#req-R001">R001</a>–<a href="#req-R042">R042</a> 全部有真实执行证据；<code>action-graph.json</code> 完成度 100%。</li>
 <li><input disabled="" type="checkbox"> 根 <code>README.md</code>、<code>CLAUDE.md</code>、产品局部约定与实际目录/命令一致。</li>
+<li><input disabled="" type="checkbox"> <code>npm pack</code> 的 <code>@vima-tech/pact</code> tgz 在隔离 prefix 可安装，两个 CLI 命令和 doctor 可用，模拟 Agent Skills 全量 ready。</li>
+<li><input disabled="" type="checkbox"> 隔离安装以 <code>--offline --ignore-scripts</code> 验证 tgz 零 runtime dependency；postinstall 再在拦截 <code>net/http/https/dns/child_process</code> 的 Node preload 下显式运行，且含哨兵 token 的输出无泄漏。</li>
+<li><input disabled="" type="checkbox"> 另有真实 scripts-enabled 全局安装 fixture：设置 <code>npm_config_global=true PACT_ALLOW_HOME_OVERRIDE=1 PACT_USER_HOME=&lt;temp-user&gt;</code>，npm 自动触发 pre/postinstall 后模拟 Agent 全量 ready；直接显式 postinstall 的 blocker fixture也设置同样变量。</li>
+<li><input disabled="" type="checkbox"> sync recovery 注入 prepared、部分 applied、state commit 后三种崩溃和损坏 journal；两个 Agent 并发只写各自 state，恢复无丢失更新。</li>
+<li><input disabled="" type="checkbox"> <code>pact uninstall --apply</code> 与 global preuninstall 对 managed/observed/conflict 三类目标符合 C2；注入多 Agent 并发、三个提交阶段崩溃并用 <code>--recover</code> 前向收敛；重复卸载不刷新冲突文件；<code>--ignore-scripts</code> 卸载文档要求先手工清理。</li>
+<li><input disabled="" type="checkbox"> preinstall 对 npm user-agent 缺失/非法/&lt;10 exit 4；普通 CLI 在无 <code>npm_config_user_agent</code> 环境下 <code>--help</code>/<code>--version</code> 仍 exit 0。</li>
+<li><input disabled="" type="checkbox"> 无 Agent、禁用 scripts、本地修改、版本漂移和安全清理 fixtures 全部符合 C2/C8，不存在假成功或静默覆盖。</li>
+<li><input disabled="" type="checkbox"> 北极星、Agent/Pact 分工、三种安装入口、八级完成态和 <code>/pact-install</code> 新职责已同步所有权威文档。</li>
 <li><input disabled="" type="checkbox"> 无临时源文件、无未解释的待办占位、无本需求引入的 secrets；用户既有未跟踪文件保持未修改。</li>
 </ul>
 </div></section>
@@ -2874,11 +4105,17 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <td>finalized 状态、两个 old alias 不存在、target/backup hash 与全量门禁通过、图谱重新 100%</td>
 <td>删除 <code>.pre-pact-*</code> 备份</td>
 </tr>
+<tr>
+<td>M5 · 产品北极星与完整 npm 发行 CR</td>
+<td><a href="#req-R028">R028</a>–<a href="#req-R042">R042</a></td>
+<td>权威文档一致；完整 tgz、CLI、manifest、Agent sync/doctor/repair、安全冲突与隔离安装全绿；根 review 重新 100%</td>
+<td>FullStackSpec、真实业务黄金切片、Starter readiness 提升、外部 npm publish</td>
+</tr>
 </tbody></table></div>
 <h3>降级策略</h3>
 <ul>
 <li><strong>可牺牲（砍宽度）</strong>：人读 release 摘要的排版、额外 benchmark 数量、重型 monorepo 缓存、远程 MCP 外壳。</li>
-<li><strong>不可牺牲（保深度）</strong>：Core 独立、业务系统才候选 Starter、finalized 前迁移可回滚、canonical-only 入口、备份保留、独立包身份、全部既有硬门、确定性 changed plan、默认不发布、C3 全部不变量。</li>
+<li><strong>不可牺牲（保深度）</strong>：Core 独立、业务系统才候选 Starter、finalized 前迁移可回滚、canonical-only 入口、备份保留、独立包身份、全部既有硬门、确定性 changed plan、默认不发布、同版包内 Skills、用户修改保护、可修复安装、北极星与完成分级、C3 全部不变量。</li>
 <li><strong>触发条件</strong>：非必要打磨导致核心门连续两轮无进展时，只删除 P2 打磨，不降低任何 P0/P1 验收。</li>
 <li><strong>决策人</strong>：renmengkai；涉及冻结需求时必须走 <code>/pact-change</code>。</li>
 </ul>
@@ -2887,14 +4124,14 @@ applyMigration(planPath: string): Promise&lt;MigrationState&gt;;
 <section class="apx" id="appendix"><h2>附录 · 需求索引（R-ID）</h2>
 <p class="pd">全部需求条目一览。每条的验收方式见 <a href="#ch-T1">4.1 验收清单</a>；★ 为强制项。正文中的 R-ID 引用悬停可预览、点击跳回本表。</p>
 <div class="tw"><table><thead><tr><th>R-ID</th><th>需求</th><th>类型</th><th>优先级</th><th>里程碑</th></tr></thead>
-<tbody><tr id="req-R001"><td class="rid">R001</td><td>PACT Core 零 Vima 源码依赖</td><td>架构</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R002"><td class="rid">R002</td><td>统一声明 3 个产品能力与 2 个 adapter</td><td>数据</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R003"><td class="rid">R003</td><td>按需求类别选择 3 种 profile</td><td>功能</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R004"><td class="rid">R004</td><td>Vima 在 profile 中均为可选</td><td>架构</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R005"><td class="rid">R005</td><td>非法或信息不足时拒绝生成</td><td>边界</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R006"><td class="rid">R006</td><td>readiness 变更必须显式且有证据</td><td>治理</td><td>P1</td><td class="rid">M2</td></tr><tr id="req-R007"><td class="rid">R007</td><td>六类治理 JSON 全部有 schema 与校验器</td><td>数据</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R008"><td class="rid">R008</td><td>版本+哈希+契约版本+发布状态判兼容</td><td>兼容</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R009"><td class="rid">R009</td><td>路由基准覆盖四类输入</td><td>测试</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R010"><td class="rid">R010</td><td>不虚报 Starter 未完成能力</td><td>真实性</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R011"><td class="rid">R011</td><td>两产品进入约定目录</td><td>迁移</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R012"><td class="rid">R012</td><td>记录来源与规范化哈希</td><td>追溯</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R013"><td class="rid">R013</td><td>导入快照不包含闭集定义的可再生产目录</td><td>边界</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R014"><td class="rid">R014</td><td>导入冲突时无覆盖无删除</td><td>安全</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R015"><td class="rid">R015</td><td>UI 包身份与公开面保持</td><td>兼容</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R016"><td class="rid">R016</td><td>Starter CLI 身份和模板真源保持</td><td>兼容</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R017"><td class="rid">R017</td><td>根级串行编排各自门禁</td><td>构建</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R018"><td class="rid">R018</td><td>退役两个旧绝对路径入口</td><td>迁移</td><td>P0</td><td class="rid">M1, M4</td></tr><tr id="req-R019"><td class="rid">R019</td><td>三个独立 release unit</td><td>发布</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R020"><td class="rid">R020</td><td>Git 路径映射直接影响单元</td><td>功能</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R021"><td class="rid">R021</td><td>依赖影响与发布影响分离</td><td>兼容</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R022"><td class="rid">R022</td><td>release plan 稳定输出 JSON 与摘要</td><td>数据</td><td>P1</td><td class="rid">M3</td></tr><tr id="req-R023"><td class="rid">R023</td><td>基线未知或归属冲突时失败</td><td>边界</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R024"><td class="rid">R024</td><td>UI 全部门禁通过且不抬 size 阈值</td><td>质量</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R025"><td class="rid">R025</td><td>Starter 全部门禁与本地 pack 通过</td><td>质量</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R026"><td class="rid">R026</td><td>PACT Core 与物料全门禁通过</td><td>质量</td><td>P0</td><td class="rid">M3, M4</td></tr><tr id="req-R027"><td class="rid">R027</td><td>真实外部发布默认不可达</td><td>安全</td><td>P0</td><td class="rid">M3</td></tr></tbody></table></div></section>
+<tbody><tr id="req-R001"><td class="rid">R001</td><td>PACT Core 零 Vima 源码依赖</td><td>架构</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R002"><td class="rid">R002</td><td>统一声明 3 个产品能力与 2 个 adapter</td><td>数据</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R003"><td class="rid">R003</td><td>按需求类别选择 3 种 profile</td><td>功能</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R004"><td class="rid">R004</td><td>Vima 在 profile 中均为可选</td><td>架构</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R005"><td class="rid">R005</td><td>非法或信息不足时拒绝生成</td><td>边界</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R006"><td class="rid">R006</td><td>readiness 变更必须显式且有证据</td><td>治理</td><td>P1</td><td class="rid">M2</td></tr><tr id="req-R007"><td class="rid">R007</td><td>六类治理 JSON 全部有 schema 与校验器</td><td>数据</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R008"><td class="rid">R008</td><td>版本+哈希+契约版本+发布状态判兼容</td><td>兼容</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R009"><td class="rid">R009</td><td>路由基准覆盖四类输入</td><td>测试</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R010"><td class="rid">R010</td><td>不虚报 Starter 未完成能力</td><td>真实性</td><td>P0</td><td class="rid">M2</td></tr><tr id="req-R011"><td class="rid">R011</td><td>两产品进入约定目录</td><td>迁移</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R012"><td class="rid">R012</td><td>记录来源与规范化哈希</td><td>追溯</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R013"><td class="rid">R013</td><td>导入快照不包含闭集定义的可再生产目录</td><td>边界</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R014"><td class="rid">R014</td><td>导入冲突时无覆盖无删除</td><td>安全</td><td>P0</td><td class="rid">M0</td></tr><tr id="req-R015"><td class="rid">R015</td><td>UI 包身份与公开面保持</td><td>兼容</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R016"><td class="rid">R016</td><td>Starter CLI 身份和模板真源保持</td><td>兼容</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R017"><td class="rid">R017</td><td>根级串行编排各自门禁</td><td>构建</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R018"><td class="rid">R018</td><td>退役两个旧绝对路径入口</td><td>迁移</td><td>P0</td><td class="rid">M1, M4</td></tr><tr id="req-R019"><td class="rid">R019</td><td>三个独立 release unit</td><td>发布</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R020"><td class="rid">R020</td><td>Git 路径映射直接影响单元</td><td>功能</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R021"><td class="rid">R021</td><td>依赖影响与发布影响分离</td><td>兼容</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R022"><td class="rid">R022</td><td>release plan 稳定输出 JSON 与摘要</td><td>数据</td><td>P1</td><td class="rid">M3</td></tr><tr id="req-R023"><td class="rid">R023</td><td>基线未知或归属冲突时失败</td><td>边界</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R024"><td class="rid">R024</td><td>UI 全部门禁通过且不抬 size 阈值</td><td>质量</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R025"><td class="rid">R025</td><td>Starter 全部门禁与本地 pack 通过</td><td>质量</td><td>P0</td><td class="rid">M1</td></tr><tr id="req-R026"><td class="rid">R026</td><td>PACT Core 与物料全门禁通过</td><td>质量</td><td>P0</td><td class="rid">M3, M4</td></tr><tr id="req-R027"><td class="rid">R027</td><td>真实外部发布默认不可达</td><td>安全</td><td>P0</td><td class="rid">M3</td></tr><tr id="req-R028"><td class="rid">R028</td><td>终极目标与最高判断标准进入五个权威入口</td><td>产品</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R029"><td class="rid">R029</td><td>提供公开完整包 @vima-tech/pact 与两个 CLI 名</td><td>发布</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R030"><td class="rid">R030</td><td>完整包携带 Core、Runtime、治理资源、Installer 和全量 Skills</td><td>交付</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R031"><td class="rid">R031</td><td>npm 安装后自动向已检测 Agent 注册全量 Skills</td><td>安装</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R032"><td class="rid">R032</td><td>自动注册只使用包内同版本 Skills</td><td>供应链</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R033"><td class="rid">R033</td><td>CLI 提供 Agent 检测、同步、定向安装与验证</td><td>功能</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R034"><td class="rid">R034</td><td>Skill 同步路径受控且不覆盖本地修改/未知来源</td><td>安全</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R035"><td class="rid">R035</td><td>pact doctor 准确报告 CLI、manifest 和 Agent Skills 状态</td><td>修复</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R036"><td class="rid">R036</td><td>保留 npx skills add vima-tech/pact -g 轻量全量 Skill 入口</td><td>兼容</td><td>P1</td><td class="rid">M5</td></tr><tr id="req-R037"><td class="rid">R037</td><td>自然语言安装只路由到官方确定性安装流程</td><td>文档</td><td>sh 或任意搜索结果执行</td><td class="rid">M5</td></tr><tr id="req-R038"><td class="rid">R038</td><td>/pact-install/pact install 负责修复与可选环境/Adapter，不静默装重型依赖</td><td>边界</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R039"><td class="rid">R039</td><td>CLI、Runtime、Skills 与 manifest 同版并支持升级后再同步</td><td>版本</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R040"><td class="rid">R040</td><td>安装状态记录 PACT 精确拥有/观察的目标并支持 adopt/unadopt/remove/uninstall 安全清理</td><td>生命周期</td><td>P1</td><td class="rid">M5</td></tr><tr id="req-R041"><td class="rid">R041</td><td>交付状态不得把低层完成冒充可用稳定业务系统</td><td>真实性</td><td>P0</td><td class="rid">M5</td></tr><tr id="req-R042"><td class="rid">R042</td><td>完整发行与 Agent 接入有独立自动测试和本地安装验收</td><td>质量</td><td>P0</td><td class="rid">M5</td></tr></tbody></table></div></section>
 <footer class="foot">本规格书为单文件自包含产物：无外部依赖、无网络请求，可直接作为附件分发；需要纸质版直接打印（Ctrl+P）。<br>
-  真源：<code>PACT.md</code>（含 30 个机器可校验锚点）· 需求 27 · 决策 9 · 不变量 9 · 里程碑 5</footer>
+  真源：<code>PACT.md</code>（含 30 个机器可校验锚点）· 需求 42 · 决策 14 · 不变量 14 · 里程碑 6</footer>
 </main>
 </div>
 <div id="card"></div>
 <button id="toTop" title="回到顶部">↑</button>
-<script>window.PACT_DOC="PACT · PACT Platform 三阶段统一迁移";window.PACT_FILE="PACT.md";
+<script>window.PACT_DOC="PACT · PACT Platform 统一治理、完整发行与 Agent 接入";window.PACT_FILE="PACT.md";
 
 const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)]
 /* 主题 */

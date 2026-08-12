@@ -8,7 +8,7 @@
       "supports": ["action-graph", "pact-specification"],
       "limitations": ["none-evidenced"],
       "readiness": "ready",
-      "evidence": [{"path":"pact/SKILL.md","sha256":"e178a43009e4f39f4f4ad336e167209c38f37b6a348753d49f1926a876e4daae"}]
+      "evidence": [{"path":"pact/SKILL.md","sha256":"9b5769a1dfb7819773748deafbd299edf1bcad2915c0e232728a37fdc9c3e9fb"}]
     },
     {
       "id": "ui-admin-adapter",

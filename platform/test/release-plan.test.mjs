@@ -28,6 +28,14 @@ test('release plan is byte deterministic and shared files verify all units', () 
   assert.deepEqual(JSON.parse(first).verificationUnits, ['pact-skills', 'vima-starter', 'vima-ui-admin']);
 });
 
+test('complete PACT package paths directly release pact-skills while shared contracts verify all units', () => {
+  for (const path of ['bin/pact.mjs', 'docs/installation.md', 'install-manifest.json', 'platform/lib/agent-skills.mjs', 'package.json']) {
+    const plan = planRelease([path], units, 'fixture');
+    assert.deepEqual(plan.directReleaseUnits, ['pact-skills'], path);
+  }
+  assert.deepEqual(planRelease(['package.json'], units, 'fixture').verificationUnits, ['pact-skills', 'vima-starter', 'vima-ui-admin']);
+});
+
 test('overlapping direct ownership and unknown baseline fail closed', () => {
   const overlapping = [...units, { ...units[0], id: 'duplicate', paths: ['products/**'] }];
   assert.throws(() => planRelease(['products/vima-ui-admin/a'], overlapping, 'fixture'), (error) => error.code === 'E_PATH_OWNERSHIP');

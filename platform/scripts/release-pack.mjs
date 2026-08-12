@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// @pact R024,R025,R026,R027
+// @pact R024,R025,R026,R027,R029,R030,R039,R042
 import { spawnSync } from 'node:child_process';
-import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PlatformError, resolveInside, sha256File, stableJson } from '../lib/core.mjs';
@@ -13,23 +13,28 @@ const flag = (name) => { const index = process.argv.indexOf(name); return index 
 const outputDir = resolveInside(ROOT, flag('--output') || 'artifacts/release');
 
 try {
+  const manifestBuild = spawnSync('node', ['platform/scripts/build-install-manifest.mjs'], { cwd: ROOT, stdio: 'inherit' });
+  if (manifestBuild.status !== 0) throw new PlatformError('E_COMMAND_FAILED', 'install-manifest', '安装清单生成失败', 1);
   const docs = await loadAndCheckGovernance(ROOT);
   const checks = docs['release-units'].units.flatMap((unit) => unit.verify.map((check) => ({ ...check, id: `${unit.id}:${check.id}` })));
   const verification = await runSerial(checks, { cwd: ROOT });
   if (!verification.passed) throw new PlatformError('E_COMMAND_FAILED', verification.results.at(-1)?.id || 'verify', '发布前门禁失败', 1);
   await mkdir(outputDir, { recursive: true });
+  for (const name of await readdir(outputDir)) {
+    if (name.endsWith('.tgz') || name.endsWith('.tar.gz') || name === 'archives.v1.json') await rm(resolve(outputDir, name), { force: true });
+  }
 
   const { version: platformVersion } = JSON.parse(await readFile(resolve(ROOT, 'package.json'), 'utf8'));
   const { version: uiVersion } = JSON.parse(await readFile(resolve(ROOT, 'products/vima-ui-admin/package.json'), 'utf8'));
   const { version: starterVersion } = JSON.parse(await readFile(resolve(ROOT, 'templates/vima-starter/cli/package.json'), 'utf8'));
   const expected = [
-    `pact-skills-${platformVersion}.tar.gz`,
+    `vima-tech-pact-${platformVersion}.tgz`,
     `vima-tech-ui-admin-${uiVersion}.tgz`,
     `create-vima-starter-${starterVersion}.tgz`
   ].sort();
 
   const packCalls = [
-    ['node', ['platform/scripts/pack-pact.mjs', '--output', outputDir]],
+    ['npm', ['pack', '--pack-destination', outputDir]],
     ['npm', ['pack', './products/vima-ui-admin', '--pack-destination', outputDir]],
     ['npm', ['pack', './templates/vima-starter/cli', '--pack-destination', outputDir]]
   ];

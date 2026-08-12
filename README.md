@@ -1,6 +1,21 @@
-# PACT — 单文件完备规格 skill 套件
+> ## ⚠️ 本项目已归档（Archived），不再维护
+>
+> 自 **2026-08-12** 起，本仓库停止维护：不再接受 issue 与 PR，不再发布新版本。
+>
+> **接替项目：https://github.com/vima-tech/vima-cli**
+>
+> 已安装 `@vima-tech/pact` 的用户可继续使用现有版本，但不会再收到更新与修复；
+> 新项目请直接使用接替项目。本仓库保留只读，作为历史存档。
+
+# PACT — AI Agent 业务系统交付控制平台
 
 **PACT = Product · Architecture · Contracts · Tests**
+
+<!-- @pact R028,R041 -->
+
+PACT 的终极目标是让 Claude Code、Codex 等 AI Agent 在一套可检查、可追溯、可恢复的控制协议下，快速把真实需求落地为**规范、准确实现、真正可用、稳定可演进的业务操作系统**。Agent 负责推理与编码，PACT 负责规格、契约、变更和完成证据。
+
+交付不用一个含混的“100%”表示，而是逐级通过 `implemented`、`buildable`、`startable`、`integrated`、`business-closed-loop`、`accepted`、`deployable`、`stable`。
 
 一套 agent skills：把 PRD / SDD / SPEC / 验收标准 / 施工范围熔成**一份单文件完备规格 `PACT.md`**，
 并驱动它落地。用于**新建项目开局**与**大需求设计**。
@@ -38,7 +53,7 @@ PACT 仓库内的 `products/vima-ui-admin` 与 `templates/vima-starter` 是唯�
 `/home/renmk/projects/vima-*` 别名已退役。导入来源、保留备份、规范化哈希和 finalized 时间记录在
 `platform/registry/provenance.v1.json`；`.pre-pact-20260811` 快照不随别名删除。
 
-## 七个命令
+## 八个工作命令
 
 | 命令 | 干什么 | 停止条件 |
 |---|---|---|
@@ -49,6 +64,7 @@ PACT 仓库内的 `products/vima-ui-admin` 与 `templates/vima-starter` 是唯�
 | **`/pact-change`** | 需求变更入口（S10-CR）：回 P5 立 R-ID → 补验收 → 改契约 → changelog → 同步图谱 → 判断重跑冷读门 | 六步走完 + 影响面报告 |
 | **`/pact-list`** | 项目内全部物料总览：状态 / 工序进度 / 完成度 + 下一步建议 | 单次，只读 |
 | **`/pact-estimate`** | 估算门：四前提核对 + 驱动因子分层测算 + 三条线（对外只承诺交付线） | 单次 |
+| **`/pact-install`** | 完整安装后的诊断、Agent Skills 修复与未来 Adapter 扩展入口 | `pact doctor` ready 或明确冲突 |
 
 `/pact` 本身只做总览与路由：打印速览，按现场状态告诉你该用哪个命令。
 除 `/pact-new`、`/pact-list` 外的命令不给路径时自动扫描 `.pact/`：
@@ -154,12 +170,18 @@ pact-check/SKILL.md    /pact-check   物料体检（只读）
 pact-change/SKILL.md   /pact-change  需求变更入口（S10-CR）
 pact-list/SKILL.md     /pact-list    多物料总览（只读）
 pact-estimate/SKILL.md /pact-estimate  估算门独立入口
+pact-install/SKILL.md  /pact-install   安装诊断与修复入口
 ```
 
 ## 安装与上手
 
+<!-- @pact R029,R031,R036,R037,R038,R039 -->
+
+**主推完整安装**：
+
 ```bash
-npx skills add vima-tech/pact -g     # 装到全局（七个命令 skill + 核心）
+npm i -g @vima-tech/pact
+pact doctor
 cd your-project
 # 然后对 agent 说：
 #   /pact-new 做一个 <你的需求>
@@ -169,7 +191,17 @@ cd your-project
 #   /pact-change 导出要支持 Excel     （冻结后改需求）
 #   /pact-list       （项目里有哪些 pact）
 #   /pact-estimate   （多久能做完 / 报个价）
+#   /pact-install    （检查/修复安装）
 ```
+
+完整安装会提供 `pact`/`vima-pact` CLI，并从同版本 npm 包自动向已检测 Agent 注册九个 Skills。另有两个入口：
+
+```bash
+npx skills add vima-tech/pact -g   # 轻量：只全量安装 Skills，不选模块
+# 或让 Agent 按 docs/installation.md 执行完整安装并运行 pact doctor
+```
+
+完整说明见 [docs/installation.md](docs/installation.md)。
 
 手动跑一次机检看看它管什么：
 
@@ -193,24 +225,31 @@ agent 会先读 `board.md` 与执行图谱判断进度，不重新访谈、不�
 ls -la ~/.claude/skills/ | grep pact
 ```
 
-**形态 A · 拷贝式安装**（`npx skills add` 装的，目录是普通文件夹）——更新要重新拉取：
+**形态 A · npm 完整安装**（主推）：
+
+```bash
+npm i -g @vima-tech/pact@latest
+pact doctor
+```
+
+**形态 B · Skills 拷贝式安装**（`npx skills add` 装的）——更新要重新拉取：
 
 ```bash
 npx skills update pact
 # 或重装：npx skills add vima-tech/pact -g
 ```
 
-**形态 B · 源码软链安装**（目录是指向本仓库 clone 的软链）——更新只需拉代码，链接自动跟随：
+**形态 C · 源码软链安装**（目录是指向本仓库 clone 的软链）——更新只需拉代码，链接自动跟随：
 
 ```bash
 cd <你的 pact 仓库 clone> && git pull
 ```
 
-首次做软链安装（clone 仓库后把八个 skill 链进 agent 的 skills 目录）：
+首次做软链安装（clone 仓库后把九个 skill 链进 agent 的 skills 目录）：
 
 ```bash
 REPO=<你的 pact 仓库 clone 的绝对路径>
-for n in pact pact-new pact-run pact-review pact-check pact-change pact-list pact-estimate; do
+for n in pact pact-new pact-run pact-review pact-check pact-change pact-list pact-estimate pact-install; do
   ln -sfn "$REPO/$n" ~/.claude/skills/$n
 done
 ```

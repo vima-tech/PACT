@@ -1,6 +1,48 @@
 {
   "version": "1",
-  "_pact": "@pact R003,R004,R007,R009",
+  "_pact": "@pact R003,R004,R007,R009,R028,R041",
+  "completionLevels": [
+    {
+      "id": "implemented",
+      "rank": 1,
+      "requiredEvidence": ["trace-complete", "implementation-tests-pass"]
+    },
+    {
+      "id": "buildable",
+      "rank": 2,
+      "requiredEvidence": ["locked-build-pass"]
+    },
+    {
+      "id": "startable",
+      "rank": 3,
+      "requiredEvidence": ["real-start-pass", "health-check-pass"]
+    },
+    {
+      "id": "integrated",
+      "rank": 4,
+      "requiredEvidence": ["real-database-pass", "real-request-pass"]
+    },
+    {
+      "id": "business-closed-loop",
+      "rank": 5,
+      "requiredEvidence": ["business-state-change-pass", "business-query-or-audit-pass"]
+    },
+    {
+      "id": "accepted",
+      "rank": 6,
+      "requiredEvidence": ["pact-t1-pass", "delivery-profile-pass", "business-owner-accepted", "no-hard-blocker"]
+    },
+    {
+      "id": "deployable",
+      "rank": 7,
+      "requiredEvidence": ["production-config-pass", "migration-pass", "security-pass", "release-pass", "rollback-plan-pass"]
+    },
+    {
+      "id": "stable",
+      "rank": 8,
+      "requiredEvidence": ["restart-recovery-pass", "observability-pass", "stability-threshold-pass"]
+    }
+  ],
   "profiles": [
     {
       "id": "admin-ui",

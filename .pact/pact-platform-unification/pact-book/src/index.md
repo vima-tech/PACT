@@ -1,10 +1,10 @@
-# PACT · PACT Platform 三阶段统一迁移
+# PACT · PACT Platform 统一治理、完整发行与 Agent 接入
 
 > **本页由 `pact-book.sh` 从 `PACT.md` 自动生成，请勿手改。**
 > 改内容请改 `PACT.md`，然后重新 `pact-book.sh --build`；`--check` 会抓出手改导致的漂移。
 
 | 创建日期 | 2026-08-11 |  
-| 更新日期 | 2026-08-11 |
+| 更新日期 | 2026-08-11（完整发行与 Agent 接入 CR） |
 
 ## 这份知识库是什么
 

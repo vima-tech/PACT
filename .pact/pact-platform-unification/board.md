@@ -24,14 +24,14 @@
 | S1 | 访谈门 | 已完成 | 十二类全部已答或显式假设；无阻塞 OPEN；保留独立发布身份、旧路径兼容、不执行真实外部 publish |
 | S2 | 熔合门 | 已完成 | 5 类来源、8 项 DIFF 全部裁定；统一 repo 与独立包边界并存；历史缺失以 provenance+hash 代偿 |
 | S3 | 存量评估 | 已完成 | 八维评估完成；6 项迁移 P0 明确回流 M0，Starter 深层业务能力债仅登记 readiness、不虚报完成 |
-| S4 | 写 P 层 | 已完成 | 27 条原子需求覆盖能力选择、治理、迁移、兼容、验证与发布预演；6 个 CLI 节点均挂 R-ID |
-| S5 | 写 A 层 | 已完成 | 明确 Core/registry/adapters/products 分层、3 条关键链路与 D001–D009；D009 取代 D005 的长期软链结论 |
-| S6 | 写 C 层 | 已完成 | 六类治理数据、readiness/迁移状态机、CLI/内部接口、安全与 AI 使用门均可执行 |
-| S7 | 写 T 层 | 已完成 | R001–R027 一一验收，M0–M3 对应三阶段；用户未要求工期/报价，估算门不适用 |
-| S8 | 完备性门 | 已完成 | 初始规格冷读第 6 轮 PASS；R018 CR 经第 7 轮 FAIL 回填并发/恢复契约，第 8 轮追问与矛盾为空后 PASS；lint/book 均 PASS |
-| S9 | 冻结 | 已完成 | PACT 于 2026-08-11 冻结；初始 11 steps，R018 CR 同步为 12 steps 覆盖 R001–R027，source-of-truth 已锁 |
-| S10 | 施工 LOOP | 已完成 | R018 finalized 已落地；两个精确软链接退役、canonical targets/备份保留，图谱 12/12 |
-| S11 | 收尾自检门 | 已完成 | finalized 后平台 25/25、产品 8/8、三份本地归档、根 9/9 verify 与 pact-review 100% 全部通过 |
+| S4 | 写 P 层 | 已完成 | 原 R001–R027 加完整发行 CR 的 R028–R042；能力选择、治理迁移、北极星、npm 安装与 Agent 接入均落入用户可达节点 |
+| S5 | 写 A 层 | 已完成 | Core/registry/adapters/products/install 分层、5 条关键链路与 D001–D014；新增 Agent 中立、完整发行和同步失败恢复决策 |
+| S6 | 写 C 层 | 已完成 | 治理、迁移、install manifest、Agent 同步状态机、CLI/内部接口、安全与 AI 使用门均可执行 |
+| S7 | 写 T 层 | 已完成 | R001–R042 一一验收，M0–M5 覆盖原三阶段与完整发行 CR；用户未要求工期/报价，估算门不适用 |
+| S8 | 完备性门 | 已完成 | 完整发行 CR 的 lint/graph 通过，经多轮回填后第 15 轮零知识冷读 PASS，无必须追问问题 |
+| S9 | 冻结 | 已完成 | PACT 于 2026-08-11 冻结；CR 保持冻结身份，经 changelog 修改并把图谱扩为 16 steps 覆盖 R001–R042 |
+| S10 | 施工 LOOP | 已完成 | M5 四个 step 全部 done/pass；已实现文档准则、公开 npm 包、双 CLI、Agent sync/安全生命周期和隔离安装测试 |
+| S11 | 收尾自检门 | 已完成 | `npm run verify` 全绿；lint/graph/book/trace/review 全过，图谱 16/16、R-ID 42/42，三份本地发行归档验证通过 |
 
 ## 冻结门计分（大型多子系统项目才用；单体需求删掉本节）
 
@@ -56,10 +56,10 @@
 
 ## 本轮
 
-- **当前工序**：全部完成
-- **做了**：R018/D009 变更冷读第 8 轮 PASS；实现 finalized schema、独占锁、journal/恢复、精确链接校验并退役两个旧入口；保留 canonical targets 与两份 `.pre-pact-*` 备份
-- **验收结果**：平台 25 项、迁移 finalized 2/2 hash、退役后 UI 4/4、Starter 4/4、三份本地归档、根 verify 9/9 与 pact-review 100% 全部通过；图谱 12/12
-- **下一道**：无；日常开发直接进入 `products/vima-ui-admin` 或 `templates/vima-starter`，不要重建旧入口
+- **当前工序**：S11 · 完整发行 CR 已收尾
+- **做了**：M5 4/4 step 已 done/pass；公开包、CLI、九 Skills 同步、doctor、安全卸载、三入口文档和八级完成度均已实现
+- **验收结果**：`npm test` 41/41 PASS；真实 scripts-enabled/ignore-scripts 全局 tgz 安装均 PASS；`release:pack` 恰好生成三个 tgz；根级 `npm run verify` 与 `pact-review.sh` PASS，完成度 100%
+- **下一道**：无；等待用户复核，外部 npm publish/tag 不在本次授权范围
 - **阻塞**：无
 
 ## 施工取活（S10 用）
@@ -73,12 +73,12 @@
 - [x] S2 熔合门通过（全部 DIFF 已裁定；D-ID 待 S5 按工序落盘）
 - [x] S3 存量评估完成（八维 + P0 已排进 M0）
 - [x] S7 估算门已判定不适用（用户未要求工期、工作量或报价；不创建虚假估算）
-- [x] S8 ① `pact-lint.sh` exit 0
+- [x] S8 CR ① `pact-lint.sh` exit 0
 - [x] S8 ② 物料反扫无遗漏
-- [x] S8 ③ 冷读门 PASS（`cold-read.md` 第 6 轮）
-- [x] S8 ④ `pact-book.sh` 生成成功且 `--check` 无漂移
+- [x] S8 CR ③ 冷读门 PASS（第 15 轮）
+- [x] S8 CR ④ `pact-book.sh` 生成成功且 `--check` 无漂移
 - [x] S9 已冻结，`action-graph.json` 已生成且 `pact-graph.mjs` 结构校验通过
-- [x] S11 收尾门全绿（finalized 后 `npm run verify` 9/9、`pact-review.sh` exit 0）
+- [x] S11 CR 收尾门重新全绿（R028–R042 实现后 `npm run verify`、`pact-review.sh` exit 0）
 
 ## 高风险项汇总（供随时复核）
 

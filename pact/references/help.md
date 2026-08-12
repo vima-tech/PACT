@@ -3,11 +3,19 @@
 > 创建日期: 2026-07-26 ｜ 更新日期: 2026-08-02 ｜ 人类向。AI 执行细则见各命令 `SKILL.md` 与 `references/agent-protocol.md`。
 
 **PACT = Product · Architecture · Contracts · Tests**
+
+<!-- @pact R028,R041 -->
+
+PACT 的终极目标是让 Claude Code、Codex 等 AI Agent 快速把需求落地为**规范、准确实现、真正可用、稳定可演进的业务操作系统**。Agent 负责理解和编码，PACT 负责固定需求、契约、执行次序、变更和完成证据。
+
+“代码写了”不等于“系统完成”。PACT 按 `implemented → buildable → startable → integrated → business-closed-loop → accepted → deployable → stable` 逐级判定，低级状态不得冒充高级交付。
+
+主推安装：`npm i -g @vima-tech/pact`，然后运行 `pact doctor`。只需 Skills 时使用 `npx skills add vima-tech/pact -g`；也可让 Agent 按官方 `docs/installation.md` 自动安装并验证。
 把 PRD / SDD / SPEC / 验收标准 / 施工范围熔成**一份 `PACT.md`**，再按它严格施工。
 
 验收标准只有一条：**一个对本项目一无所知的人或 AI，只读 `PACT.md` 就能开工。**
 
-## 一、七个命令
+## 一、八个命令
 
 | 命令 | 什么时候用 | 干什么 |
 |---|---|---|
@@ -18,6 +26,7 @@
 | **`/pact-change`** | 冻结后要改需求 / 加功能 | **变更入口**：回 P5 立 R-ID → 补验收 → 改契约 → changelog → 同步图谱 → 判断重跑冷读门，出影响面报告。**别直接让 AI 改代码** |
 | **`/pact-list`** | 项目里有好几份 pact | **总览**：每份物料的状态 / 工序进度 / 完成度 + 下一步建议 |
 | **`/pact-estimate`** | 问「多久能做完 / 报个价」 | **估算门**：四前提核对 + 分层测算 + 三条线，对外只承诺交付线。禁止拍脑袋数字 |
+| **`/pact-install`** | 完整安装后要检查/修复 Skills | **安装控制**：doctor → Agent sync → 重验；不在运行中替换自身 npm 包 |
 
 ```
 /pact-new 做一个给中小企业用的报销审批系统    # 新项目从零
@@ -29,6 +38,7 @@
 /pact-change 导出要支持 Excel 格式            # 冻结后的需求变更
 /pact-list                                    # 项目里有哪些 pact、各自到哪了
 /pact-estimate                                # 工期/报价测算
+/pact-install --repair                        # 检查并修复 Agent Skills
 /pact                                         # 看速览 + 按现场状态告诉你该用哪个命令
 ```
 

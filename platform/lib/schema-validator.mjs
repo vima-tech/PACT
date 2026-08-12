@@ -1,4 +1,4 @@
-// @pact R005,R006,R007,R008,R010,R019,R023
+// @pact R005,R006,R007,R008,R010,R019,R023,R041
 import { PlatformError } from './core.mjs';
 import { EXCLUDED_SEGMENTS } from './tree-hash.mjs';
 
@@ -8,6 +8,16 @@ const LIMITATIONS = new Set(['none-evidenced', 'standalone-ui-only', 'business-c
 const READINESS = new Set(['ready', 'partial', 'blocked']);
 const PROFILES = new Set(['generic', 'admin-ui', 'business-system']);
 const UNITS = new Set(['pact-skills', 'vima-ui-admin', 'vima-starter']);
+const COMPLETION_LEVELS = Object.freeze([
+  ['implemented', ['trace-complete', 'implementation-tests-pass']],
+  ['buildable', ['locked-build-pass']],
+  ['startable', ['real-start-pass', 'health-check-pass']],
+  ['integrated', ['real-database-pass', 'real-request-pass']],
+  ['business-closed-loop', ['business-state-change-pass', 'business-query-or-audit-pass']],
+  ['accepted', ['pact-t1-pass', 'delivery-profile-pass', 'business-owner-accepted', 'no-hard-blocker']],
+  ['deployable', ['production-config-pass', 'migration-pass', 'security-pass', 'release-pass', 'rollback-plan-pass']],
+  ['stable', ['restart-recovery-pass', 'observability-pass', 'stability-threshold-pass']]
+]);
 
 function fail(path, message) { throw new PlatformError('E_SCHEMA', path, message, 2); }
 function object(value, path) { if (!value || typeof value !== 'object' || Array.isArray(value)) fail(path, '必须是对象'); }
@@ -24,7 +34,17 @@ const validators = {
     doc.capabilities.forEach((item, i) => { const p = `capabilities.${i}`; object(item, p); enumValue(item.id, CAPABILITIES, `${p}.id`); enumValue(item.kind, new Set(['core', 'product', 'adapter']), `${p}.kind`); stringArray(item.supports, SUPPORTS, `${p}.supports`); stringArray(item.limitations, LIMITATIONS, `${p}.limitations`); enumValue(item.readiness, READINESS, `${p}.readiness`); evidence(item.evidence, `${p}.evidence`); });
   },
   profiles(doc) {
-    exactVersion(doc); array(doc.profiles, 'profiles'); uniqueIds(doc.profiles, 'profiles');
+    exactVersion(doc); array(doc.completionLevels, 'completionLevels');
+    if (doc.completionLevels.length !== COMPLETION_LEVELS.length) fail('completionLevels', '完成度必须恰为八级');
+    doc.completionLevels.forEach((item, i) => {
+      const path = `completionLevels.${i}`;
+      object(item, path);
+      const [expectedId, expectedEvidence] = COMPLETION_LEVELS[i];
+      if (item.id !== expectedId) fail(`${path}.id`, `必须为 ${expectedId}`);
+      if (item.rank !== i + 1) fail(`${path}.rank`, '必须为 1–8 连续整数');
+      if (JSON.stringify(item.requiredEvidence) !== JSON.stringify(expectedEvidence)) fail(`${path}.requiredEvidence`, '证据 ID 或顺序不符合闭集');
+    });
+    array(doc.profiles, 'profiles'); uniqueIds(doc.profiles, 'profiles');
     doc.profiles.forEach((item, i) => { const p = `profiles.${i}`; enumValue(item.id, PROFILES, `${p}.id`); if (item.matchKind !== item.id) fail(`${p}.matchKind`, '必须等于 id'); stringArray(item.requiredCapabilities, CAPABILITIES, `${p}.requiredCapabilities`); stringArray(item.optionalCapabilities, CAPABILITIES, `${p}.optionalCapabilities`); stringArray(item.requiredChecks, null, `${p}.requiredChecks`); });
   },
   adapters(doc) {

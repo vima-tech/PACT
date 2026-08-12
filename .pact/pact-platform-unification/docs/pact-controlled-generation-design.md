@@ -1,11 +1,17 @@
 # PACT 驱动的可控 AI 系统生成设计
 
-> 状态：审核草案，未冻结，不可直接作为施工规格  
+> 状态：设计解释；施工真源仍为同物料的 `PACT.md`
 > 创建日期：2026-08-11  
 > 更新日期：2026-08-11（加入 ClearWorks 失败复盘与独立交付门）  
 > 适用范围：PACT、Vima UI Admin、Vima Starter 与未来项目 Adapter 的协作设计
 
 ## 文档目的
+
+<!-- @pact R028,R041 -->
+
+**最高判断标准**：本设计服务于“用 Claude Code、Codex 等 AI Agent 与 PACT，快速把真实需求交付为规范、准确实现、可用、稳定且可持续演进的业务操作系统”。PACT 不与 Agent 争夺通用推理和编码能力，而是管理意图、契约、执行图谱、变更和完成证据。
+
+系统完成度统一使用八级模型：`implemented → buildable → startable → integrated → business-closed-loop → accepted → deployable → stable`。详细 evidence ID 的机器真源是 `platform/registry/delivery-profiles.v1.json`。
 
 本文回答三个问题：
 
@@ -191,7 +197,7 @@ board.md + action-graph.json + PACT hash → 取活
 | R015 | 修复 | 自动修复最多两轮且不得降低门禁 | 超限返回结构化阻塞项 |
 | R016 | 回归 | 生成控制平台必须维护冻结任务集 | 每次发布运行完整基准 |
 | R017 | 完整性 | 交付完整度的必需项由版本化 Delivery Profile 提供，不由项目 action graph 自己定义 | 删除装配、启动或 E2E 步骤后仍被独立门发现 |
-| R018 | 分级 | 完成态必须区分已实现、可构建、可启动、已集成、已验收和可部署 | 任一低层状态不得显示为“系统 100% 完成” |
+| R018 | 分级 | 完成态必须区分 implemented、buildable、startable、integrated、business-closed-loop、accepted、deployable、stable | 任一低层状态不得显示为“系统 100% 完成” |
 | R019 | 运行 | 业务系统每个里程碑必须有装配、真实启动和至少一次真实请求 | 只有单测或类型检查时里程碑不得完成 |
 | R020 | 闭环 | 业务 UI 必须连接真实 API，关键提交动作必须产生可观测后端状态变化 | 演示数据、无 handler 按钮和静态页面被判失败 |
 | R021 | 证据 | 完成证据必须可重放并绑定代码快照、命令、退出码、环境和产物 | 仅文件路径、代码注释或 Agent 自述不能作为 pass |
@@ -238,7 +244,7 @@ board.md + action-graph.json + PACT hash → 取活
 - action graph 漏掉 Delivery Profile 必需工作仍显示完成的次数为 0；
 - 业务 UI 中演示数据、无提交 handler 和未接真实 API 的关键流程为 0；
 - 必跑门因环境缺失而被记为通过的次数为 0；
-- “可构建”“可启动”“已集成”“已验收”“可部署”的状态互相冒充次数为 0；
+- 八级完成状态互相冒充的次数为 0；
 - Agent 入口文档、PACT、图谱、代码和哈希锁漂移为 0。
 
 ---
@@ -463,7 +469,7 @@ PACT R-ID
 
 ### D008 · 完成态分层，不提供含糊的单一百分比
 
-- **选项**：一个 completion=100% / 分别报告 implemented、buildable、runnable、integrated、accepted、deployable；
+- **选项**：一个 completion=100% / 分别报告 implemented、buildable、startable、integrated、business-closed-loop、accepted、deployable、stable；
 - **结论**：分别报告，并给出最低未通过层；
 - **理由**：编译通过、进程能起、业务链闭合和可以上线承担的风险完全不同；
 - **已否决**：把“实现范围完成”简称为“系统全部完工”；
@@ -754,16 +760,19 @@ deliveryType: business-system
 requiredStages:
   - implemented
   - buildable
-  - runnable
+  - startable
   - integrated
+  - business-closed-loop
   - accepted
+  - deployable
+  - stable
 requiredChecks:
   - id: source-integrity
     stage: implemented
   - id: clean-database-migration
-    stage: runnable
+    stage: startable
   - id: backend-startup
-    stage: runnable
+    stage: startable
   - id: frontend-startup
     stage: runnable
   - id: api-contract
@@ -782,14 +791,14 @@ requiredChecks:
 
 | 层级 | 判定含义 | 典型证据 |
 |---|---|---|
-| `specified` | 需求和契约可判定 | PACT lint、最新冷读、零硬阻塞 |
-| `planned` | PACT 与 Delivery Profile 必需项均进入图谱 | compiled graph coverage |
 | `implemented` | 产物存在且追踪完整 | code/test trace + snapshot |
 | `buildable` | 全部目标从干净环境可编译/打包 | clean build |
-| `runnable` | 迁移与各真实进程可以启动并健康 | process + health evidence |
+| `startable` | 迁移与各真实进程可以启动并健康 | process + health evidence |
 | `integrated` | 跨进程、跨层核心链路使用真实协议闭合 | API/DB/message E2E |
+| `business-closed-loop` | 关键用户操作通过真实 API 产生可查/可审计状态变化 | business state + query/audit |
 | `accepted` | 业务、权限、异常路径和人工验收通过 | acceptance evidence |
-| `deployable` | 生产配置、密钥、回滚、观测和外部门就绪 | release readiness |
+| `deployable` | 生产配置、密钥、迁移、安全和回滚就绪 | release readiness |
+| `stable` | 重启/恢复、观测和规格稳定性阈值通过 | stability evidence |
 
 证据对象至少包含：`checkId`、`snapshotHash`、`command/argv`、`environmentId`、`startedAt`、
 `exitCode`、`stdout/stderr digest`、`artifacts`、`verifierVersion`。以下内容不能单独作为 pass：
@@ -1246,7 +1255,7 @@ token lint 和 `vue-tsc`，却被当成页面业务验收。
 ClearWorks 同时存在“代码和单测完成”“后来可启动”“前端仍是演示数据”“平台拒绝核心事件”
 “真实 TSA 和现场输入未到位”。用一个 100% 无法表达这些事实，最终自然产生误导。
 
-修正：强制分别报告 `implemented/buildable/runnable/integrated/accepted/deployable`，并始终展示最低
+修正：强制分别报告 `implemented/buildable/startable/integrated/business-closed-loop/accepted/deployable/stable`，并始终展示最低
 未通过层和阻塞原因。
 
 #### 6. 范围规模与执行能力不匹配

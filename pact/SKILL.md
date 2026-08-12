@@ -2,11 +2,12 @@
 name: pact
 description: >
   PACT = Product · Architecture · Contracts · Tests。核心 skill：总览、路由与共享资源
-  （脚本 / 模板 / 工序卡）。实际工作由七个命令承担——/pact-new 创建 pact 物料包
+  （脚本 / 模板 / 工序卡）。实际工作由八个命令承担——/pact-new 创建 pact 物料包
   （单文件完备规格 PACT.md + 知识库 HTML/md + action-graph.json 执行图谱，落 .pact/<slug>/，
   单项目可并存多份）；/pact-run 按物料施工到完成度 100% 才停；/pact-review 审查实现完成度；
   /pact-check 体检物料完备性与遗漏点；/pact-change 需求变更入口（S10-CR）；
-  /pact-list 多物料总览；/pact-estimate 工期/报价估算门。
+  /pact-list 多物料总览；/pact-estimate 工期/报价估算门；
+  /pact-install 完整安装后的诊断、Skill 同步修复与 Adapter 扩展入口。
   用户说 /pact 或问 PACT 怎么用 → 输出使用速览并按现场状态建议该用哪个命令，不执行任何工序。
   触发词：pact、PACT 文档、完备规格、pact 怎么用。
 argument-hint: "[--help]"
@@ -17,6 +18,10 @@ argument-hint: "[--help]"
 > 创建日期: 2026-07-26 ｜ 更新日期: 2026-08-02
 
 **PACT 既是一种文档体裁，也是一条不许跳步的流水线。** 它的验收标准只有一条，且必须被真实检验：
+
+<!-- @pact R028,R041 -->
+
+最高目标是让 Claude Code、Codex 等 AI Agent 配合 PACT，快速把真实需求交付为规范、准确实现、可用、稳定且可演进的业务操作系统。Agent 负责推理与编码，PACT 负责固定意图、契约、变更与完成证据；`implemented` 不得冒充 `stable`。
 
 > 一个对本项目**一无所知**的人或 AI，**只读这一份 `PACT.md`**即可开始编码，
 > 且不需要追问背景、不需要猜测意图、不会遗漏约束。
@@ -35,7 +40,7 @@ argument-hint: "[--help]"
      `/pact-check` / `/pact-review` / `/pact-change` / `/pact-estimate`。
 3. **停止。不建目录、不写文件、不进任何工序。**
 
-## 七个命令（工作都在它们里）
+## 八个命令（工作都在它们里）
 
 | 命令 | 干什么 | 工序 | 停止条件 |
 |---|---|---|---|
@@ -46,6 +51,7 @@ argument-hint: "[--help]"
 | `/pact-change` | 需求变更入口（S10-CR）：回 P5 立 R-ID → 补验收 → 改契约 → changelog → 同步图谱 → 判断重跑冷读门 | 变更协议 | 六步走完 + 影响面报告 |
 | `/pact-list` | 项目内全部物料总览：状态/工序进度/完成度/一句话定义 + 下一步建议 | 只读 | 单次 |
 | `/pact-estimate` | 估算门独立入口：四前提核对 + 分层测算 + 三条线（对外只承诺交付线） | 只读+落 estimate.md | 单次 |
+| `/pact-install` | 安装后 doctor、Agent Skills 同步/修复和未来 Adapter 扩展 | 安装控制 | ready 或明确冲突 |
 
 旧版单命令模式的对应关系：`--new`/`--feature`/`--merge` → `/pact-new`（模式自动判定）；
 `--build` → `/pact-run`；`--audit` → `/pact-check`。

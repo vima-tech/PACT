@@ -1,16 +1,17 @@
 {
   "version": "1",
-  "_pact": "@pact R017,R019,R021,R024,R025,R026,R027",
+  "_pact": "@pact R017,R019,R021,R024,R025,R026,R027,R029,R030,R039,R042",
   "units": [
     {
       "id": "pact-skills",
-      "paths": ["pact/**", "pact-*/**"],
+      "paths": ["pact/**", "pact-*/**", "bin/**", "platform/**", "docs/**", "install-manifest.json", "package.json", "package-lock.json", "README.md", "CLAUDE.md"],
       "versionSource": "package.json",
       "verify": [
         {"id":"pact-self-test","argv":["bash","pact/scripts/pact-lint.sh","--self-test"]},
-        {"id":"pact-material-check","argv":["bash","pact/scripts/pact-check.sh",".pact/pact-platform-unification"]}
+        {"id":"pact-material-check","argv":["bash","pact/scripts/pact-check.sh",".pact/pact-platform-unification"]},
+        {"id":"pact-platform-test","argv":["npm","test"]}
       ],
-      "pack": [{"id":"pact-pack","argv":["node","platform/scripts/pack-pact.mjs"]}],
+      "pack": [{"id":"pact-pack","argv":["npm","pack","--pack-destination","artifacts/release"]}],
       "verifyDependents": []
     },
     {

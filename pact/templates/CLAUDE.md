@@ -6,6 +6,12 @@
 > **「写什么、为什么、做到什么算完成」看 `.pact/<slug>/PACT.md` —— 那是规格真源，本文不重复它。**
 > 任何 AI agent 或人类接手本项目：先读 `PACT.md`（了解要做什么），再读本文（了解怎么动手）。
 
+<!-- @pact R028,R041 -->
+
+## 最高交付准则
+
+本项目使用 AI Agent + PACT 把真实需求落地为规范、准确实现、可用、稳定可演进的业务操作系统。Agent 负责理解与编码，PACT 负责规格、契约、变更与完成证据。判定顺序为 `implemented → buildable → startable → integrated → business-closed-loop → accepted → deployable → stable`；低级状态不得冒充高级交付。
+
 ## 1. 三类文件的分工（别搞混）
 
 | 文件 | 回答 | 谁改 |
